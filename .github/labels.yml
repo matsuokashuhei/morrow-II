@@ -1,0 +1,137 @@
+# GitHub Labels Configuration
+# This file is used to automatically sync labels across the repository
+
+# Phase Labels
+- name: "phase-1"
+  color: "0366d6"
+  description: "MVP開発フェーズ"
+
+- name: "phase-2"
+  color: "28a745"
+  description: "ソーシャル機能フェーズ"
+
+- name: "phase-3"
+  color: "ffd33d"
+  description: "拡張・最適化フェーズ"
+
+- name: "phase-4"
+  color: "f66a0a"
+  description: "Web版展開フェーズ"
+
+# Category Labels
+- name: "backend"
+  color: "d73a4a"
+  description: "バックエンド関連"
+
+- name: "frontend"
+  color: "0075ca"
+  description: "フロントエンド関連"
+
+- name: "infrastructure"
+  color: "cfd3d7"
+  description: "インフラ・DevOps関連"
+
+- name: "documentation"
+  color: "7057ff"
+  description: "ドキュメント関連"
+
+# Priority Labels
+- name: "priority-high"
+  color: "d93f0b"
+  description: "高優先度"
+
+- name: "priority-medium"
+  color: "fbca04"
+  description: "中優先度"
+
+- name: "priority-low"
+  color: "0e8a16"
+  description: "低優先度"
+
+# Size Labels
+- name: "size-xs"
+  color: "c2e0c6"
+  description: "非常に小さなタスク (< 1日)"
+
+- name: "size-s"
+  color: "bfd4f2"
+  description: "小さなタスク (1-2日)"
+
+- name: "size-m"
+  color: "f9d0c4"
+  description: "中程度のタスク (3-5日)"
+
+- name: "size-l"
+  color: "fef2c0"
+  description: "大きなタスク (1-2週間)"
+
+- name: "size-xl"
+  color: "f1c6c7"
+  description: "非常に大きなタスク (2週間以上)"
+
+# Status Labels
+- name: "status-todo"
+  color: "ffffff"
+  description: "未着手"
+
+- name: "status-in-progress"
+  color: "fbca04"
+  description: "作業中"
+
+- name: "status-review"
+  color: "0075ca"
+  description: "レビュー中"
+
+- name: "status-done"
+  color: "0e8a16"
+  description: "完了"
+
+# Type Labels
+- name: "bug"
+  color: "d73a4a"
+  description: "バグ報告"
+
+- name: "enhancement"
+  color: "a2eeef"
+  description: "機能拡張"
+
+- name: "question"
+  color: "d876e3"
+  description: "質問"
+
+- name: "help wanted"
+  color: "008672"
+  description: "ヘルプが必要"
+
+- name: "good first issue"
+  color: "7057ff"
+  description: "初心者向けのタスク"
+
+# Special Labels
+- name: "breaking change"
+  color: "b60205"
+  description: "破壊的変更を含む"
+
+- name: "security"
+  color: "ee0701"
+  description: "セキュリティ関連"
+
+- name: "performance"
+  color: "1d76db"
+  description: "パフォーマンス関連"
+
+- name: "dependencies"
+  color: "0366d6"
+  description: "依存関係の更新"
+
+- name: "wontfix"
+  color: "ffffff"
+  description: "修正しない"
+
+- name: "duplicate"
+  color: "cfd3d7"
+  description: "重複"
+
+- name: "invalid"
+  color: "e4e669"
+  description: "無効"
