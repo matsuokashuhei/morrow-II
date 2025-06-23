@@ -116,9 +116,34 @@ cd frontend && npm install
 
 ### 開発サーバーの起動
 
+#### Docker環境での起動（推奨）
+```bash
+# 全サービスを一括起動
+docker-compose up --build
+
+# 個別サービス起動
+docker-compose up postgres -d        # データベースのみ
+docker-compose up backend --build    # バックエンドのみ  
+docker-compose up frontend --build   # フロントエンドのみ
+
+# Makefileを使用
+make dev                             # 全サービス起動
+make dev-backend                     # バックエンドのみ
+make dev-frontend                    # フロントエンドのみ
+```
+
+#### アクセス先
+- **Backend API**: http://localhost:8080
+  - Health Check: http://localhost:8080/health
+  - API Endpoints: http://localhost:8080/api/v1/*
+- **Frontend (Metro Bundler)**: http://localhost:8081
+- **Expo DevTools**: http://localhost:19000
+- **PostgreSQL**: localhost:5432
+
+#### ローカル環境での起動
 ```bash
 # バックエンド (Port: 8080)
-cd backend && go run main.go
+cd backend && go run cmd/server/main.go
 
 # フロントエンド (React Native)
 cd frontend && npm run ios # or npm run android
