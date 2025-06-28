@@ -44,6 +44,10 @@ Thumbs.db
 *.prof
 go.work
 go.work.sum
+# Go build outputs
+backend/tmp/
+backend/server
+backend/cmd/server/server
 
 # React Native specific
 *.hprof

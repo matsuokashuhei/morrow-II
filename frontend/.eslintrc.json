@@ -1,7 +1,6 @@
 {
   "extends": [
-    "expo",
-    "@typescript-eslint/recommended"
+    "expo"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [

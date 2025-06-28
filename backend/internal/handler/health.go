@@ -14,7 +14,7 @@ func NewHealthHandler() *HealthHandler {
 
 func (h *HealthHandler) Health(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"status": "ok",
+		"status":  "ok",
 		"message": "Morrow API is running",
 		"version": "0.1.0",
 	})
