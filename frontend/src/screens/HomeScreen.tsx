@@ -5,9 +5,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Morrow!</Text>
-      <Text style={styles.subtitle}>
-        Event Countdown Sharing App
-      </Text>
+      <Text style={styles.subtitle}>Event Countdown Sharing App</Text>
       <Text style={styles.description}>
         Create, manage, and share your upcoming events with friends and family.
       </Text>
