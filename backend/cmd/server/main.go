@@ -13,6 +13,11 @@ func main() {
 	// Load configuration
 	cfg := config.New()
 
+	// Validate configuration
+	if err := cfg.Validate(); err != nil {
+		log.Fatal("Configuration validation failed:", err)
+	}
+
 	// Set Gin mode
 	if !cfg.IsDevelopment() {
 		gin.SetMode(gin.ReleaseMode)
@@ -41,7 +46,7 @@ func main() {
 	log.Printf("Starting server on port %s", cfg.Port)
 	log.Printf("Environment: %s", cfg.Env)
 	log.Printf("Database URL: %s", cfg.DatabaseURL())
-	
+
 	if err := router.Run(":" + cfg.Port); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}

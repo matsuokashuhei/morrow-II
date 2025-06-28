@@ -123,7 +123,7 @@ docker-compose up --build
 
 # 個別サービス起動
 docker-compose up postgres -d        # データベースのみ
-docker-compose up backend --build    # バックエンドのみ  
+docker-compose up backend --build    # バックエンドのみ
 docker-compose up frontend --build   # フロントエンドのみ
 
 # Makefileを使用

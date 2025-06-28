@@ -37,6 +37,29 @@ func (c *Config) IsDevelopment() bool {
 	return c.Env == "development"
 }
 
+// Validate validates the configuration
+func (c *Config) Validate() error {
+	if c.Port == "" {
+		return fmt.Errorf("port is required")
+	}
+	if c.DBHost == "" {
+		return fmt.Errorf("database host is required")
+	}
+	if c.DBPort == "" {
+		return fmt.Errorf("database port is required")
+	}
+	if c.DBName == "" {
+		return fmt.Errorf("database name is required")
+	}
+	if c.DBUser == "" {
+		return fmt.Errorf("database user is required")
+	}
+	if c.DBPass == "" {
+		return fmt.Errorf("database password is required")
+	}
+	return nil
+}
+
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
