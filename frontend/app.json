@@ -4,13 +4,7 @@
     "slug": "morrow",
     "version": "0.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -19,14 +13,10 @@
       "bundleIdentifier": "com.morrow.app"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
       "package": "com.morrow.app"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "bundler": "webpack"
     },
     "extra": {
       "apiUrl": "http://localhost:8080/api/v1"

@@ -16,5 +16,11 @@
   "env": {
     "node": true,
     "es6": true
-  }
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "web-build/",
+    "*.config.js",
+    "*.config.ts"
+  ]
 }
