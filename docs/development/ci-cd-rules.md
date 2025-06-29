@@ -125,8 +125,9 @@ cd frontend && npm test -- --coverage --watchAll=false
 - **レート制限対策**: `fail_ci_if_error: false`を設定してCI失敗を防ぐ
 - **トークン設定**: プライベートリポジトリの場合は`CODECOV_TOKEN`シークレットを設定
 - **セグメント分離**: `flags: backend`/`flags: frontend`で分離してトラッキング
+- **⚠️ 現在の状態**: レート制限回避のため一時的にCodecovアップロードを無効化
 
-#### Codecov 429エラー対策
+#### Codecov 429エラー対策と再有効化手順
 ```yaml
 # CI設定例
 - name: Upload coverage reports to Codecov
