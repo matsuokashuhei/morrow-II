@@ -18,6 +18,7 @@ func SetupRoutes(cfg *config.Config, logger *logrus.Logger, dbClient *database.C
 	router.Use(middleware.LoggerMiddleware(logger))
 	router.Use(gin.Recovery())
 	router.Use(middleware.CORS())
+	router.Use(middleware.DatabaseMiddleware(dbClient)) // データベースクライアント注入
 	router.Use(middleware.Auth())
 	router.Use(middleware.ErrorHandler())
 

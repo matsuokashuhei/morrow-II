@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/matsuokashuhei/morrow-backend/internal/config"
 	"github.com/matsuokashuhei/morrow-backend/internal/database"
 	"github.com/matsuokashuhei/morrow-backend/internal/middleware"
@@ -55,6 +57,15 @@ func main() {
 	// Create router with database client
 	router := routes.SetupRoutes(cfg, logger, dbClient)
 
+	// Configure HTTP server
+	srv := &http.Server{
+		Addr:         ":" + cfg.Port,
+		Handler:      router,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 30 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
+
 	// Log server start information
 	logger.WithField("port", cfg.Port).
 		WithField("environment", cfg.Env).
@@ -65,7 +76,7 @@ func main() {
 
 	// Start server in a goroutine
 	go func() {
-		if err := router.Run(":" + cfg.Port); err != nil {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.WithError(err).Fatal("Failed to start server")
 		}
 	}()
@@ -78,12 +89,15 @@ func main() {
 	logger.Info("Shutting down server...")
 
 	// Graceful shutdown with timeout
-	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer shutdownCancel()
 
-	// Here you would add graceful shutdown for the HTTP server if using a different setup
-	// For now, we just wait for the context timeout
-	<-shutdownCtx.Done()
+	// Shutdown HTTP server
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		logger.WithError(err).Error("Server forced to shutdown")
+	} else {
+		logger.Info("Server gracefully stopped")
+	}
 
 	logger.Info("Server shutdown complete")
 }
