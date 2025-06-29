@@ -48,6 +48,13 @@ go.work.sum
 backend/tmp/
 backend/server
 backend/cmd/server/server
+# Go binary files
+backend/main
+backend/cmd/server/main
+main
+server
+# Air build outputs
+backend/tmp/main
 
 # React Native specific
 *.hprof

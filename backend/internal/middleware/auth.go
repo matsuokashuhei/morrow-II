@@ -12,7 +12,7 @@ import (
 // TODO: Integrate with Amazon Cognito in Phase 2
 func Auth() gin.HandlerFunc {
 	logger := InitLogger()
-
+	
 	return func(c *gin.Context) {
 		// Skip authentication for health check endpoints
 		if strings.HasPrefix(c.Request.URL.Path, "/health") ||
@@ -81,7 +81,7 @@ func Auth() gin.HandlerFunc {
 // RequireAuth ensures the user is authenticated
 func RequireAuth() gin.HandlerFunc {
 	logger := InitLogger()
-
+	
 	return func(c *gin.Context) {
 		authenticated, exists := c.Get("authenticated")
 		if !exists || !authenticated.(bool) {
