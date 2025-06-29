@@ -10,7 +10,7 @@ import (
 // ErrorHandler handles errors and provides consistent error responses
 func ErrorHandler() gin.HandlerFunc {
 	logger := InitLogger()
-	
+
 	return func(c *gin.Context) {
 		c.Next()
 
@@ -84,7 +84,7 @@ func (e *APIError) Error() string {
 // RespondWithError sends a consistent error response
 func RespondWithError(c *gin.Context, statusCode int, errorType, message string) {
 	logger := InitLogger()
-	
+
 	logger.WithFields(logrus.Fields{
 		"status_code": statusCode,
 		"error_type":  errorType,
