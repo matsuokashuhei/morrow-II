@@ -1,53 +1,39 @@
 package main
 
 import (
-	"log"
-
-	"github.com/gin-gonic/gin"
 	"github.com/matsuokashuhei/morrow-backend/internal/config"
-	"github.com/matsuokashuhei/morrow-backend/internal/handler"
 	"github.com/matsuokashuhei/morrow-backend/internal/middleware"
+	"github.com/matsuokashuhei/morrow-backend/internal/routes"
 )
 
 func main() {
+	// Initialize structured logging
+	logger := middleware.InitLogger()
+
+	// Set Gin mode based on environment
+	middleware.SetGinMode()
+
 	// Load configuration
 	cfg := config.New()
 
 	// Validate configuration
 	if err := cfg.Validate(); err != nil {
-		log.Fatal("Configuration validation failed:", err)
-	}
-
-	// Set Gin mode
-	if !cfg.IsDevelopment() {
-		gin.SetMode(gin.ReleaseMode)
+		logger.WithError(err).Fatal("Configuration validation failed")
 	}
 
 	// Create router
-	router := gin.New()
+	router := routes.SetupRoutes(cfg, logger)
 
-	// Add middleware
-	router.Use(middleware.Logger())
-	router.Use(gin.Recovery())
-	router.Use(middleware.CORS())
-
-	// Health check endpoints
-	healthHandler := handler.NewHealthHandler()
-	router.GET("/health", healthHandler.Health)
-	router.GET("/ping", healthHandler.Ping)
-
-	// API routes
-	v1 := router.Group("/api/v1")
-	{
-		v1.GET("/status", healthHandler.Health)
-	}
+	// Log server start information
+	logger.WithField("port", cfg.Port).
+		WithField("environment", cfg.Env).
+		WithField("database_host", cfg.DatabaseHost()).
+		WithField("database_port", cfg.DatabasePort()).
+		WithField("database_name", cfg.DatabaseName()).
+		Info("Starting Morrow API server")
 
 	// Start server
-	log.Printf("Starting server on port %s", cfg.Port)
-	log.Printf("Environment: %s", cfg.Env)
-	log.Printf("Database URL: %s", cfg.DatabaseURL())
-
 	if err := router.Run(":" + cfg.Port); err != nil {
-		log.Fatal("Failed to start server:", err)
+		logger.WithError(err).Fatal("Failed to start server")
 	}
 }
