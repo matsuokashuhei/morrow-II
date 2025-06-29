@@ -15,6 +15,8 @@
 ### 👨‍💻 development/
 開発プロセス・管理関連のドキュメント
 - [`development-items.md`](development/development-items.md) - 開発アイテムリスト
+- **[`ci-cd-rules.md`](development/ci-cd-rules.md) - CI/CD開発ルール (必読)**
+- [`docker-setup.md`](development/docker-setup.md) - Docker環境セットアップ
 - [`github-issues-data.md`](development/github-issues-data.md) - GitHub Issue作成用データ
 
 ### 📊 プロジェクト管理
@@ -41,6 +43,13 @@
 - 4フェーズの開発計画
 - 詳細なタスクリスト
 - GitHub Issue管理方針
+
+### 4. CI/CD開発ルール ⚠️ 必読
+[`development/ci-cd-rules.md`](development/ci-cd-rules.md)
+- CI失敗を防ぐための必須チェック項目
+- ローカル検証手順
+- 依存関係管理ルール
+- コード品質ガイドライン
 
 ## 🔄 ドキュメント更新フロー
 

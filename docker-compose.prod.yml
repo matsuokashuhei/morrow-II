@@ -1,0 +1,62 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: morrow-postgres-prod
+    environment:
+      POSTGRES_DB: ${DB_NAME:-morrow_prod}
+      POSTGRES_USER: ${DB_USER:-morrow_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      - ./infrastructure/docker/postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - morrow-network
+    restart: unless-stopped
+
+  # Go Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: morrow-backend-prod
+    environment:
+      - GO_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-morrow_prod}
+      - DB_USER=${DB_USER:-morrow_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - PORT=8080
+      - JWT_SECRET=${JWT_SECRET}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - morrow-network
+    restart: unless-stopped
+
+  # Frontend (for production build)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: morrow-frontend-prod
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - morrow-network
+    restart: unless-stopped
+
+volumes:
+  postgres_prod_data:
+
+networks:
+  morrow-network:
+    driver: bridge
