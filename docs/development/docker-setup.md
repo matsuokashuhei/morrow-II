@@ -143,3 +143,73 @@ docker-compose down
 docker-compose down -v
 docker volume prune
 ```
+
+## データベース管理
+
+### PostgreSQL接続
+```bash
+# PostgreSQLコンテナへ接続
+docker-compose exec postgres psql -U morrow_user -d morrow_dev
+
+# SQL実行例
+docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "SELECT version();"
+docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "\dt"
+
+# 特定テーブルの構造確認
+docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "\d events"
+docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "\d users"
+docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "\d participants"
+```
+
+### データベースマイグレーション
+```bash
+# マイグレーション状態確認
+docker-compose logs backend | grep -i migration
+
+# Entスキーマ再生成（開発時）
+docker-compose exec backend go generate ./ent
+
+# データベースリセット（開発環境のみ）
+docker-compose down -v postgres
+docker-compose up postgres
+```
+
+### データベーステスト
+```bash
+# 接続テスト
+curl http://localhost:8080/health | jq '.database'
+
+# 手動接続確認
+docker-compose exec backend go run cmd/test-ent/main.go
+```
+
+## サービス状態確認
+
+### ヘルスチェック
+```bash
+# 全サービスの状態確認
+curl http://localhost:8080/health
+
+# 期待されるレスポンス
+{
+  "database": {
+    "status": "ok"
+  },
+  "message": "Morrow API is running",
+  "status": "ok",
+  "timestamp": "2025-06-29T14:05:30Z",
+  "version": "0.1.0"
+}
+```
+
+### パフォーマンス確認
+```bash
+# API応答時間測定
+time curl -s http://localhost:8080/ping
+
+# 負荷テスト（簡易）
+for i in {1..10}; do 
+  curl -s http://localhost:8080/health > /dev/null & 
+done; 
+wait
+```
