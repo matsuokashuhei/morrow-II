@@ -27,7 +27,9 @@ func main() {
 	// Log server start information
 	logger.WithField("port", cfg.Port).
 		WithField("environment", cfg.Env).
-		WithField("database_url", cfg.DatabaseURL()).
+		WithField("database_host", cfg.DatabaseHost()).
+		WithField("database_port", cfg.DatabasePort()).
+		WithField("database_name", cfg.DatabaseName()).
 		Info("Starting Morrow API server")
 
 	// Start server
