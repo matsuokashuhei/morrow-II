@@ -49,6 +49,64 @@ dev-frontend: ## Run frontend in development mode
 dev: ## Run full development environment
 	docker-compose up
 
+# Linting and formatting commands
+.PHONY: lint lint-backend lint-frontend format format-backend format-frontend
+
+lint: lint-backend lint-frontend ## Run all linters
+
+lint-backend: ## Run Go linter
+	docker run --rm -v $(PWD):/workspace -w /workspace/backend golangci/golangci-lint:latest golangci-lint run --config=../.golangci.yml
+
+lint-frontend: ## Run TypeScript/JavaScript linter
+	docker-compose run --rm frontend npm run lint
+
+format: format-backend format-frontend ## Format all code
+
+format-backend: ## Format Go code
+	docker run --rm -v $(PWD)/backend:/app -w /app golang:1.23-alpine sh -c "go fmt ./..."
+
+format-frontend: ## Format TypeScript/JavaScript code
+	docker-compose run --rm frontend npm run format
+
+# Testing commands
+.PHONY: test test-backend test-frontend test-coverage
+
+test: test-backend test-frontend ## Run all tests
+
+test-backend: ## Run Go tests
+	docker run --rm -v $(PWD)/backend:/app -w /app golang:1.23-alpine go test -v -race ./...
+
+test-frontend: ## Run React Native tests
+	docker-compose run --rm frontend npm test -- --watchAll=false
+
+test-coverage: ## Run tests with coverage
+	docker run --rm -v $(PWD)/backend:/app -w /app golang:1.23-alpine go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+	docker-compose run --rm frontend npm run test:coverage
+
+# Pre-commit validation
+.PHONY: pre-commit validate
+
+pre-commit: format lint test ## Run pre-commit validation (format, lint, test)
+
+validate: ## Validate project before push
+	@echo "Running project validation..."
+	@make format
+	@make lint
+	@make test
+	@echo "✅ All validation passed!"
+
+# Setup commands
+.PHONY: setup setup-hooks
+
+setup: install-backend install-frontend setup-hooks ## Setup development environment
+
+setup-hooks: ## Setup pre-commit hooks
+	@echo "Setting up pre-commit hooks..."
+	pip install pre-commit
+	pre-commit install
+	cd frontend && npm run prepare
+	@echo "✅ Pre-commit hooks installed!"
+
 # Database commands
 db-migrate: ## Run database migrations (Ent)
 	docker-compose run --rm backend go run -mod=mod entgo.io/ent/cmd/ent generate ./ent/schema
@@ -57,18 +115,6 @@ db-reset: ## Reset database
 	docker-compose down -v postgres
 	docker-compose up -d postgres
 
-# Code quality
-lint-backend: ## Lint backend code
-	docker-compose run --rm backend golangci-lint run
-
-lint-frontend: ## Lint frontend code
-	docker-compose run --rm frontend npm run lint
-
-test-backend: ## Run backend tests
-	docker-compose run --rm backend go test ./...
-
-test-frontend: ## Run frontend tests
-	docker-compose run --rm frontend npm test
 
 # Go commands
 go-mod-init: ## Initialize Go module

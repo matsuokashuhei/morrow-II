@@ -31,11 +31,11 @@ jobs:
       run: go mod download
 
     - name: Run golangci-lint
-      uses: golangci/golangci-lint-action@v3
+      uses: golangci/golangci-lint-action@v6
       with:
         version: latest
         working-directory: ./backend
-        args: --timeout=5m
+        args: --config=../.golangci.yml --timeout=5m
 
     - name: Build backend
       working-directory: ./backend
