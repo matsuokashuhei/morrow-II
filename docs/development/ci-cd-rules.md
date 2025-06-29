@@ -23,7 +23,7 @@
 # Lintチェック
 docker run --rm -v $(pwd)/backend:/app -w /app golangci/golangci-lint:latest golangci-lint run
 
-# ビルドテスト  
+# ビルドテスト
 docker run --rm -v $(pwd)/backend:/app -w /app golang:1.23-alpine go build ./...
 
 # テスト実行
@@ -68,7 +68,7 @@ docker compose down
 
 #### Frontend依存関係
 - **package.json変更時**: 必ず`npm install`実行後、`package-lock.json`もコミット
-- **新規依存関係追加時**: 
+- **新規依存関係追加時**:
   - 本番依存関係: `npm install <package>`
   - 開発依存関係: `npm install --save-dev <package>`
   - ピア依存関係競合時: `--legacy-peer-deps`フラグ使用
@@ -109,6 +109,33 @@ docker compose down
 - **マルチステージビルド**: 本番用Dockerfileはマルチステージ構成
 - **ヘルスチェック**: 長時間実行サービスはヘルスチェック設定
 
+### 7. コードカバレッジ・Codecov設定
+
+#### ローカルでのカバレッジ確認
+```bash
+# Backend (Go)
+cd backend && go test -coverprofile=coverage.out ./...
+go tool cover -html=coverage.out -o coverage.html
+
+# Frontend (React Native)
+cd frontend && npm test -- --coverage --watchAll=false
+```
+
+#### Codecov設定
+- **レート制限対策**: `fail_ci_if_error: false`を設定してCI失敗を防ぐ
+- **トークン設定**: プライベートリポジトリの場合は`CODECOV_TOKEN`シークレットを設定
+- **セグメント分離**: `flags: backend`/`flags: frontend`で分離してトラッキング
+
+#### Codecov 429エラー対策
+```yaml
+# CI設定例
+- name: Upload coverage reports to Codecov
+  uses: codecov/codecov-action@v4
+  with:
+    fail_ci_if_error: false  # レート制限時もCI失敗させない
+    token: ${{ secrets.CODECOV_TOKEN }}  # トークン使用でレート制限回避
+```
+
 ## 🔄 推奨ワークフロー
 
 ### 新機能開発時
@@ -144,13 +171,16 @@ docker compose down
 | `No tests found` | テストファイル不存在 | 基本テスト作成、`--passWithNoTests`追加 |
 | `Prettier check` 失敗 | フォーマット不適合 | `npm run format`実行 |
 | `Docker build` 失敗 | 依存関係・設定問題 | ローカルでビルドテスト実行 |
+| `Codecov 429` レート制限 | アップロード回数超過 | `fail_ci_if_error: false`設定、トークン使用 |
+| `Type check` 失敗 | TypeScript型エラー | `npm run type-check`でローカル確認 |
+| `Coverage threshold` | カバレッジ不足 | テスト追加、カバレッジ閾値調整 |
 
 ## 📝 コミットメッセージガイドライン
 
 ### 良い例
 ```
 feat: add user authentication with JWT
-test: add comprehensive tests for auth middleware  
+test: add comprehensive tests for auth middleware
 fix: resolve Docker Compose V2 compatibility issue
 docs: update API documentation for auth endpoints
 ```

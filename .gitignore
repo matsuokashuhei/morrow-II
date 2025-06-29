@@ -56,6 +56,7 @@ backend/cmd/server/server
 *.apk
 *.app
 *.ipa
+web-build/  # Expo web build output
 
 # iOS
 ios/build/
