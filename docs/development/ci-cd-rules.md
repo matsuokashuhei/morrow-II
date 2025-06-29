@@ -137,6 +137,34 @@ cd frontend && npm test -- --coverage --watchAll=false
     token: ${{ secrets.CODECOV_TOKEN }}  # トークン使用でレート制限回避
 ```
 
+## ⚙️ npm実行ルール
+
+### CI環境
+CI/CDパイプライン内では、パフォーマンスと安定性のため **直接npmコマンドを実行**：
+```yaml
+- name: Install dependencies
+  working-directory: ./frontend
+  run: npm ci
+
+- name: Run tests
+  working-directory: ./frontend
+  run: npm test -- --coverage --watchAll=false
+```
+
+### 開発環境・本番環境
+ローカル開発やその他の環境では、環境の統一性のため **Docker経由で実行**：
+```bash
+# 開発環境での推奨実行方法
+docker run --rm -v $(pwd)/frontend:/app -w /app node:18-alpine npm ci
+docker run --rm -v $(pwd)/frontend:/app -w /app node:18-alpine npm run lint
+docker run --rm -v $(pwd)/frontend:/app -w /app node:18-alpine npm test
+```
+
+### 理由
+- **CI環境**: GitHub Actionsで既にNode.js環境が提供され、キャッシュ効率化のため直接実行
+- **開発環境**: 環境差異を防ぎ、再現性を確保するためDocker経由
+- **本番環境**: Dockerでビルドするため、開発時も同じ環境で検証
+
 ## 🔄 推奨ワークフロー
 
 ### 新機能開発時
