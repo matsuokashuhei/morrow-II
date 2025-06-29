@@ -158,6 +158,8 @@ cd web && npm run dev
 - [要件定義書](docs/planning/requirements.md)
 - [技術選定書](docs/architecture/tech-stack.md)
 - [開発アイテムリスト](docs/development/development-items.md)
+- **[CI/CD 開発ルール](docs/development/ci-cd-rules.md)** - CI失敗を防ぐための必須ルール
+- [Docker セットアップガイド](docs/development/docker-setup.md)
 - [API ドキュメント](docs/api/README.md) (作成予定)
 - [デプロイメントガイド](docs/deployment/README.md) (作成予定)
 
