@@ -8,7 +8,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/matsuokashuhei/morrow-backend/internal/config"
 	"github.com/matsuokashuhei/morrow-backend/internal/database"
 	"github.com/matsuokashuhei/morrow-backend/internal/middleware"

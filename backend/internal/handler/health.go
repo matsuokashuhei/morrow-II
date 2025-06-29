@@ -29,7 +29,10 @@ func (h *HealthHandler) Health(c *gin.Context) {
 	// Database health check
 	dbHealth := "ok"
 	var dbError string
-	if err := h.dbClient.HealthCheck(ctx); err != nil {
+	if h.dbClient == nil {
+		dbHealth = "unavailable"
+		dbError = "database client not initialized"
+	} else if err := h.dbClient.HealthCheck(ctx); err != nil {
 		dbHealth = "error"
 		dbError = err.Error()
 		h.logger.WithError(err).Error("Database health check failed")
