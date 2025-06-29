@@ -15,6 +15,10 @@ describe('HomeScreen', () => {
 
   it('should display the description', () => {
     const { getByText } = render(<HomeScreen />);
-    expect(getByText('Create, manage, and share your upcoming events with friends and family.')).toBeTruthy();
+    expect(
+      getByText(
+        'Create, manage, and share your upcoming events with friends and family.'
+      )
+    ).toBeTruthy();
   });
 });
