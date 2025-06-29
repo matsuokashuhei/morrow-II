@@ -19,7 +19,7 @@ docker-compose ps
 ```
 NAME              IMAGE                COMMAND                  SERVICE    STATUS
 morrow-backend    morrow-ii-backend    "sh -c 'while ! nc -…"   backend    Up
-morrow-frontend   morrow-ii-frontend   "docker-entrypoint.s…"   frontend   Up  
+morrow-frontend   morrow-ii-frontend   "docker-entrypoint.s…"   frontend   Up
 morrow-postgres   postgres:15-alpine   "docker-entrypoint.s…"   postgres   Up
 ```
 
@@ -52,7 +52,7 @@ docker-compose exec backend go tool cover -func=coverage.out
 ```
 === 設定テスト ===
 ✅ TestNew
-✅ TestNewWithEnvironmentVariables  
+✅ TestNewWithEnvironmentVariables
 ✅ TestConfig_DatabaseURL
 ✅ TestConfig_IsDevelopment
 ✅ TestConfig_Validate (7 サブテスト)
@@ -97,7 +97,7 @@ Snapshots:   0 total
 Time:        1.711 s
 
 ✅ App.test.tsx
-✅ basic.test.tsx  
+✅ basic.test.tsx
 ✅ HomeScreen.test.tsx
 ```
 
@@ -119,7 +119,7 @@ docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "\dt"
 
 # 期待される出力
               List of relations
- Schema |     Name     | Type  |    Owner    
+ Schema |     Name     | Type  |    Owner
 --------+--------------+-------+-------------
  public | events       | table | morrow_user
  public | participants | table | morrow_user
@@ -136,7 +136,7 @@ docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "\d events"
 - title (varchar, NOT NULL)
 - description (varchar)
 - start_time (timestamptz, NOT NULL)
-- end_time (timestamptz, NOT NULL)  
+- end_time (timestamptz, NOT NULL)
 - emoji (varchar)
 - visibility (varchar, DEFAULT 'private')
 - created_at (timestamptz, NOT NULL)
@@ -184,9 +184,9 @@ curl http://localhost:8080/api/v1/status | jq .
 ### レスポンス時間測定
 ```bash
 # 5回連続測定
-for i in {1..5}; do 
-  echo "Request $i:"; 
-  time curl -s http://localhost:8080/health > /dev/null; 
+for i in {1..5}; do
+  echo "Request $i:";
+  time curl -s http://localhost:8080/health > /dev/null;
 done
 
 # 期待される応答時間: 10-15ms以下
@@ -196,9 +196,9 @@ done
 ```bash
 # 10件同時リクエスト
 echo "Concurrent load test (10 requests):"
-for i in {1..10}; do 
-  curl -s http://localhost:8080/ping > /dev/null & 
-done; 
+for i in {1..10}; do
+  curl -s http://localhost:8080/ping > /dev/null &
+done;
 wait && echo "All requests completed"
 
 # 期待される結果: 全リクエスト正常完了
@@ -265,7 +265,7 @@ docker-compose restart backend frontend
 
 ### 成功基準
 - **バックエンドテスト**: 全15テスト成功
-- **フロントエンドテスト**: 全6テスト成功  
+- **フロントエンドテスト**: 全6テスト成功
 - **データベース**: PostgreSQL 15.13稼働
 - **API応答時間**: 平均15ms以下
 - **ヘルスチェック**: status: "ok"
@@ -299,7 +299,7 @@ docker-compose restart backend frontend
 
 ### 🚀 システム状態
 - Backend: 正常稼働中 (http://localhost:8080)
-- Frontend: 正常稼働中 (http://localhost:8081)  
+- Frontend: 正常稼働中 (http://localhost:8081)
 - Database: PostgreSQL 15.13稼働中
 
 ### 📈 パフォーマンス

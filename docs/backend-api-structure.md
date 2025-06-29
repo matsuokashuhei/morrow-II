@@ -93,7 +93,7 @@ backend/
 - **ファイル**: `ent/` ディレクトリ配下
 - **スキーマ定義**:
   - `ent/schema/user.go` - ユーザーエンティティ
-  - `ent/schema/event.go` - イベントエンティティ  
+  - `ent/schema/event.go` - イベントエンティティ
   - `ent/schema/participant.go` - 参加者エンティティ
 - **マイグレーション**: アプリケーション起動時自動実行
 

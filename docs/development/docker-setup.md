@@ -208,8 +208,8 @@ curl http://localhost:8080/health
 time curl -s http://localhost:8080/ping
 
 # 負荷テスト（簡易）
-for i in {1..10}; do 
-  curl -s http://localhost:8080/health > /dev/null & 
-done; 
+for i in {1..10}; do
+  curl -s http://localhost:8080/health > /dev/null &
+done;
 wait
 ```

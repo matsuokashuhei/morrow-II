@@ -251,15 +251,15 @@ curl http://localhost:8080/api/v1/status | jq .
 #### パフォーマンステスト
 ```bash
 # レスポンス時間測定
-for i in {1..5}; do 
-  echo "Request $i:"; 
-  time curl -s http://localhost:8080/health > /dev/null; 
+for i in {1..5}; do
+  echo "Request $i:";
+  time curl -s http://localhost:8080/health > /dev/null;
 done
 
 # 同時接続テスト
-for i in {1..10}; do 
-  curl -s http://localhost:8080/ping > /dev/null & 
-done; 
+for i in {1..10}; do
+  curl -s http://localhost:8080/ping > /dev/null &
+done;
 wait && echo "All requests completed"
 ```
 
