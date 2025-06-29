@@ -36,7 +36,21 @@ func (c *Config) IsDevelopment() bool {
 	return c.Env == "development"
 }
 
-// Removed DatabaseHost, DatabasePort, and DatabaseName methods as they were redundant.
+// DatabaseHost returns the database host for safe logging
+func (c *Config) DatabaseHost() string {
+	return c.DBHost
+}
+
+// DatabasePort returns the database port for safe logging
+func (c *Config) DatabasePort() string {
+	return c.DBPort
+}
+
+// DatabaseName returns the database name for safe logging
+func (c *Config) DatabaseName() string {
+	return c.DBName
+}
+
 // Validate validates the configuration
 func (c *Config) Validate() error {
 	if c.Port == "" {
