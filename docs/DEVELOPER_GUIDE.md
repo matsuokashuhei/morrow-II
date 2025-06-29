@@ -63,7 +63,35 @@ make test        # 全体のテスト
 make format      # 全体のフォーマット
 ```
 
-### 3. プルリクエスト作成前
+### 3. Go コマンド実行ルール
+
+**重要**: Goコマンド（go mod、go get、go run等）は必ずDockerコンテナ内で実行してください。
+
+```bash
+# ❌ ローカルでの実行（禁止）
+go mod tidy
+go get github.com/example/package
+go run main.go
+
+# ✅ Dockerコンテナ内での実行（推奨）
+docker-compose exec backend go mod tidy
+docker-compose exec backend go get github.com/example/package
+docker-compose exec backend go run cmd/server/main.go
+
+# または、コンテナ内でbashシェルを起動して作業
+docker-compose exec backend bash
+# コンテナ内で
+go mod tidy
+go get github.com/example/package
+```
+
+**理由**:
+- Goバージョンの一貫性を保つ
+- 依存関係の環境一致
+- go.mod/go.sumファイルの整合性
+- チーム開発での環境差分回避
+
+### 4. プルリクエスト作成前
 
 ```bash
 # 最終検証
