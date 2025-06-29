@@ -1,0 +1,94 @@
+repos:
+  # Go linting and formatting
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.1
+    hooks:
+      - id: go-fmt
+        args: [-w]
+        files: ^backend/.*\.go$
+      - id: go-vet-mod
+        files: ^backend/.*\.go$
+      - id: go-mod-tidy
+        files: ^backend/(go\.mod|go\.sum)$
+      - id: go-unit-tests-mod
+        files: ^backend/.*\.go$
+        args: [-race, -v]
+
+  # TypeScript/JavaScript linting and formatting
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.20.0
+    hooks:
+      - id: eslint
+        files: ^frontend/.*\.(js|jsx|ts|tsx)$
+        args: [--fix]
+        additional_dependencies:
+          - eslint@^8.54.0
+          - eslint-config-expo@^7.0.0
+          - '@typescript-eslint/eslint-plugin@^6.12.0'
+          - '@typescript-eslint/parser@^6.12.0'
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        files: ^frontend/.*\.(js|jsx|ts|tsx|json|md)$
+        args: [--write]
+
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(.*\.(md|txt)|docs/.*)$
+      - id: end-of-file-fixer
+        exclude: ^(.*\.(md|txt)|docs/.*)$
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-yaml
+        files: \.(yaml|yml)$
+      - id: check-json
+        files: \.json$
+      - id: check-toml
+        files: \.toml$
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Dockerfile linting
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        files: Dockerfile.*
+
+  # Shell script linting
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+        files: \.(sh|bash)$
+
+  # Docker Compose validation
+  - repo: https://github.com/IamTheFij/docker-compose-check
+    rev: v1.3.0
+    hooks:
+      - id: docker-compose-check
+        files: docker-compose.*\.ya?ml$
+
+  # Secrets detection
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: ^(package-lock\.json|.*\.lock)$
+
+# Global configuration
+ci:
+  autofix_commit_msg: 'fix: auto-fix pre-commit hooks'
+  autofix_prs: true
+  autoupdate_commit_msg: 'chore: pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

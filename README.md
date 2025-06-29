@@ -10,6 +10,7 @@
 - ✅ イベント作成・編集・削除
 - ✅ リアルタイムカウントダウン表示
 - ✅ 基本的なイベント管理
+- ✅ 開発ツール・リンター設定
 
 ### Phase 2: ソーシャル機能
 - 🔄 ユーザー認証（Google/Apple）
@@ -30,7 +31,7 @@
 ## 🛠 技術スタック
 
 ### バックエンド
-- **言語**: Go 1.21+
+- **言語**: Go 1.23+
 - **フレームワーク**: Gin
 - **ORM**: Ent
 - **API**: GraphQL (gqlgen)
@@ -48,6 +49,165 @@
 ### インフラ・DevOps
 - **クラウド**: AWS (ECS, RDS, ElastiCache, S3, CloudFront)
 - **CI/CD**: GitHub Actions
+- **開発ツール**: Docker, Docker Compose, golangci-lint, ESLint, Prettier
+
+## 🚀 開発環境セットアップ
+
+### 前提条件
+- Docker & Docker Compose
+- Node.js 18+ (ローカル開発時)
+- Go 1.23+ (ローカル開発時)
+
+### クイックスタート
+
+```bash
+# リポジトリクローン
+git clone https://github.com/matsuokashuhei/morrow-II.git
+cd morrow-II
+
+# 開発環境セットアップ
+make setup
+
+# 開発サーバー起動
+make dev
+```
+
+### 開発コマンド
+
+```bash
+# 開発環境
+make dev                # 全サービス起動
+make dev-backend        # バックエンドのみ
+make dev-frontend       # フロントエンドのみ
+
+# コード品質管理
+make lint              # 全体のlint
+make lint-backend      # Go linter
+make lint-frontend     # TypeScript/JavaScript linter
+make format            # 全体のフォーマット
+make format-backend    # Go フォーマット
+make format-frontend   # TypeScript/JavaScript フォーマット
+
+# テスト
+make test              # 全体のテスト
+make test-backend      # Go テスト
+make test-frontend     # React Native テスト
+make test-coverage     # カバレッジ付きテスト
+
+# Pre-commit 検証
+make pre-commit        # コミット前の検証（format + lint + test）
+make validate          # プッシュ前の最終検証
+
+# その他
+make clean             # Docker環境クリーンアップ
+make help              # 利用可能なコマンド一覧
+```
+
+## 📋 開発ガイドライン
+
+### コード品質管理
+- **Go**: golangci-lint による包括的な静的解析
+- **TypeScript**: ESLint + Prettier による品質管理
+- **Pre-commit hooks**: コミット前の自動検証
+- **CI/CD**: GitHub Actions による継続的インテグレーション
+
+### 開発フロー
+1. Issue作成・担当者アサイン
+2. ブランチ作成（feature/issue-番号）
+3. 開発・テスト（`make pre-commit`で検証）
+4. プルリクエスト作成
+5. CI/CD自動テスト
+6. コードレビュー
+7. マージ
+
+### 詳細なドキュメント
+- [📖 開発者ガイド](docs/DEVELOPER_GUIDE.md)
+- [⚙️ CI/CD開発ルール](docs/development/ci-cd-rules.md)
+- [🏗 プロジェクト構成](docs/PROJECT_STRUCTURE.md)
+- [💻 技術スタック詳細](docs/architecture/tech-stack.md)
+- **開発ツール**: golangci-lint, Prettier, ESLint, pre-commit hooks
+
+## 🚀 開発環境セットアップ
+
+### 必要な環境
+- Docker & Docker Compose
+- Node.js 18+
+- Go 1.23+
+- Python 3.8+ (pre-commit用)
+
+### 初期セットアップ
+```bash
+# リポジトリクローン
+git clone https://github.com/matsuokashuhei/morrow-II.git
+cd morrow-II
+
+# 開発環境セットアップ
+make setup
+
+# 開発環境起動
+make dev
+```
+
+### 開発ツール使用方法
+
+#### コード品質管理
+```bash
+# 全体のlint実行
+make lint
+
+# バックエンド（Go）のlint
+make lint-backend
+
+# フロントエンド（TypeScript）のlint
+make lint-frontend
+
+# コードフォーマット
+make format
+
+# テスト実行
+make test
+
+# プリコミット検証（フォーマット + lint + テスト）
+make pre-commit
+```
+
+#### Pre-commit Hooks
+プロジェクトでは以下のpre-commit hooksが設定されています：
+
+**Go（バックエンド）**
+- `go fmt`: コードフォーマット
+- `go vet`: 静的解析
+- `go mod tidy`: 依存関係整理
+- `golangci-lint`: 包括的linting
+
+**TypeScript（フロントエンド）**
+- `prettier`: コードフォーマット
+- `eslint`: linting + 自動修正
+- `typescript`: 型チェック
+
+**一般**
+- ファイルサイズチェック（1MB以上禁止）
+- YAML/JSON構文チェック
+- Dockerfile lint
+- シークレット検出
+
+#### 手動でのlint実行
+```bash
+# Go
+cd backend
+go fmt ./...
+go vet ./...
+golangci-lint run
+
+# TypeScript
+cd frontend
+npm run lint
+npm run type-check
+npm run format
+
+# pre-commit（全体）
+pre-commit run --all-files
+```
 - **コンテナ**: Docker
 - **IaC**: Terraform/CDK
 - **監視**: CloudWatch, Sentry
