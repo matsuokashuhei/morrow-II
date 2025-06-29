@@ -3,37 +3,53 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/matsuokashuhei/morrow-backend/ent"
+	"github.com/matsuokashuhei/morrow-backend/internal/config"
 	"github.com/matsuokashuhei/morrow-backend/internal/database"
+	"github.com/matsuokashuhei/morrow-backend/internal/middleware"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	ctx := context.Background()
 
+	// Initialize logger
+	logger := middleware.InitLogger()
+
+	// Load configuration
+	cfg := config.New()
+	if err := cfg.Validate(); err != nil {
+		logger.WithError(err).Fatal("Configuration validation failed")
+	}
+
 	// データベースクライアントの作成
-	client, err := database.NewClient()
+	client, err := database.NewClient(cfg, logger)
 	if err != nil {
-		log.Fatalf("Failed to create database client: %v", err)
+		logger.WithError(err).Fatal("Failed to create database client")
 	}
 	defer client.Close()
 
 	// マイグレーション実行
-	if err := database.AutoMigrate(ctx, client); err != nil {
-		log.Fatalf("Failed to run migration: %v", err)
+	if err := client.AutoMigrate(ctx); err != nil {
+		logger.WithError(err).Fatal("Failed to run migration")
+	}
+
+	// ヘルスチェック実行
+	if err := client.HealthCheck(ctx); err != nil {
+		logger.WithError(err).Fatal("Database health check failed")
 	}
 
 	// テストデータの作成
-	if err := createTestData(ctx, client); err != nil {
-		log.Fatalf("Failed to create test data: %v", err)
+	if err := createTestData(ctx, client.Client, logger); err != nil {
+		logger.WithError(err).Fatal("Failed to create test data")
 	}
 
 	fmt.Println("✅ Ent schema setup completed successfully!")
 }
 
-func createTestData(ctx context.Context, client *ent.Client) error {
+func createTestData(ctx context.Context, client *ent.Client, logger *logrus.Logger) error {
 	// ユーザーの作成
 	user, err := client.User.
 		Create().
@@ -43,7 +59,7 @@ func createTestData(ctx context.Context, client *ent.Client) error {
 	if err != nil {
 		return fmt.Errorf("failed creating user: %v", err)
 	}
-	fmt.Printf("Created user: %v\n", user)
+	logger.WithField("user_id", user.ID).Info("Created test user")
 
 	// イベントの作成
 	event, err := client.Event.
@@ -59,7 +75,7 @@ func createTestData(ctx context.Context, client *ent.Client) error {
 	if err != nil {
 		return fmt.Errorf("failed creating event: %v", err)
 	}
-	fmt.Printf("Created event: %v\n", event)
+	logger.WithField("event_id", event.ID).Info("Created test event")
 
 	// 参加者の作成（作成者は自動的にownerとして参加）
 	participant, err := client.Participant.
@@ -72,7 +88,7 @@ func createTestData(ctx context.Context, client *ent.Client) error {
 	if err != nil {
 		return fmt.Errorf("failed creating participant: %v", err)
 	}
-	fmt.Printf("Created participant: %v\n", participant)
+	logger.WithField("participant_id", participant.ID).Info("Created test participant")
 
 	// データの取得テスト
 	events, err := client.Event.
@@ -87,8 +103,11 @@ func createTestData(ctx context.Context, client *ent.Client) error {
 	}
 
 	for _, e := range events {
-		fmt.Printf("Event: %s, Creator: %s, Participants: %d\n",
-			e.Title, e.Edges.Creator.Name, len(e.Edges.Participants))
+		logger.WithFields(logrus.Fields{
+			"event_title":       e.Title,
+			"creator_name":      e.Edges.Creator.Name,
+			"participants_count": len(e.Edges.Participants),
+		}).Info("Retrieved event data")
 	}
 
 	return nil
