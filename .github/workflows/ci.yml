@@ -122,6 +122,9 @@ jobs:
         docker compose config
 
     - name: Build production Docker images
+      env:
+        DB_PASSWORD: test_password
+        JWT_SECRET: test_jwt_secret_for_ci_only
       run: |
         docker compose -f docker-compose.prod.yml build
         docker compose -f docker-compose.prod.yml config
