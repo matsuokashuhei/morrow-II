@@ -87,7 +87,7 @@ func createTestData(ctx context.Context, client *ent.Client) error {
 	}
 
 	for _, e := range events {
-		fmt.Printf("Event: %s, Creator: %s, Participants: %d\n", 
+		fmt.Printf("Event: %s, Creator: %s, Participants: %d\n",
 			e.Title, e.Edges.Creator.Name, len(e.Edges.Participants))
 	}
 

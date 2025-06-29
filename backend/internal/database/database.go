@@ -13,7 +13,7 @@ import (
 func NewClient() (*ent.Client, error) {
 	// Docker Compose環境のPostgreSQL接続情報
 	dsn := "host=postgres port=5432 user=morrow_user password=morrow_password dbname=morrow_dev sslmode=disable"
-	
+
 	client, err := ent.Open("postgres", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("failed opening connection to postgres: %v", err)
