@@ -74,13 +74,13 @@ format-frontend: ## Format TypeScript/JavaScript code
 test: test-backend test-frontend ## Run all tests
 
 test-backend: ## Run Go tests
-	docker run --rm -v $(PWD)/backend:/app -w /app golang:1.23-alpine go test -v -race ./...
+	docker run --rm -v $(PWD)/backend:/app -w /app -e CGO_ENABLED=1 golang:1.23-alpine sh -c "apk add --no-cache gcc musl-dev && go test -v -race ./..."
 
 test-frontend: ## Run React Native tests
 	docker-compose run --rm frontend npm test -- --watchAll=false
 
 test-coverage: ## Run tests with coverage
-	docker run --rm -v $(PWD)/backend:/app -w /app golang:1.23-alpine go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+	docker run --rm -v $(PWD)/backend:/app -w /app -e CGO_ENABLED=1 golang:1.23-alpine sh -c "apk add --no-cache gcc musl-dev && go test -v -race -coverprofile=coverage.out -covermode=atomic ./..."
 	docker-compose run --rm frontend npm run test:coverage
 
 # Pre-commit validation
