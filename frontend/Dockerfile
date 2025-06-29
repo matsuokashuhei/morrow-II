@@ -29,7 +29,7 @@ RUN addgroup -g 1001 -S morrow && \
 WORKDIR /app
 
 # Copy built files from builder stage
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/web-build ./dist
 
 # Change ownership to non-root user
 RUN chown -R morrow:morrow /app
