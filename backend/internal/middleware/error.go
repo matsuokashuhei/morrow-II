@@ -101,6 +101,9 @@ func RespondWithError(c *gin.Context, statusCode int, errorType, message string)
 		},
 		"success": false,
 	})
+
+	// Prevent further handler execution
+	c.Abort()
 }
 
 // RespondWithSuccess sends a consistent success response
