@@ -108,7 +108,7 @@ setup-hooks: ## Setup pre-commit hooks
 	@echo "✅ Pre-commit hooks installed!"
 
 # Database commands
-.PHONY: db-migrate db-reset db-status db-diff db-apply db-hash db-test
+.PHONY: db-migrate db-reset db-status db-diff db-apply db-hash db-test atlas-build
 
 db-migrate: ## Run database migrations (Ent)
 	docker-compose run --rm backend go run -mod=mod entgo.io/ent/cmd/ent generate ./ent/schema
@@ -117,23 +117,26 @@ db-reset: ## Reset database
 	docker-compose down -v postgres
 	docker-compose up -d postgres
 
+atlas-build: ## Build Atlas service
+	docker-compose build atlas
+
 db-status: ## Check migration status with Atlas
-	docker-compose run --rm backend atlas migrate status --env docker
+	docker-compose run --rm atlas migrate status --env docker
 
 db-diff: ## Generate migration diff with Atlas (requires name: make db-diff name=migration_name)
-	docker-compose run --rm backend atlas migrate diff --env docker $(name)
+	docker-compose run --rm atlas migrate diff --env docker $(name)
 
 db-apply: ## Apply migrations with Atlas
-	docker-compose run --rm backend atlas migrate apply --env docker
+	docker-compose run --rm atlas migrate apply --env docker
 
 db-hash: ## Generate migration hash with Atlas
-	docker-compose run --rm backend atlas migrate hash --env docker
+	docker-compose run --rm atlas migrate hash --env docker
 
 db-lint: ## Lint migration files with Atlas
-	docker-compose run --rm backend atlas migrate lint --env docker
+	docker-compose run --rm atlas migrate lint --env docker
 
 db-test: ## Test migrations on test database
-	docker-compose run --rm backend atlas migrate apply --env test
+	docker-compose run --rm atlas migrate apply --env test
 
 
 # Go commands

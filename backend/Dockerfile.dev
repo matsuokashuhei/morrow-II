@@ -12,9 +12,6 @@ RUN go install github.com/air-verse/air@v1.60.0
 RUN go install github.com/99designs/gqlgen@latest
 RUN go install entgo.io/ent/cmd/ent@latest
 
-# Install Atlas CLI for database migrations
-RUN curl -sSf https://atlasgo.sh | sh
-
 # Copy go mod files for caching dependencies
 COPY go.mod go.sum* ./
 

@@ -21,7 +21,7 @@ func GetDatabaseClient(c *gin.Context) (*database.Client, bool) {
 	if !exists {
 		return nil, false
 	}
-	
+
 	dbClient, ok := client.(*database.Client)
 	return dbClient, ok
 }
