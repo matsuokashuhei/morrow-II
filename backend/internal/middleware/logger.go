@@ -3,34 +3,44 @@ package middleware
 import (
 	"io"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
-// InitLogger はLogrusの初期設定を行う
+var (
+	// globalLogger はアプリケーション全体で使用されるシングルトンのロガー
+	globalLogger *logrus.Logger
+	// once はロガーの初期化を一度だけ実行するために使用
+	once sync.Once
+)
+
+// InitLogger はLogrusの初期設定を行う（シングルトンパターン）
 func InitLogger() *logrus.Logger {
-	log := logrus.New()
+	once.Do(func() {
+		globalLogger = logrus.New()
 
-	// 出力先設定
-	log.SetOutput(os.Stdout)
+		// 出力先設定
+		globalLogger.SetOutput(os.Stdout)
 
-	// 環境に応じた設定
-	env := os.Getenv("GO_ENV")
-	if env == "production" {
-		log.SetLevel(logrus.InfoLevel)
-		log.SetFormatter(&logrus.JSONFormatter{})
-	} else {
-		log.SetLevel(logrus.DebugLevel)
-		log.SetFormatter(&logrus.TextFormatter{
-			FullTimestamp:   true,
-			TimestampFormat: "2006-01-02 15:04:05",
-			ForceColors:     true,
-		})
-	}
+		// 環境に応じた設定
+		env := os.Getenv("GO_ENV")
+		if env == "production" {
+			globalLogger.SetLevel(logrus.InfoLevel)
+			globalLogger.SetFormatter(&logrus.JSONFormatter{})
+		} else {
+			globalLogger.SetLevel(logrus.DebugLevel)
+			globalLogger.SetFormatter(&logrus.TextFormatter{
+				FullTimestamp:   true,
+				TimestampFormat: "2006-01-02 15:04:05",
+				ForceColors:     true,
+			})
+		}
+	})
 
-	return log
+	return globalLogger
 }
 
 // LoggerMiddleware はGinのリクエストログを構造化ログとして出力する
@@ -78,15 +88,12 @@ func LoggerMiddleware(logger *logrus.Logger) gin.HandlerFunc {
 // Logger returns a gin.HandlerFunc that logs requests using logrus
 // (後方互換性のために残す)
 func Logger() gin.HandlerFunc {
-	logger := InitLogger()
-	return LoggerMiddleware(logger)
+	return LoggerMiddleware(InitLogger())
 }
 
 // RequestLogger creates a structured logger for the current request
 func RequestLogger(c *gin.Context) *logrus.Entry {
-	logger := InitLogger()
-
-	return logger.WithFields(logrus.Fields{
+	return InitLogger().WithFields(logrus.Fields{
 		"request_id": c.GetHeader("X-Request-ID"),
 		"path":       c.Request.URL.Path,
 		"method":     c.Request.Method,
