@@ -29,22 +29,65 @@ morrow-II/
 ├── scripts/                          # 自動化スクリプト
 │   └── setup-github.sh
 │
-├── backend/                          # Go APIサーバー (作成予定)
+├── backend/                          # Go APIサーバー ✅
 │   ├── cmd/
-│   ├── internal/
-│   ├── pkg/
-│   ├── ent/
-│   ├── graph/
-│   ├── Dockerfile
-│   └── go.mod
+│   │   ├── server/                   # メインアプリケーション
+│   │   │   └── main.go
+│   │   └── test-ent/                 # Entテスト用
+│   │       └── main.go
+│   ├── internal/                     # 内部パッケージ
+│   │   ├── config/                   # 設定管理 ✅
+│   │   │   ├── config.go
+│   │   │   └── config_test.go
+│   │   ├── database/                 # データベース層 ✅
+│   │   │   └── database.go
+│   │   ├── handler/                  # HTTPハンドラー ✅
+│   │   │   ├── health.go
+│   │   │   └── health_test.go
+│   │   ├── middleware/               # ミドルウェア ✅
+│   │   │   ├── auth.go
+│   │   │   ├── auth_test.go
+│   │   │   ├── cors.go
+│   │   │   ├── error.go
+│   │   │   └── logger.go
+│   │   └── routes/                   # ルーター設定 ✅
+│   │       └── routes.go
+│   ├── ent/                          # Ent ORM ✅
+│   │   ├── client.go
+│   │   ├── schema/                   # エンティティスキーマ
+│   │   │   ├── user.go
+│   │   │   ├── event.go
+│   │   │   └── participant.go
+│   │   └── [auto-generated files]
+│   ├── graph/                        # GraphQL (将来対応)
+│   ├── Dockerfile.dev                # 開発用Dockerfile ✅
+│   ├── Dockerfile                    # 本番用Dockerfile ✅
+│   ├── .air.toml                     # ホットリロード設定 ✅
+│   ├── go.mod                        # Go モジュール ✅
+│   └── go.sum                        # 依存関係チェックサム ✅
 │
-├── frontend/                         # React Nativeアプリ (作成予定)
+├── frontend/                         # React Nativeアプリ ✅
 │   ├── src/
-│   ├── __tests__/
-│   ├── android/
-│   ├── ios/
-│   ├── package.json
-│   └── app.json
+│   │   ├── __tests__/                # テストファイル ✅
+│   │   │   ├── App.test.tsx
+│   │   │   ├── basic.test.tsx
+│   │   │   └── HomeScreen.test.tsx
+│   │   ├── components/               # 共通コンポーネント
+│   │   ├── hooks/                    # カスタムフック
+│   │   ├── screens/                  # 画面コンポーネント ✅
+│   │   │   └── HomeScreen.tsx
+│   │   ├── store/                    # 状態管理
+│   │   ├── types/                    # 型定義
+│   │   └── utils/                    # ユーティリティ
+│   ├── assets/                       # 静的リソース ✅
+│   ├── coverage/                     # テストカバレッジ ✅
+│   ├── Dockerfile.dev                # 開発用Dockerfile ✅
+│   ├── Dockerfile                    # 本番用Dockerfile ✅
+│   ├── package.json                  # 依存関係定義 ✅
+│   ├── tsconfig.json                 # TypeScript設定 ✅
+│   ├── jest.config.json              # Jest設定 ✅
+│   ├── babel.config.js               # Babel設定 ✅
+│   └── app.json                      # Expo設定 ✅
 │
 ├── web/                              # React Webアプリ (Phase 4で作成予定)
 │   ├── src/

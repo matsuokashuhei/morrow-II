@@ -3,7 +3,9 @@ package schema
 import (
 	"time"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -26,11 +28,13 @@ func (Participant) Fields() []ent.Field {
 			Comment("参加状態"),
 		field.Time("joined_at").
 			Default(time.Now).
-			Comment("参加日時"),
+			Comment("参加日時").
+			Annotations(entgql.OrderField("JOINED_AT")),
 		field.Time("updated_at").
 			Default(time.Now).
 			UpdateDefault(time.Now).
-			Comment("更新日時"),
+			Comment("更新日時").
+			Annotations(entgql.OrderField("UPDATED_AT")),
 	}
 }
 
@@ -49,5 +53,14 @@ func (Participant) Edges() []ent.Edge {
 			Unique().
 			Required().
 			Comment("対象イベント"),
+	}
+}
+
+// Annotations of the Participant.
+func (Participant) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.RelayConnection(),
+		entgql.QueryField(),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 	}
 }

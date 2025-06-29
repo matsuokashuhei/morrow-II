@@ -178,6 +178,126 @@ make build
 3. **依存関係変更時の注意**: package.json ↔ package-lock.json整合性
 4. **未使用コードの削除**: IDEの警告に注意
 
+## 🧪 テスト実行ガイド
+
+### テスト実行環境
+
+**すべてのテストは必ずDockerコンテナ内で実行してください**
+
+#### バックエンドテスト
+```bash
+# 全テスト実行
+docker-compose exec backend go test ./... -v
+
+# 特定パッケージのテスト
+docker-compose exec backend go test ./internal/handler -v
+docker-compose exec backend go test ./internal/config -v
+docker-compose exec backend go test ./internal/middleware -v
+
+# カバレッジ付きテスト実行
+docker-compose exec backend go test -coverprofile=coverage.out ./...
+docker-compose exec backend go tool cover -html=coverage.out
+```
+
+#### フロントエンドテスト
+```bash
+# Jest テスト実行
+docker-compose exec frontend npm test
+
+# ウォッチモード
+docker-compose exec frontend npm test -- --watch
+
+# カバレッジレポート
+docker-compose exec frontend npm test -- --coverage
+```
+
+### データベーステスト
+
+#### データベース接続確認
+```bash
+# PostgreSQL接続テスト
+docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "SELECT version();"
+
+# テーブル構造確認
+docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "\dt"
+
+# 特定テーブルのスキーマ確認
+docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "\d events"
+```
+
+#### マイグレーション確認
+```bash
+# マイグレーション状態確認
+docker-compose logs backend | grep -i migration
+
+# 手動マイグレーション実行（緊急時のみ）
+docker-compose exec backend go run cmd/server/main.go
+```
+
+### 統合テスト
+
+#### API エンドポイントテスト
+```bash
+# ヘルスチェック
+curl http://localhost:8080/health | jq .
+
+# 疎通確認
+curl http://localhost:8080/ping | jq .
+
+# API v1 ステータス
+curl http://localhost:8080/api/v1/status | jq .
+```
+
+#### パフォーマンステスト
+```bash
+# レスポンス時間測定
+for i in {1..5}; do
+  echo "Request $i:";
+  time curl -s http://localhost:8080/health > /dev/null;
+done
+
+# 同時接続テスト
+for i in {1..10}; do
+  curl -s http://localhost:8080/ping > /dev/null &
+done;
+wait && echo "All requests completed"
+```
+
+### テスト結果の期待値
+
+#### 成功基準
+- **バックエンドテスト**: 全テスト通過（設定、ハンドラー、ミドルウェア）
+- **フロントエンドテスト**: 全Jestテスト通過
+- **API レスポンス時間**: 15ms以下
+- **データベース接続**: PostgreSQL 15.13 稼働確認
+- **ヘルスチェック**: `status: "ok"` レスポンス
+
+#### エラー対応
+- **テスト失敗**: ログ確認後、個別テスト実行で原因特定
+- **データベース接続エラー**: PostgreSQLコンテナ再起動
+- **API応答なし**: バックエンドコンテナログ確認
+- **ポート競合**: `docker-compose down` 後に再起動
+
+## 📊 品質監視
+
+### 継続的品質確認
+```bash
+# 日次品質チェック
+make test-all                      # 全テスト実行
+make lint-all                      # 全Lint検証
+make build                         # Docker ビルド確認
+
+# 週次パフォーマンスチェック
+make performance-test              # API応答速度測定
+make load-test                     # 負荷テスト実行
+```
+
+### 品質メトリクス
+- **テストカバレッジ**: バックエンド 85%以上維持
+- **Lint違反**: ゼロ維持
+- **API応答時間**: 平均15ms以下
+- **ビルド時間**: 5分以内完了
+
 ## 📚 リファレンス
 
 ### 設定ファイル一覧

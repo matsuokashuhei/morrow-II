@@ -3,13 +3,14 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/matsuokashuhei/morrow-backend/internal/config"
+	"github.com/matsuokashuhei/morrow-backend/internal/database"
 	"github.com/matsuokashuhei/morrow-backend/internal/handler"
 	"github.com/matsuokashuhei/morrow-backend/internal/middleware"
 	"github.com/sirupsen/logrus"
 )
 
 // SetupRoutes configures all application routes
-func SetupRoutes(cfg *config.Config, logger *logrus.Logger) *gin.Engine {
+func SetupRoutes(cfg *config.Config, logger *logrus.Logger, dbClient *database.Client) *gin.Engine {
 	// Create router
 	router := gin.New()
 
@@ -17,11 +18,12 @@ func SetupRoutes(cfg *config.Config, logger *logrus.Logger) *gin.Engine {
 	router.Use(middleware.LoggerMiddleware(logger))
 	router.Use(gin.Recovery())
 	router.Use(middleware.CORS())
+	router.Use(middleware.DatabaseMiddleware(dbClient)) // データベースクライアント注入
 	router.Use(middleware.Auth())
 	router.Use(middleware.ErrorHandler())
 
-	// Initialize handlers
-	healthHandler := handler.NewHealthHandler()
+	// Initialize handlers with dependencies
+	healthHandler := handler.NewHealthHandler(dbClient, logger)
 
 	// Public routes (no authentication required)
 	setupPublicRoutes(router, healthHandler, logger)

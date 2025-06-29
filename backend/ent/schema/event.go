@@ -3,7 +3,9 @@ package schema
 import (
 	"time"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -17,14 +19,17 @@ type Event struct {
 func (Event) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("title").
-			Comment("イベントのタイトル"),
+			Comment("イベントのタイトル").
+			Annotations(entgql.OrderField("TITLE")),
 		field.String("description").
 			Optional().
 			Comment("イベントの説明"),
 		field.Time("start_time").
-			Comment("イベント開始日時"),
+			Comment("イベント開始日時").
+			Annotations(entgql.OrderField("START_TIME")),
 		field.Time("end_time").
-			Comment("イベント終了日時"),
+			Comment("イベント終了日時").
+			Annotations(entgql.OrderField("END_TIME")),
 		field.String("emoji").
 			Optional().
 			Comment("イベントの絵文字"),
@@ -34,11 +39,13 @@ func (Event) Fields() []ent.Field {
 			Comment("イベントの公開設定"),
 		field.Time("created_at").
 			Default(time.Now).
-			Comment("作成日時"),
+			Comment("作成日時").
+			Annotations(entgql.OrderField("CREATED_AT")),
 		field.Time("updated_at").
 			Default(time.Now).
 			UpdateDefault(time.Now).
-			Comment("更新日時"),
+			Comment("更新日時").
+			Annotations(entgql.OrderField("UPDATED_AT")),
 	}
 }
 
@@ -54,5 +61,14 @@ func (Event) Edges() []ent.Edge {
 		// イベントの参加者（Participantを通じて）
 		edge.To("participants", Participant.Type).
 			Comment("イベントの参加者情報"),
+	}
+}
+
+// Annotations of the Event.
+func (Event) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.RelayConnection(),
+		entgql.QueryField(),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
 	}
 }

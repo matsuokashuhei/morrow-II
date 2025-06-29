@@ -60,6 +60,27 @@ services:
     networks:
       - morrow-network
 
+  # Atlas Migration Service
+  atlas:
+    build:
+      context: ./infrastructure/docker/atlas
+      dockerfile: Dockerfile
+    container_name: morrow-atlas
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=morrow_dev
+      - POSTGRES_USER=morrow_user
+      - POSTGRES_PASSWORD=morrow_password
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - postgres
+    networks:
+      - morrow-network
+    profiles:
+      - tools
+
 volumes:
   postgres_data:
   go_cache:
