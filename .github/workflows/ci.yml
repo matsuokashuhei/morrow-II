@@ -59,6 +59,11 @@ jobs:
     - name: Test backend with coverage
       working-directory: ./backend
       env:
+        TEST_DB_HOST: localhost
+        TEST_DB_PORT: 5432
+        TEST_DB_NAME: morrow_test
+        TEST_DB_USER: postgres
+        TEST_DB_PASSWORD: postgres
         DB_HOST: localhost
         DB_PORT: 5432
         DB_NAME: morrow_test

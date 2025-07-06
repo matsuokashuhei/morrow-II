@@ -34,12 +34,12 @@ func setupTestDB(t *testing.T) *ent.Client {
 
 	testDBUser := os.Getenv("TEST_DB_USER")
 	if testDBUser == "" {
-		testDBUser = "morrow_user"
+		testDBUser = "postgres"
 	}
 
 	testDBPassword := os.Getenv("TEST_DB_PASSWORD")
 	if testDBPassword == "" {
-		testDBPassword = "morrow_password"
+		testDBPassword = "postgres"
 	}
 
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
