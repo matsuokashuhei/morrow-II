@@ -27,27 +27,76 @@ func entUserToGraphQL(u *ent.User) *model.User {
 
 // Helper function to convert Ent Event to GraphQL Event
 func entEventToGraphQL(e *ent.Event) *model.Event {
+	var creator *model.User
+	if e.Edges.Creator != nil {
+		creator = entUserToGraphQL(e.Edges.Creator)
+	}
+
+	var participants []*model.Participant
+	for _, p := range e.Edges.Participants {
+		participants = append(participants, entParticipantToGraphQL(p))
+	}
+
 	return &model.Event{
-		ID:          strconv.Itoa(e.ID),
-		Title:       e.Title,
-		Description: &e.Description,
-		StartTime:   e.StartTime.Format(time.RFC3339),
-		EndTime:     e.EndTime.Format(time.RFC3339),
-		Emoji:       &e.Emoji,
-		Visibility:  model.EventVisibility(e.Visibility),
-		CreatedAt:   e.CreatedAt.Format(time.RFC3339),
-		UpdatedAt:   e.UpdatedAt.Format(time.RFC3339),
+		ID:           strconv.Itoa(e.ID),
+		Title:        e.Title,
+		Description:  &e.Description,
+		StartTime:    e.StartTime.Format(time.RFC3339),
+		EndTime:      e.EndTime.Format(time.RFC3339),
+		Emoji:        &e.Emoji,
+		Visibility:   model.EventVisibility(e.Visibility),
+		CreatedAt:    e.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:    e.UpdatedAt.Format(time.RFC3339),
+		Creator:      creator,
+		Participants: participants,
+	}
+}
+
+// Helper function to convert Ent Event to GraphQL Event (without participants to avoid circular references)
+func entEventToGraphQLSimple(e *ent.Event) *model.Event {
+	var creator *model.User
+	if e.Edges.Creator != nil {
+		creator = entUserToGraphQL(e.Edges.Creator)
+	}
+
+	return &model.Event{
+		ID:           strconv.Itoa(e.ID),
+		Title:        e.Title,
+		Description:  &e.Description,
+		StartTime:    e.StartTime.Format(time.RFC3339),
+		EndTime:      e.EndTime.Format(time.RFC3339),
+		Emoji:        &e.Emoji,
+		Visibility:   model.EventVisibility(e.Visibility),
+		CreatedAt:    e.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:    e.UpdatedAt.Format(time.RFC3339),
+		Creator:      creator,
+		Participants: nil, // Avoid circular reference
 	}
 }
 
 // Helper function to convert Ent Participant to GraphQL Participant
 func entParticipantToGraphQL(p *ent.Participant) *model.Participant {
+	var user *model.User
+	var event *model.Event
+
+	// Load User relation if available
+	if p.Edges.User != nil {
+		user = entUserToGraphQL(p.Edges.User)
+	}
+
+	// Load Event relation if available (using simple version to avoid circular references)
+	if p.Edges.Event != nil {
+		event = entEventToGraphQLSimple(p.Edges.Event)
+	}
+
 	return &model.Participant{
 		ID:        strconv.Itoa(p.ID),
 		Role:      model.ParticipantRole(p.Role),
 		Status:    model.ParticipantStatus(p.Status),
 		JoinedAt:  p.JoinedAt.Format(time.RFC3339),
 		UpdatedAt: p.UpdatedAt.Format(time.RFC3339),
+		User:      user,
+		Event:     event,
 	}
 }
 
@@ -265,11 +314,6 @@ func (r *Resolver) DeleteParticipant(ctx context.Context, id string) (bool, erro
 }
 
 // Query resolvers
-func (r *Resolver) Node(ctx context.Context, id string) (model.Node, error) {
-	// Basic Node implementation - can be improved with more sophisticated ID handling
-	return nil, fmt.Errorf("not implemented: Node - node")
-}
-
 func (r *Resolver) User(ctx context.Context, id string) (*model.User, error) {
 	userID, err := strconv.Atoi(id)
 	if err != nil {
@@ -302,7 +346,11 @@ func (r *Resolver) Event(ctx context.Context, id string) (*model.Event, error) {
 		return nil, fmt.Errorf("invalid event ID: %w", err)
 	}
 
-	e, err := r.Client.Event.Get(ctx, eventID)
+	e, err := r.Client.Event.Query().
+		Where(event.IDEQ(eventID)).
+		WithCreator().
+		WithParticipants().
+		Only(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get event: %w", err)
 	}
@@ -310,7 +358,10 @@ func (r *Resolver) Event(ctx context.Context, id string) (*model.Event, error) {
 }
 
 func (r *Resolver) Events(ctx context.Context) ([]*model.Event, error) {
-	events, err := r.Client.Event.Query().All(ctx)
+	events, err := r.Client.Event.Query().
+		WithCreator().
+		WithParticipants().
+		All(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get events: %w", err)
 	}
@@ -328,7 +379,11 @@ func (r *Resolver) Participant(ctx context.Context, id string) (*model.Participa
 		return nil, fmt.Errorf("invalid participant ID: %w", err)
 	}
 
-	p, err := r.Client.Participant.Get(ctx, participantID)
+	p, err := r.Client.Participant.Query().
+		Where(participant.IDEQ(participantID)).
+		WithUser().
+		WithEvent().
+		Only(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get participant: %w", err)
 	}
@@ -336,7 +391,10 @@ func (r *Resolver) Participant(ctx context.Context, id string) (*model.Participa
 }
 
 func (r *Resolver) Participants(ctx context.Context) ([]*model.Participant, error) {
-	participants, err := r.Client.Participant.Query().All(ctx)
+	participants, err := r.Client.Participant.Query().
+		WithUser().
+		WithEvent().
+		All(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get participants: %w", err)
 	}

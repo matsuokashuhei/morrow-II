@@ -16,7 +16,7 @@ export TEST_DB_PASSWORD=morrow_password
 
 # テスト用データベースが存在しない場合は作成
 echo "📦 テスト用データベース準備..."
-docker-compose exec postgres psql -U morrow_user -d morrow_dev -c "CREATE DATABASE morrow_test;" 2>/dev/null || echo "テストDB既存 or 作成済み"
+docker-compose exec postgres psql -U morrow_user -d postgres -c "CREATE DATABASE morrow_test;" 2>/dev/null || echo "テストDB既存 or 作成済み"
 
 # GraphQLテストを実行
 echo "🚀 GraphQLテスト実行..."

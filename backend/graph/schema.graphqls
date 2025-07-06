@@ -72,9 +72,6 @@ enum ParticipantStatus {
 
 # Query type
 type Query {
-  # Node query (for Relay)
-  node(id: ID!): Node
-
   # User queries
   user(id: ID!): User
   users: [User!]!
