@@ -349,7 +349,9 @@ func (r *Resolver) Event(ctx context.Context, id string) (*model.Event, error) {
 	e, err := r.Client.Event.Query().
 		Where(event.IDEQ(eventID)).
 		WithCreator().
-		WithParticipants().
+		WithParticipants(func(q *ent.ParticipantQuery) {
+			q.WithUser().WithEvent()
+		}).
 		Only(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get event: %w", err)
@@ -360,7 +362,9 @@ func (r *Resolver) Event(ctx context.Context, id string) (*model.Event, error) {
 func (r *Resolver) Events(ctx context.Context) ([]*model.Event, error) {
 	events, err := r.Client.Event.Query().
 		WithCreator().
-		WithParticipants().
+		WithParticipants(func(q *ent.ParticipantQuery) {
+			q.WithUser().WithEvent()
+		}).
 		All(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get events: %w", err)
