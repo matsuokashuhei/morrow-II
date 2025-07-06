@@ -39,26 +39,26 @@ Webアプリ開発とビジネス向け機能
   - GitHub Actions基本ワークフロー
 
 ### 1.2 バックエンドAPI基盤
-- [ ] **Go + Gin APIサーバー基盤構築**
+- [x] **Go + Gin APIサーバー基盤構築**
   - プロジェクト構造設計
   - Gin ルーター設定
   - ミドルウェア設定（CORS, ログ, 認証）
   - ヘルスチェックエンドポイント
 
-- [ ] **Ent スキーマ設計・実装**
+- [x] **Ent スキーマ設計・実装**
   - Entプロジェクト初期化
   - ユーザーエンティティ定義
   - イベントエンティティ定義
   - 参加者関連エンティティ定義
   - リレーション設計
 
-- [ ] **データベース設定**
+- [x] **データベース設定**
   - PostgreSQL Docker設定
   - Ent Schema Code生成
   - Atlas マイグレーション設定
   - 初期データ投入スクリプト
 
-- [ ] **GraphQL API実装**
+- [x] **GraphQL API実装**
   - gqlgen初期設定
   - entgql統合設定
   - GraphQLスキーマ自動生成
@@ -66,7 +66,7 @@ Webアプリ開発とビジネス向け機能
   - GraphiQL Playground設定
 
 ### 1.3 React Native基本アプリ
-- [ ] **React Nativeプロジェクト初期化**
+- [x] **React Nativeプロジェクト初期化**
   - Expo/React Native CLI決定・設定
   - TypeScript設定
   - ナビゲーション設定（React Navigation）

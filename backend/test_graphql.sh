@@ -17,7 +17,7 @@ export TEST_DB_PASSWORD=morrow_password
 # テスト用データベースが存在しない場合は作成
 echo "📦 テスト用データベース準備..."
 echo "⏳ PostgreSQLの準備を確認中..."
-until docker-compose exec -T postgres pg_isready -U morrow_user -h ${TEST_DB_HOST} -p 5432; do
+until docker-compose exec -T postgres pg_isready -U morrow_user -h localhost -p 5432; do
     echo "PostgreSQLが準備中です。1秒後に再試行します..."
     sleep 1
 done

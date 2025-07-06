@@ -30,30 +30,6 @@ docker run --rm -v $(pwd)/backend:/app -w /app golang:1.23-alpine go build ./...
 docker run --rm -v $(pwd)/backend:/app -w /app golang:1.23-alpine go test ./...
 ```
 
-#### 🚨 Go コマンド実行ルール - 必須
-**全ての Go コマンド（build、test、run等）は必ず Docker Compose の backend コンテナ内で実行してください。**
-
-開発環境起動後は以下のように実行：
-```bash
-# 開発環境起動
-docker compose up -d
-
-# Go コマンドはコンテナ内で実行
-docker compose exec backend go build ./...
-docker compose exec backend go test ./...
-docker compose exec backend go run ./cmd/server
-docker compose exec backend go mod tidy
-```
-
-**理由**: 
-- データベース接続など環境変数の一貫性を保つため
-- 開発環境と本番環境の設定統一のため
-- 依存関係の整合性を保つため
-
-**禁止事項**:
-- ❌ ローカルに直接インストールしたGoでのコマンド実行
-- ❌ `go run`をローカルで実行（環境変数不整合の原因）
-
 #### Frontend (React Native/TypeScript)
 ```bash
 # 依存関係インストール
@@ -128,20 +104,6 @@ docker compose down
 #### Docker Compose
 - **現代的構文使用**: `docker compose`（V2）を使用、`docker-compose`（V1）は避ける
 - **ビルドテスト**: 本番・開発両環境でのビルドテストを実施
-
-#### 🚨 Go コマンド実行ルール（重要）
-**全ての Go コマンドは docker compose backend コンテナ内で実行必須:**
-```bash
-# 正しい実行方法
-docker compose exec backend go build ./...
-docker compose exec backend go test ./...
-docker compose exec backend go run ./cmd/server
-docker compose exec backend go mod tidy
-
-# 禁止: ローカルGoでの実行
-go build ./...  # ❌ 環境変数不整合の原因
-go test ./...   # ❌ データベース接続エラーの原因
-```
 
 #### Dockerfile
 - **マルチステージビルド**: 本番用Dockerfileはマルチステージ構成
@@ -256,7 +218,17 @@ docker run --rm -v $(pwd)/frontend:/app -w /app node:18-alpine npm test
 - 📋 **レビューアーの責任**: CI未成功PRはレビュー拒否
 - 📋 **マージ責任者の責任**: 全CI成功を再確認してからマージ
 
-<!-- Removed redundant section: プルリクエスト作成後の必須確認プロセス -->
+### プルリクエスト作成後の必須確認プロセス
+8. **プルリクエスト作成**
+9. **CI/CDパイプライン実行状況の継続監視**
+   - GitHub Actions画面でワークフロー実行状況を確認
+   - backend-test、frontend-test、docker-buildの各ジョブステータスを確認
+   - 失敗したジョブがあれば詳細ログを確認
+10. **CI完全成功まで修正を継続**
+    - CIが失敗した場合、必ず修正してから次のステップに進む
+    - 部分的成功（一部ジョブのみ成功）では不十分
+    - 全てのジョブが✅成功状態になるまで修正を継続
+11. **CI成功確認後、レビュー依頼**
 
 ### 依存関係追加時
 1. **依存関係追加**
@@ -328,7 +300,6 @@ docker compose up --build
 ### プルリクエスト作成前に必ず確認：
 
 - [ ] ローカルで全てのlint/testが通過
-- [ ] **Go コマンドは docker compose backend コンテナ内で実行済み**
 - [ ] 依存関係追加時はlockファイルも更新済み
 - [ ] 新機能にはテストを追加済み
 - [ ] フォーマットチェックが通過
