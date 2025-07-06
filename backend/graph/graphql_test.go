@@ -34,7 +34,7 @@ func setupTestDB(t *testing.T) *ent.Client {
 
 	testDBUser := os.Getenv("TEST_DB_USER")
 	if testDBUser == "" {
-		testDBUser = "postgres"
+		testDBUser = "morrow_user"
 	}
 
 	testDBPassword := os.Getenv("TEST_DB_PASSWORD")
