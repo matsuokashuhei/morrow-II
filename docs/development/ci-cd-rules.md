@@ -30,6 +30,30 @@ docker run --rm -v $(pwd)/backend:/app -w /app golang:1.23-alpine go build ./...
 docker run --rm -v $(pwd)/backend:/app -w /app golang:1.23-alpine go test ./...
 ```
 
+#### 🚨 Go コマンド実行ルール - 必須
+**全ての Go コマンド（build、test、run等）は必ず Docker Compose の backend コンテナ内で実行してください。**
+
+開発環境起動後は以下のように実行：
+```bash
+# 開発環境起動
+docker compose up -d
+
+# Go コマンドはコンテナ内で実行
+docker compose exec backend go build ./...
+docker compose exec backend go test ./...
+docker compose exec backend go run ./cmd/server
+docker compose exec backend go mod tidy
+```
+
+**理由**: 
+- データベース接続など環境変数の一貫性を保つため
+- 開発環境と本番環境の設定統一のため
+- 依存関係の整合性を保つため
+
+**禁止事項**:
+- ❌ ローカルに直接インストールしたGoでのコマンド実行
+- ❌ `go run`をローカルで実行（環境変数不整合の原因）
+
 #### Frontend (React Native/TypeScript)
 ```bash
 # 依存関係インストール
@@ -105,6 +129,20 @@ docker compose down
 - **現代的構文使用**: `docker compose`（V2）を使用、`docker-compose`（V1）は避ける
 - **ビルドテスト**: 本番・開発両環境でのビルドテストを実施
 
+#### 🚨 Go コマンド実行ルール（重要）
+**全ての Go コマンドは docker compose backend コンテナ内で実行必須:**
+```bash
+# 正しい実行方法
+docker compose exec backend go build ./...
+docker compose exec backend go test ./...
+docker compose exec backend go run ./cmd/server
+docker compose exec backend go mod tidy
+
+# 禁止: ローカルGoでの実行
+go build ./...  # ❌ 環境変数不整合の原因
+go test ./...   # ❌ データベース接続エラーの原因
+```
+
 #### Dockerfile
 - **マルチステージビルド**: 本番用Dockerfileはマルチステージ構成
 - **ヘルスチェック**: 長時間実行サービスはヘルスチェック設定
@@ -174,7 +212,51 @@ docker run --rm -v $(pwd)/frontend:/app -w /app node:18-alpine npm test
 4. **コミット** (適切なコミットメッセージ)
 5. **プッシュ前統合テスト**
 6. **プッシュ**
-7. **CI結果確認** (失敗時は修正後再プッシュ)
+7. **プルリクエスト作成**
+8. **CI/CDパイプライン完全成功まで修正継続** 🚨 **必須ルール**
+   - GitHub Actions画面でワークフロー実行状況を継続監視
+   - `backend-test`、`frontend-test`、`docker-build`の全ジョブが✅成功するまで待機
+   - 失敗したジョブがあれば詳細ログを確認し、即座に修正
+   - 部分的成功（一部ジョブのみ成功）は不完全 - 全ジョブ成功が必須
+   - CI失敗時は修正コミットを追加し、再度CI完了まで監視
+9. **全CI成功確認後にレビュー依頼**
+
+### プルリクエスト作成後の必須確認プロセス詳細
+#### CI監視の具体的手順
+1. **PRページでChecks画面を開く**
+   - プルリクエストの"Checks"タブをクリック
+   - "CI/CD Pipeline"ワークフローの実行状況を確認
+
+2. **各ジョブの実行状況を個別確認**
+   ```
+   ✅ backend-test    - Go テスト・lint・ビルド
+   ✅ frontend-test   - React Native テスト・lint・型チェック
+   ✅ docker-build    - Docker イメージビルド
+   ```
+
+3. **失敗時の対応**
+   - ❌マークのジョブをクリックしてログを確認
+   - エラーメッセージを基に修正内容を特定
+   - 修正後、新しいコミットをプッシュ
+   - 自動的にCI再実行 → 成功まで繰り返し
+
+4. **成功確認**
+   - 全ジョブが緑色✅になることを確認
+   - "All checks have passed"表示を確認
+   - この段階でレビューアーにレビュー依頼
+
+#### CI失敗時の禁止事項
+- ❌ CI失敗を放置してレビュー依頼
+- ❌ 一部ジョブのみ成功でレビュー依頼
+- ❌ 「後で修正します」コメントでレビュー依頼
+- ❌ CI失敗理由の未調査
+
+#### CI成功までの責任
+- 📋 **PR作成者の責任**: CI完全成功まで修正を継続
+- 📋 **レビューアーの責任**: CI未成功PRはレビュー拒否
+- 📋 **マージ責任者の責任**: 全CI成功を再確認してからマージ
+
+<!-- Removed redundant section: プルリクエスト作成後の必須確認プロセス -->
 
 ### 依存関係追加時
 1. **依存関係追加**
@@ -243,15 +325,32 @@ docker compose up --build
 
 ## 📋 チェックリスト
 
-プルリクエスト作成前に必ず確認：
+### プルリクエスト作成前に必ず確認：
 
 - [ ] ローカルで全てのlint/testが通過
+- [ ] **Go コマンドは docker compose backend コンテナ内で実行済み**
 - [ ] 依存関係追加時はlockファイルも更新済み
 - [ ] 新機能にはテストを追加済み
 - [ ] フォーマットチェックが通過
 - [ ] Dockerビルドが成功
 - [ ] 適切なコミットメッセージを使用
 - [ ] CI失敗時は段階的デバッグを実施
+
+### プルリクエスト作成後に必ず確認：🚨 **必須**
+
+- [ ] **CI/CDパイプライン全ジョブが✅成功まで監視**
+- [ ] **backend-test ジョブが完全成功**
+- [ ] **frontend-test ジョブが完全成功**
+- [ ] **docker-build ジョブが完全成功**
+- [ ] **CI失敗時は即座に修正コミットを追加**
+- [ ] **全CI成功後にレビュー依頼**
+- [ ] **レビューアーへの依頼前に"All checks have passed"を確認**
+
+### レビューアー・マージ担当者チェックリスト：
+
+- [ ] **全CI成功を確認してからレビュー開始**
+- [ ] **CI未成功PRは「CI修正してください」でレビュー返却**
+- [ ] **マージ前に最新CI状況を再確認**
 
 ---
 
