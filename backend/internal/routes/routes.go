@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/matsuokashuhei/morrow-backend/graph"
 	"github.com/matsuokashuhei/morrow-backend/internal/config"
 	"github.com/matsuokashuhei/morrow-backend/internal/database"
 	"github.com/matsuokashuhei/morrow-backend/internal/handler"
@@ -29,7 +30,7 @@ func SetupRoutes(cfg *config.Config, logger *logrus.Logger, dbClient *database.C
 	setupPublicRoutes(router, healthHandler, logger)
 
 	// API v1 routes
-	setupAPIV1Routes(router, healthHandler, logger)
+	setupAPIV1Routes(router, healthHandler, dbClient, logger)
 
 	return router
 }
@@ -47,7 +48,7 @@ func setupPublicRoutes(router *gin.Engine, healthHandler *handler.HealthHandler,
 }
 
 // setupAPIV1Routes configures API v1 routes
-func setupAPIV1Routes(router *gin.Engine, healthHandler *handler.HealthHandler, logger *logrus.Logger) {
+func setupAPIV1Routes(router *gin.Engine, healthHandler *handler.HealthHandler, dbClient *database.Client, logger *logrus.Logger) {
 	v1 := router.Group("/api/v1")
 
 	// Public API endpoints
@@ -65,7 +66,9 @@ func setupAPIV1Routes(router *gin.Engine, healthHandler *handler.HealthHandler, 
 
 	logger.Info("API v1 routes configured")
 
-	// GraphQL endpoint (will be added in Phase 1)
-	// v1.POST("/graphql", graphqlHandler.Handle)
-	// v1.GET("/graphql", graphqlHandler.Playground)
+	// GraphQL endpoints
+	v1.POST("/graphql", graph.GraphQLHandler(dbClient.Client))
+	v1.GET("/graphql", graph.PlaygroundHandler())
+
+	logger.Info("GraphQL endpoints configured")
 }
