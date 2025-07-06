@@ -3,22 +3,21 @@ import { render } from '@testing-library/react-native';
 import HomeScreen from '../screens/HomeScreen';
 
 describe('HomeScreen', () => {
-  it('should render without crashing', () => {
+  it('renders correctly', () => {
     const { getByText } = render(<HomeScreen />);
     expect(getByText('Welcome to Morrow!')).toBeTruthy();
+    expect(getByText('Create and share countdowns for your special moments')).toBeTruthy();
   });
 
-  it('should display the welcome message', () => {
+  it('renders action cards', () => {
     const { getByText } = render(<HomeScreen />);
-    expect(getByText('Event Countdown Sharing App')).toBeTruthy();
+    expect(getByText('🎉 Create Event')).toBeTruthy();
+    expect(getByText('🤝 Join Event')).toBeTruthy();
   });
 
-  it('should display the description', () => {
+  it('renders features section', () => {
     const { getByText } = render(<HomeScreen />);
-    expect(
-      getByText(
-        'Create, manage, and share your upcoming events with friends and family.'
-      )
-    ).toBeTruthy();
+    expect(getByText('What you can do')).toBeTruthy();
+    expect(getByText('📅 Create countdowns for any event')).toBeTruthy();
   });
 });

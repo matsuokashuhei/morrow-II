@@ -1,5 +1,5 @@
 # Development environment for React Native/Expo
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Install necessary packages
 RUN apk add --no-cache git
@@ -7,14 +7,20 @@ RUN apk add --no-cache git
 # Set working directory
 WORKDIR /app
 
-# Install global packages
-RUN npm install -g @expo/cli @react-native-community/cli
+# Install global packages and clear cache
+RUN npm install -g @expo/cli@latest @react-native-community/cli && \
+    npm cache clean --force
 
 # Copy package files for caching dependencies
 COPY package*.json ./
 
-# Install dependencies (if package.json exists)
-RUN if [ -f package.json ]; then npm install; fi
+# Install dependencies (if package.json exists) with clean slate
+RUN if [ -f package.json ]; then \
+    rm -rf node_modules package-lock.json && \
+    npm cache clean --force && \
+    npm install --legacy-peer-deps && \
+    npm cache clean --force; \
+    fi
 
 # Copy source code
 COPY . .
