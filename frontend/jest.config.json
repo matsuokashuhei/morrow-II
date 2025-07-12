@@ -14,7 +14,13 @@
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "collectCoverageFrom": [
     "src/**/*.{ts,tsx}",
-    "!src/**/*.d.ts"
+    "!src/**/*.d.ts",
+    "!src/__tests__/test-utils.tsx"
   ],
-  "extensionsToTreatAsEsm": [".ts", ".tsx"]
+  "extensionsToTreatAsEsm": [".ts", ".tsx"],
+  "testMatch": [
+    "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+    "<rootDir>/src/**/*.(test|spec).{js,jsx,ts,tsx}",
+    "!<rootDir>/src/**/__tests__/**/test-utils.{js,jsx,ts,tsx}"
+  ]
 }
