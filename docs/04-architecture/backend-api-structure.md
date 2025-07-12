@@ -283,9 +283,6 @@ GET  /ping                # Ping-Pong
 GET  /api/v1/status       # API状態
 ```
 
-### GraphQL エンドポイント
-GraphQL関連のエンドポイントについては、[GraphQL API実装](#graphql-api実装-✅) セクションを参照してください。
-
 ### 認証必須エンドポイント
 ```bash
 # 現在実装されているエンドポイントなし（GraphQL以外）
