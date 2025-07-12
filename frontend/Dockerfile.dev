@@ -1,5 +1,5 @@
 # Development environment for React + Vite
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Install necessary packages
 RUN apk add --no-cache git
