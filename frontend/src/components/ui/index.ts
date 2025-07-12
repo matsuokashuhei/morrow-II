@@ -7,6 +7,7 @@ export { ResponsiveContainer } from './ResponsiveContainer';
 export { Loading } from './Loading';
 export { Toast, ToastContainer } from './Toast';
 export { Layout } from './Layout';
+export { Steps } from './Steps';
 
 export type { ButtonProps } from './Button';
 export type { CardProps } from './Card';
@@ -17,3 +18,4 @@ export type { ResponsiveContainerProps } from './ResponsiveContainer';
 export type { LoadingProps } from './Loading';
 export type { ToastProps, ToastContainerProps } from './Toast';
 export type { LayoutProps } from './Layout';
+export type { StepsProps, Step } from './Steps';
