@@ -1,4 +1,4 @@
-# Multi-stage build for React Native Web production
+# Multi-stage build for React Vite production
 FROM node:18-alpine AS builder
 
 # Set working directory
@@ -29,7 +29,7 @@ RUN addgroup -g 1001 -S morrow && \
 WORKDIR /app
 
 # Copy built files from builder stage
-COPY --from=builder /app/web-build ./dist
+COPY --from=builder /app/dist ./dist
 
 # Change ownership to non-root user
 RUN chown -R morrow:morrow /app

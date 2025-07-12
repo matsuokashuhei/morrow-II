@@ -1,17 +1,19 @@
-import React from 'react';
-import { render } from '@testing-library/react-native';
-import { View, Text } from 'react-native';
-
-// Simple App component for testing
-const App = () => (
-  <View>
-    <Text testID="app-text">Morrow App</Text>
-  </View>
-);
+import { render } from '@testing-library/react';
+import App from '../../App';
 
 describe('App', () => {
   it('renders without crashing', () => {
-    const { getByTestId } = render(<App />);
-    expect(getByTestId('app-text')).toBeTruthy();
+    const { getByText } = render(<App />);
+    expect(getByText('Morrow')).toBeInTheDocument();
+  });
+
+  it('renders the navigation header', () => {
+    const { getByText } = render(<App />);
+    expect(getByText('ホーム')).toBeInTheDocument();
+  });
+
+  it('renders the HomeScreen component', () => {
+    const { getByText } = render(<App />);
+    expect(getByText('Welcome to Morrow!')).toBeInTheDocument();
   });
 });

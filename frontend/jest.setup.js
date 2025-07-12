@@ -1,2 +1,3 @@
-// Jest setup file
-// Add any global test configuration here
+// Jest setup file for React DOM testing
+// @ts-ignore - jest-dom is a CommonJS module
+require('@testing-library/jest-dom');

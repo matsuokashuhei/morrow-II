@@ -42,10 +42,9 @@
 - **認証**: Amazon Cognito
 
 ### フロントエンド
-- **モバイル**: React Native + TypeScript
 - **Web**: React + TypeScript + Vite
 - **状態管理**: Zustand
-- **UI**: Tailwind CSS / React Native Elements
+- **UI**: Tailwind CSS
 - **GraphQLクライアント**: Apollo Client
 
 ### インフラ・DevOps
@@ -93,7 +92,7 @@ make format-frontend   # TypeScript/JavaScript フォーマット
 # テスト
 make test              # 全体のテスト
 make test-backend      # Go テスト
-make test-frontend     # React Native テスト
+make test-frontend     # React テスト
 make test-coverage     # カバレッジ付きテスト
 
 # Pre-commit 検証
@@ -225,7 +224,7 @@ pre-commit run --all-files
 - [x] [#4] Ent スキーマ設計・実装 ✅ (2025/06/29完了)
 - [x] [#5] PostgreSQL統合・データベース設定 ✅ (2025/06/30完了)
 - [x] [#6] GraphQL API実装 ✅ (2025/07/06完了)
-- [ ] [#7] React Nativeプロジェクト初期化
+- [x] [#7] React プロジェクト初期化 ✅ (2025/07/12完了)
 - [ ] [#8] 基本画面・コンポーネント実装
 - [ ] [#9] GraphQLクライアント設定
 - [ ] [#11] イベント作成機能実装
@@ -299,8 +298,7 @@ make dev-frontend                    # フロントエンドのみ
 - **Backend API**: http://localhost:8080
   - Health Check: http://localhost:8080/health
   - API Endpoints: http://localhost:8080/api/v1/*
-- **Frontend (Metro Bundler)**: http://localhost:8081
-- **Expo DevTools**: http://localhost:19000
+- **Frontend (React + Vite)**: http://localhost:3000
 - **PostgreSQL**: localhost:5432
 
 #### ローカル環境での起動
@@ -308,11 +306,8 @@ make dev-frontend                    # フロントエンドのみ
 # バックエンド (Port: 8080)
 cd backend && go run cmd/server/main.go
 
-# フロントエンド (React Native)
-cd frontend && npm run ios # or npm run android
-
-# フロントエンド (Web - Phase 4)
-cd web && npm run dev
+# フロントエンド (React)
+cd frontend && npm run dev
 ```
 
 ## 📖 ドキュメント

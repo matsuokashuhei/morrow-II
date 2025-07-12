@@ -1,18 +1,16 @@
-import React from 'react';
-import { render } from '@testing-library/react-native';
-import { View, Text } from 'react-native';
+import { render } from '@testing-library/react';
 
 // Simple test component
 const TestComponent = () => (
-  <View>
-    <Text testID="test-text">Hello World</Text>
-  </View>
+  <div>
+    <p data-testid="test-text">Hello World</p>
+  </div>
 );
 
 describe('Basic Tests', () => {
   it('should render test component', () => {
     const { getByTestId } = render(<TestComponent />);
-    expect(getByTestId('test-text')).toBeTruthy();
+    expect(getByTestId('test-text')).toBeInTheDocument();
   });
 
   it('should pass a basic test', () => {

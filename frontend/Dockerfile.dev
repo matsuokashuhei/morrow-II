@@ -1,4 +1,4 @@
-# Development environment for React Native/Expo
+# Development environment for React + Vite
 FROM node:18-alpine
 
 # Install necessary packages
@@ -6,9 +6,6 @@ RUN apk add --no-cache git
 
 # Set working directory
 WORKDIR /app
-
-# Install global packages
-RUN npm install -g @expo/cli @react-native-community/cli
 
 # Copy package files for caching dependencies
 COPY package*.json ./
@@ -19,8 +16,8 @@ RUN if [ -f package.json ]; then npm install; fi
 # Copy source code
 COPY . .
 
-# Expose ports (Metro bundler, Expo DevTools)
-EXPOSE 8081 19000 19001 19002
+# Expose port (Vite dev server)
+EXPOSE 3000
 
 # Start development server
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
