@@ -167,6 +167,11 @@ GO_ENV=development            # 環境設定
 PORT=8080                    # サーバーポート
 ```
 
+**SSL設定について:**
+- 開発環境では SSL は無効（sslmode=disable が PostgreSQL接続文字列に自動設定）
+- 本番環境では適切な SSL 設定が必要
+- Docker Compose内部通信は安全なプライベートネットワーク使用
+
 ## テスト構成 ✅
 
 ### 1. ユニットテスト

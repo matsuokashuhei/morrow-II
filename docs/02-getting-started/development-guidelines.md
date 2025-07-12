@@ -168,7 +168,7 @@ const Button: React.FC<ButtonProps> = ({ children, variant = 'primary' }) => {
 };
 
 // ❌ 悪い例：インラインスタイル
-const Button = ({ children }) => (
+const BadButton = ({ children }) => (
   <button style={{ backgroundColor: 'blue', color: 'white' }}>
     {children}
   </button>
