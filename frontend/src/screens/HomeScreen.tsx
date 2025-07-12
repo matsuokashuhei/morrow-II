@@ -14,7 +14,7 @@ const HomeScreen = () => {
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="card">
               <div className="text-orange-600 text-3xl mb-4">📅</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 イベント作成
@@ -24,7 +24,7 @@ const HomeScreen = () => {
               </p>
             </div>
             
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="card">
               <div className="text-orange-600 text-3xl mb-4">⏰</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 リアルタイム表示
@@ -34,7 +34,7 @@ const HomeScreen = () => {
               </p>
             </div>
             
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="card">
               <div className="text-orange-600 text-3xl mb-4">👥</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 友達と共有
@@ -46,7 +46,7 @@ const HomeScreen = () => {
           </div>
           
           <div className="mt-12">
-            <button className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors">
+            <button className="btn-primary">
               今すぐ始める
             </button>
           </div>
