@@ -22,7 +22,7 @@ const Modal = ({
   size = 'md',
   showCloseButton = true,
   closeOnOverlayClick = true,
-  className
+  className,
 }: ModalProps) => {
   // Handle ESC key press
   useEffect(() => {
@@ -68,15 +68,13 @@ const Modal = ({
           sizeClasses[size],
           className
         )}
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         {(title || showCloseButton) && (
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             {title && (
-              <h3 className="text-lg font-semibold text-gray-900">
-                {title}
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
             )}
             {showCloseButton && (
               <Button
@@ -104,9 +102,7 @@ const Modal = ({
         )}
 
         {/* Body */}
-        <div className="p-6">
-          {children}
-        </div>
+        <div className="p-6">{children}</div>
       </div>
     </div>
   );

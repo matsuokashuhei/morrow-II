@@ -28,14 +28,14 @@ const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex-1">
-            {title && (
-              <h1 className="text-2xl font-bold">{title}</h1>
-            )}
+            {title && <h1 className="text-2xl font-bold">{title}</h1>}
             {subtitle && (
-              <p className={cn(
-                'text-sm mt-1',
-                variant === 'primary' ? 'text-orange-100' : 'text-gray-600'
-              )}>
+              <p
+                className={cn(
+                  'text-sm mt-1',
+                  variant === 'primary' ? 'text-orange-100' : 'text-gray-600'
+                )}
+              >
                 {subtitle}
               </p>
             )}
@@ -43,9 +43,7 @@ const Header: React.FC<HeaderProps> = ({
           </div>
 
           {actions && (
-            <div className="flex items-center space-x-4">
-              {actions}
-            </div>
+            <div className="flex items-center space-x-4">{actions}</div>
           )}
         </div>
       </div>

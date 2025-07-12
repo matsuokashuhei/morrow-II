@@ -34,7 +34,9 @@ describe('Input Component', () => {
       />
     );
     expect(screen.getByText('This field is required')).toBeInTheDocument();
-    expect(screen.queryByText('Please enter a valid email')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Please enter a valid email')
+    ).not.toBeInTheDocument();
   });
 
   it('handles value changes', () => {

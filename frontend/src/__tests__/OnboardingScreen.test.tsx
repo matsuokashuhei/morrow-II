@@ -41,7 +41,11 @@ describe('OnboardingScreen', () => {
 
   it('should display the first step by default', () => {
     renderWithRouter();
-    expect(screen.getByText('大切な予定やイベントを簡単に登録できます。誕生日、記念日、旅行など、楽しみにしている日を追加しましょう。')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        '大切な予定やイベントを簡単に登録できます。誕生日、記念日、旅行など、楽しみにしている日を追加しましょう。'
+      )
+    ).toBeInTheDocument();
   });
 
   it('should show Skip button', () => {

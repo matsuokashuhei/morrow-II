@@ -28,7 +28,9 @@ describe('OnboardingScreen', () => {
     renderWithRouter(<OnboardingScreen />);
 
     expect(screen.getByText('イベントを作成')).toBeInTheDocument();
-    expect(screen.getByText(/大切な予定やイベントを簡単に登録/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/大切な予定やイベントを簡単に登録/)
+    ).toBeInTheDocument();
     expect(screen.getByText('📅')).toBeInTheDocument();
     expect(screen.getByText('1 / 3')).toBeInTheDocument();
   });
@@ -54,7 +56,9 @@ describe('OnboardingScreen', () => {
 
     // Should show second step
     expect(screen.getByText('カウントダウンを楽しむ')).toBeInTheDocument();
-    expect(screen.getByText(/リアルタイムで残り時間を表示/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/リアルタイムで残り時間を表示/)
+    ).toBeInTheDocument();
     expect(screen.getByText('⏰')).toBeInTheDocument();
     expect(screen.getByText('2 / 3')).toBeInTheDocument();
   });
@@ -135,7 +139,9 @@ describe('OnboardingScreen', () => {
   it('applies correct gradient background styling', () => {
     const { container } = renderWithRouter(<OnboardingScreen />);
 
-    const backgroundDiv = container.querySelector('.bg-gradient-to-br.from-orange-50.to-orange-100');
+    const backgroundDiv = container.querySelector(
+      '.bg-gradient-to-br.from-orange-50.to-orange-100'
+    );
     expect(backgroundDiv).toBeInTheDocument();
   });
 });

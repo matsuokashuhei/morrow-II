@@ -19,7 +19,13 @@ interface TimeRemaining {
   isExpired: boolean;
 }
 
-const EventCard = ({ event, onEdit, onDelete, onShare, className }: EventCardProps) => {
+const EventCard = ({
+  event,
+  onEdit,
+  onDelete,
+  onShare,
+  className,
+}: EventCardProps) => {
   const [timeRemaining, setTimeRemaining] = useState<TimeRemaining>({
     days: 0,
     hours: 0,
@@ -45,7 +51,9 @@ const EventCard = ({ event, onEdit, onDelete, onShare, className }: EventCardPro
 
     return {
       days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      hours: Math.floor(
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      ),
       minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
       seconds: Math.floor((difference % (1000 * 60)) / 1000),
       isExpired: false,
@@ -86,9 +94,7 @@ const EventCard = ({ event, onEdit, onDelete, onShare, className }: EventCardPro
             <h3 className="text-xl font-bold text-gray-900 mb-1">
               {event.title}
             </h3>
-            <p className="text-sm text-gray-500">
-              {formatDate(event.date)}
-            </p>
+            <p className="text-sm text-gray-500">{formatDate(event.date)}</p>
           </div>
 
           {/* Action buttons */}
@@ -100,8 +106,12 @@ const EventCard = ({ event, onEdit, onDelete, onShare, className }: EventCardPro
                 onClick={() => onShare(event)}
                 className="p-2"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                 </svg>
               </Button>
             )}
@@ -112,8 +122,12 @@ const EventCard = ({ event, onEdit, onDelete, onShare, className }: EventCardPro
                 onClick={() => onEdit(event)}
                 className="p-2"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                 </svg>
               </Button>
             )}
@@ -124,8 +138,16 @@ const EventCard = ({ event, onEdit, onDelete, onShare, className }: EventCardPro
                 onClick={() => onDelete(event)}
                 className="p-2"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 102 0v3a1 1 0 11-2 0V9zm4 0a1 1 0 10-2 0v3a1 1 0 102 0V9z" clipRule="evenodd"/>
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 102 0v3a1 1 0 11-2 0V9zm4 0a1 1 0 10-2 0v3a1 1 0 102 0V9z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </Button>
             )}
@@ -134,17 +156,19 @@ const EventCard = ({ event, onEdit, onDelete, onShare, className }: EventCardPro
 
         {/* Description */}
         {event.description && (
-          <p className="text-gray-600">
-            {event.description}
-          </p>
+          <p className="text-gray-600">{event.description}</p>
         )}
 
         {/* Countdown */}
         <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4">
           {timeRemaining.isExpired ? (
             <div className="text-center">
-              <p className="text-lg font-semibold text-gray-700 mb-2">🎉 イベント終了</p>
-              <p className="text-sm text-gray-500">このイベントは終了しました</p>
+              <p className="text-lg font-semibold text-gray-700 mb-2">
+                🎉 イベント終了
+              </p>
+              <p className="text-sm text-gray-500">
+                このイベントは終了しました
+              </p>
             </div>
           ) : (
             <div className="text-center">

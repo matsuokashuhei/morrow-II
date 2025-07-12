@@ -53,7 +53,11 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           )}
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={
-            error ? `${props.id}-error` : helpText ? `${props.id}-help` : undefined
+            error
+              ? `${props.id}-error`
+              : helpText
+                ? `${props.id}-help`
+                : undefined
           }
           {...props}
         />

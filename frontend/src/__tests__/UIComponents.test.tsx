@@ -44,7 +44,11 @@ describe('UI Components', () => {
 
     it('applies correct base classes', () => {
       render(<Card data-testid="card">Card content</Card>);
-      expect(screen.getByTestId('card')).toHaveClass('bg-white', 'rounded-lg', 'shadow-md');
+      expect(screen.getByTestId('card')).toHaveClass(
+        'bg-white',
+        'rounded-lg',
+        'shadow-md'
+      );
     });
   });
 

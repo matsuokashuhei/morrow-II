@@ -39,33 +39,30 @@ const Layout: React.FC<LayoutProps> = ({
       <div className="flex flex-1">
         {/* Left Sidebar */}
         {hasSidebar && sidebarPosition === 'left' && (
-          <aside className={cn(
-            'hidden lg:flex lg:flex-shrink-0 bg-white border-r border-gray-200',
-            sidebarWidthClasses[sidebarWidth]
-          )}>
-            <div className="w-full overflow-y-auto">
-              {sidebar}
-            </div>
+          <aside
+            className={cn(
+              'hidden lg:flex lg:flex-shrink-0 bg-white border-r border-gray-200',
+              sidebarWidthClasses[sidebarWidth]
+            )}
+          >
+            <div className="w-full overflow-y-auto">{sidebar}</div>
           </aside>
         )}
 
         {/* Main Content */}
-        <main className={cn(
-          'flex-1 min-w-0 bg-gray-50',
-          contentClassName
-        )}>
+        <main className={cn('flex-1 min-w-0 bg-gray-50', contentClassName)}>
           {children}
         </main>
 
         {/* Right Sidebar */}
         {hasSidebar && sidebarPosition === 'right' && (
-          <aside className={cn(
-            'hidden lg:flex lg:flex-shrink-0 bg-white border-l border-gray-200',
-            sidebarWidthClasses[sidebarWidth]
-          )}>
-            <div className="w-full overflow-y-auto">
-              {sidebar}
-            </div>
+          <aside
+            className={cn(
+              'hidden lg:flex lg:flex-shrink-0 bg-white border-l border-gray-200',
+              sidebarWidthClasses[sidebarWidth]
+            )}
+          >
+            <div className="w-full overflow-y-auto">{sidebar}</div>
           </aside>
         )}
       </div>

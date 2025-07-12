@@ -52,23 +52,22 @@ interface UIState {
 }
 
 // Onboarding Store
-export const useOnboardingStore = create<OnboardingState>((set) => ({
+export const useOnboardingStore = create<OnboardingState>(set => ({
   hasCompletedOnboarding: false,
   currentStep: 0,
   setOnboardingComplete: (completed: boolean) =>
     set({ hasCompletedOnboarding: completed }),
-  setCurrentStep: (step: number) =>
-    set({ currentStep: step }),
+  setCurrentStep: (step: number) => set({ currentStep: step }),
 }));
 
 // Events Store
-export const useEventStore = create<EventState>((set) => ({
+export const useEventStore = create<EventState>(set => ({
   events: [],
   selectedEvent: null,
   isLoading: false,
   error: null,
 
-  addEvent: (eventData) => {
+  addEvent: eventData => {
     const newEvent: Event = {
       ...eventData,
       id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -76,15 +75,15 @@ export const useEventStore = create<EventState>((set) => ({
       updatedAt: new Date().toISOString(),
     };
 
-    set((state) => ({
+    set(state => ({
       events: [...state.events, newEvent],
       error: null,
     }));
   },
 
   updateEvent: (id, updates) => {
-    set((state) => ({
-      events: state.events.map((event) =>
+    set(state => ({
+      events: state.events.map(event =>
         event.id === id
           ? { ...event, ...updates, updatedAt: new Date().toISOString() }
           : event
@@ -93,42 +92,45 @@ export const useEventStore = create<EventState>((set) => ({
     }));
   },
 
-  deleteEvent: (id) => {
-    set((state) => ({
-      events: state.events.filter((event) => event.id !== id),
-      selectedEvent: state.selectedEvent?.id === id ? null : state.selectedEvent,
+  deleteEvent: id => {
+    set(state => ({
+      events: state.events.filter(event => event.id !== id),
+      selectedEvent:
+        state.selectedEvent?.id === id ? null : state.selectedEvent,
       error: null,
     }));
   },
 
-  selectEvent: (event) => set({ selectedEvent: event }),
-  setLoading: (loading) => set({ isLoading: loading }),
-  setError: (error) => set({ error }),
+  selectEvent: event => set({ selectedEvent: event }),
+  setLoading: loading => set({ isLoading: loading }),
+  setError: error => set({ error }),
 }));
 
 // User Store
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserState>(set => ({
   user: null,
   isAuthenticated: false,
 
-  setUser: (user) => set({
-    user,
-    isAuthenticated: !!user
-  }),
+  setUser: user =>
+    set({
+      user,
+      isAuthenticated: !!user,
+    }),
 
-  logout: () => set({
-    user: null,
-    isAuthenticated: false
-  }),
+  logout: () =>
+    set({
+      user: null,
+      isAuthenticated: false,
+    }),
 }));
 
 // UI Store
-export const useUIStore = create<UIState>((set) => ({
+export const useUIStore = create<UIState>(set => ({
   theme: 'light',
   isCreateEventModalOpen: false,
   isMobileMenuOpen: false,
 
-  setTheme: (theme) => set({ theme }),
-  setCreateEventModalOpen: (open) => set({ isCreateEventModalOpen: open }),
-  setMobileMenuOpen: (open) => set({ isMobileMenuOpen: open }),
+  setTheme: theme => set({ theme }),
+  setCreateEventModalOpen: open => set({ isCreateEventModalOpen: open }),
+  setMobileMenuOpen: open => set({ isMobileMenuOpen: open }),
 }));

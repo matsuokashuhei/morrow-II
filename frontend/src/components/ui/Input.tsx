@@ -8,15 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({
-    className,
-    label,
-    error,
-    helperText,
-    id,
-    disabled,
-    ...props
-  }, ref) => {
+  ({ className, label, error, helperText, id, disabled, ...props }, ref) => {
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
 
     return (
@@ -51,9 +43,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
         {(error || helperText) && (
           <div className="mt-2">
-            {error && (
-              <p className="text-sm text-red-600">{error}</p>
-            )}
+            {error && <p className="text-sm text-red-600">{error}</p>}
             {helperText && !error && (
               <p className="text-sm text-gray-500">{helperText}</p>
             )}

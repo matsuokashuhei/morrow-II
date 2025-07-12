@@ -62,9 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           className
         )}
       >
-        <div className="h-full overflow-y-auto">
-          {children}
-        </div>
+        <div className="h-full overflow-y-auto">{children}</div>
       </aside>
     </>
   );

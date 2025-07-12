@@ -12,7 +12,7 @@ const ResponsiveContainer = ({
   children,
   className,
   maxWidth = 'lg',
-  padding = 'md'
+  padding = 'md',
 }: ResponsiveContainerProps) => {
   const maxWidthClasses = {
     sm: 'max-w-sm',

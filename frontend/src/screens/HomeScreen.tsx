@@ -7,18 +7,9 @@ import { EventCard } from '../components/EventCard';
 import { useEventStore, useUIStore } from '../store';
 
 const HomeScreen = () => {
-  const {
-    events,
-    addEvent,
-    deleteEvent,
-    isLoading,
-    error
-  } = useEventStore();
+  const { events, addEvent, deleteEvent, isLoading, error } = useEventStore();
 
-  const {
-    isCreateEventModalOpen,
-    setCreateEventModalOpen
-  } = useUIStore();
+  const { isCreateEventModalOpen, setCreateEventModalOpen } = useUIStore();
 
   const [eventTitle, setEventTitle] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -129,7 +120,7 @@ const HomeScreen = () => {
               <Button
                 variant="secondary"
                 size="md"
-                onClick={() => window.location.href = '/onboarding'}
+                onClick={() => (window.location.href = '/onboarding')}
               >
                 使い方を見る
               </Button>
@@ -161,7 +152,7 @@ const HomeScreen = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map((event) => (
+            {events.map(event => (
               <EventCard
                 key={event.id}
                 event={event}
@@ -185,7 +176,7 @@ const HomeScreen = () => {
             label="イベント名"
             placeholder="例: 誕生日パーティー"
             value={eventTitle}
-            onChange={(e) => setEventTitle(e.target.value)}
+            onChange={e => setEventTitle(e.target.value)}
             required
           />
 
@@ -193,7 +184,7 @@ const HomeScreen = () => {
             label="イベント日時"
             type="datetime-local"
             value={eventDate}
-            onChange={(e) => setEventDate(e.target.value)}
+            onChange={e => setEventDate(e.target.value)}
             required
           />
 
@@ -201,7 +192,7 @@ const HomeScreen = () => {
             label="説明（任意）"
             placeholder="イベントの詳細を入力してください"
             value={eventDescription}
-            onChange={(e) => setEventDescription(e.target.value)}
+            onChange={e => setEventDescription(e.target.value)}
           />
 
           <div className="flex justify-end space-x-3 pt-4">

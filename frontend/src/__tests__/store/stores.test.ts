@@ -1,5 +1,10 @@
 import { renderHook, act } from '@testing-library/react';
-import { useEventStore, useUIStore, useOnboardingStore, useUserStore } from '../../store';
+import {
+  useEventStore,
+  useUIStore,
+  useOnboardingStore,
+  useUserStore,
+} from '../../store';
 
 describe('Event Store', () => {
   beforeEach(() => {
@@ -56,7 +61,9 @@ describe('Event Store', () => {
     expect(result.current.events[0].title).toBe('Updated Title');
     expect(result.current.events[0].description).toBe('Updated Description');
     // Just check that updatedAt exists and is a valid ISO string
-    expect(result.current.events[0].updatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
+    expect(result.current.events[0].updatedAt).toMatch(
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/
+    );
   });
 
   it('should delete an event', () => {

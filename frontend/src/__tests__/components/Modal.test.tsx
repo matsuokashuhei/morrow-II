@@ -71,7 +71,12 @@ describe('Modal Component', () => {
 
   it('does not render close button when showCloseButton is false', () => {
     render(
-      <Modal isOpen={true} onClose={jest.fn()} title="Test Modal" showCloseButton={false}>
+      <Modal
+        isOpen={true}
+        onClose={jest.fn()}
+        title="Test Modal"
+        showCloseButton={false}
+      >
         <div>Modal content</div>
       </Modal>
     );

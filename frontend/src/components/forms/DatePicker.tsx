@@ -10,15 +10,7 @@ interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
   (
-    {
-      label,
-      error,
-      helpText,
-      showTime = false,
-      className,
-      type,
-      ...props
-    },
+    { label, error, helpText, showTime = false, className, type, ...props },
     ref
   ) => {
     const inputType = showTime ? 'datetime-local' : type || 'date';
@@ -46,7 +38,11 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
           )}
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={
-            error ? `${props.id}-error` : helpText ? `${props.id}-help` : undefined
+            error
+              ? `${props.id}-error`
+              : helpText
+                ? `${props.id}-help`
+                : undefined
           }
           {...props}
         />

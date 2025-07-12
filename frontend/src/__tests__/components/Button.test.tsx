@@ -49,7 +49,11 @@ describe('Button Component', () => {
 
   it('is disabled when loading', () => {
     const handleClick = jest.fn();
-    render(<Button loading onClick={handleClick}>Loading</Button>);
+    render(
+      <Button loading onClick={handleClick}>
+        Loading
+      </Button>
+    );
 
     fireEvent.click(screen.getByRole('button'));
     expect(handleClick).not.toHaveBeenCalled();
@@ -57,7 +61,11 @@ describe('Button Component', () => {
 
   it('is disabled when disabled prop is true', () => {
     const handleClick = jest.fn();
-    render(<Button disabled onClick={handleClick}>Disabled</Button>);
+    render(
+      <Button disabled onClick={handleClick}>
+        Disabled
+      </Button>
+    );
 
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();

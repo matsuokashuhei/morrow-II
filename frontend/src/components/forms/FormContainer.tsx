@@ -30,9 +30,7 @@ const FormContainer: React.FC<FormContainerProps> = ({
           {title && (
             <h2 className="text-2xl font-bold text-gray-900 mb-2">{title}</h2>
           )}
-          {description && (
-            <p className="text-gray-600">{description}</p>
-          )}
+          {description && <p className="text-gray-600">{description}</p>}
         </div>
       )}
 
@@ -40,9 +38,7 @@ const FormContainer: React.FC<FormContainerProps> = ({
         {children}
 
         {footer && (
-          <div className="pt-4 border-t border-gray-200">
-            {footer}
-          </div>
+          <div className="pt-4 border-t border-gray-200">{footer}</div>
         )}
       </form>
     </div>

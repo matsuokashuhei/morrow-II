@@ -11,7 +11,7 @@ const Loading = ({
   size = 'md',
   text,
   fullScreen = false,
-  className
+  className,
 }: LoadingProps) => {
   const sizeClasses = {
     sm: 'w-4 h-4',
@@ -34,10 +34,7 @@ const Loading = ({
         )}
       />
       {text && (
-        <p className={cn(
-          'text-gray-600 font-medium',
-          textSizeClasses[size]
-        )}>
+        <p className={cn('text-gray-600 font-medium', textSizeClasses[size])}>
           {text}
         </p>
       )}
