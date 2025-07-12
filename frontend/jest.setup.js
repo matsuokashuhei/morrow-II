@@ -1,2 +1,2 @@
 // Jest setup file for React DOM testing
-import '@testing-library/jest-dom';
+require('@testing-library/jest-dom');
