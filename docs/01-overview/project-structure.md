@@ -15,7 +15,7 @@ morrow-II/
 │   └── pull_request_template.md      # PRテンプレート
 ├── 📁 docs/                          # 📖 ドキュメント
 ├── 📁 backend/                       # 🔧 Go APIサーバー
-├── 📁 frontend/                      # 📱 React Nativeアプリ
+├── 📁 frontend/                      # 🌐 React Webアプリ
 ├── 📁 infrastructure/                # ☁️ インフラ設定
 └── 📁 scripts/                       # 🛠️ 自動化スクリプト
 ```
@@ -69,7 +69,7 @@ backend/
 └── 📄 gqlgen.yml                     # GraphQL生成設定
 ```
 
-## 📱 フロントエンド構成（React Native）
+## 🌐 フロントエンド構成（React + Vite）
 
 ```
 frontend/
@@ -90,7 +90,7 @@ frontend/
 │   │   ├── useAuth.ts                # 認証フック
 │   │   ├── useEvents.ts              # イベント管理フック
 │   │   └── useCountdown.ts           # カウントダウンフック
-│   ├── store/                        # 状態管理
+│   ├── store/                        # 状態管理（Zustand）
 │   │   ├── index.ts                  # ストア設定
 │   │   ├── authSlice.ts              # 認証状態
 │   │   └── eventSlice.ts             # イベント状態
@@ -99,18 +99,59 @@ frontend/
 │   │   ├── event.ts                  # イベント関連型
 │   │   └── api.ts                    # API関連型
 │   ├── utils/                        # ユーティリティ
-│   │   ├── api.ts                    # API通信
-│   │   ├── date.ts                   # 日付処理
-│   │   └── validation.ts             # バリデーション
-│   └── constants/                    # 定数定義
-│       ├── colors.ts                 # カラーパレット
-│       └── config.ts                 # 設定定数
+│   │   ├── api.ts                    # API クライアント
+│   │   ├── auth.ts                   # 認証ユーティリティ
+│   │   └── formatting.ts             # データフォーマット
+│   ├── styles/                       # スタイル設定
+│   │   └── globals.css               # グローバルスタイル
+│   ├── main.tsx                      # アプリケーションエントリーポイント
+│   └── App.tsx                       # ルートコンポーネント
+├── 📁 public/                        # 静的ファイル
+│   ├── index.html                    # HTMLテンプレート
+│   └── favicon.ico                   # ファビコン
 ├── 📁 assets/                        # 静的リソース
 │   ├── images/                       # 画像ファイル
 │   ├── fonts/                        # フォントファイル
 │   └── icons/                        # アイコンファイル
 ├── 📁 coverage/                      # テストカバレッジ
-├── 📄 App.tsx                        # アプリケーションルート
+├── �📄 package.json                   # Node.js依存関係
+├── 📄 package-lock.json              # 依存関係ロック
+├── 📄 vite.config.ts                 # Vite設定
+├── 📄 tailwind.config.js             # Tailwind CSS設定
+├── 📄 postcss.config.js              # PostCSS設定
+├── 📄 tsconfig.json                  # TypeScript設定
+├── 📄 tsconfig.node.json             # Node.js用TypeScript設定
+├── 📄 jest.config.json               # Jest設定
+├── 📄 jest.setup.ts                  # Jestセットアップ
+├── 📄 Dockerfile.dev                 # 開発用Dockerfile
+├── 📄 Dockerfile                     # 本番用Dockerfile
+└── 📄 .eslintrc.json                 # ESLint設定
+```
+
+### 技術選定詳細
+
+#### ビルドツール: Vite
+- **高速な開発サーバー**: ES modules による即座の起動
+- **効率的なHMR**: 変更の即座反映
+- **最適化されたビルド**: Rollup による本番最適化
+
+#### スタイリング: Tailwind CSS
+- **ユーティリティファースト**: 迅速なUI開発
+- **レスポンシブデザイン**: モバイル対応の簡素化
+- **設定可能**: カスタムデザインシステム
+
+#### ルーティング: React Router
+- **SPA ルーティング**: クライアントサイドナビゲーション
+- **ネストされたルート**: 複雑なUI構造に対応
+- **コード分割**: 遅延読み込み対応
+
+#### 状態管理: Zustand
+- **軽量**: 最小限のボイラープレート
+- **TypeScript対応**: 完全な型安全性
+- **シンプルAPI**: 学習コストの低減
+
+#### ディレクトリ構造補足
+├──  App.tsx                        # アプリケーションルート
 ├── 📄 package.json                   # Node.js依存関係
 ├── 📄 tsconfig.json                  # TypeScript設定
 ├── 📄 jest.config.json               # Jest設定

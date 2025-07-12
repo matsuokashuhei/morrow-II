@@ -112,9 +112,9 @@ DB_PORT=5432
 DB_NAME=morrow_dev
 ```
 
-### 3. React Native フロントエンドの問題
+### 3. React フロントエンドの問題
 
-#### npm/yarn の依存関係エラー
+#### npm の依存関係エラー
 ```bash
 # 症状
 npm ERR! peer dep missing
@@ -132,21 +132,22 @@ docker-compose exec frontend npm cache clean --force
 docker-compose exec frontend npm install <package-name>
 ```
 
-#### Metro bundler の問題
+#### Vite の問題
 ```bash
 # 症状
-Error: Metro bundler failed to start
-Unable to resolve module xxx
+Error: Vite dev server failed to start
+Failed to resolve import xxx
 
 # 解決法
-# 1. Metro キャッシュをクリア
-docker-compose exec frontend npx react-native start --reset-cache
+# 1. Vite キャッシュをクリア
+docker-compose exec frontend npm run dev -- --force
 
-# 2. Watchman キャッシュをクリア (macOS)
-watchman watch-del-all
+# 2. node_modules を削除して再インストール
+docker-compose exec frontend rm -rf node_modules
+docker-compose exec frontend npm install
 
-# 3. Metro 設定を確認
-# metro.config.js が正しく設定されているか確認
+# 3. Vite 設定を確認
+# vite.config.ts が正しく設定されているか確認
 ```
 
 #### TypeScript エラー
@@ -247,13 +248,13 @@ slog.Error("Failed to save event", "error", err)
 ```
 
 ```typescript
-// React Native でのログ出力
+// React でのログ出力
 console.log('Event data:', event);
 console.error('API call failed:', error);
 
 // デバッグ用のカスタムログ
 const debugLog = (message: string, data?: any) => {
-  if (__DEV__) {
+  if (import.meta.env.DEV) {
     console.log(`[DEBUG] ${message}`, data);
   }
 };
@@ -264,10 +265,9 @@ const debugLog = (message: string, data?: any) => {
 # Go デバッガー (Delve)
 docker-compose exec backend dlv debug cmd/server/main.go
 
-# React Native デバッガー
-# アプリ内でデバッグメニューを開く
-# iOS: Cmd + D
-# Android: Cmd + M
+# React デバッガー
+# ブラウザの開発者ツール (F12) を使用
+# React DevTools 拡張機能での状態管理確認
 ```
 
 ### 3. パフォーマンス監視
@@ -278,8 +278,9 @@ docker stats
 # Go プロファイリング
 docker-compose exec backend go tool pprof http://localhost:8080/debug/pprof/profile
 
-# React Native パフォーマンス監視
-# Flipper を使用した詳細な監視
+# React パフォーマンス監視
+# React DevTools Profiler を使用
+# Vite のビルド分析: npm run build -- --analyze
 ```
 
 ## 🛠️ 診断コマンド
@@ -326,7 +327,7 @@ curl http://localhost:3000
    - 緊急度を明確にする
 
 3. **技術サポート**
-   - Docker、Go、React Native の公式ドキュメント
+   - Docker、Go、React の公式ドキュメント
    - Stack Overflow での既知の問題検索
 
 ## 📋 問題報告テンプレート

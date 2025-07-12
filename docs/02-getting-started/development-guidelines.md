@@ -120,13 +120,12 @@ func TestEventHandler_GetEvent(t *testing.T) {
 }
 ```
 
-## 📱 React Native フロントエンド ガイドライン
+## 🌐 React フロントエンド ガイドライン
 
 ### コンポーネント設計
 ```typescript
 // src/components/EventCard.tsx
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import { Event } from '../types/event';
 
 interface EventCardProps {
@@ -140,35 +139,40 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onPress }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{event.name}</Text>
-      <Text style={styles.description}>{event.description}</Text>
-    </View>
+    <div
+      className="p-4 my-2 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+      onClick={handlePress}
+    >
+      <h3 className="text-lg font-bold mb-2">{event.name}</h3>
+      <p className="text-sm text-gray-600">{event.description}</p>
+    </div>
+  );
+};
+```
+
+### Tailwind CSS スタイリング
+```typescript
+// ✅ 良い例：Tailwind クラスの使用
+const Button: React.FC<ButtonProps> = ({ children, variant = 'primary' }) => {
+  const baseClasses = 'px-4 py-2 rounded font-medium transition-colors';
+  const variantClasses = {
+    primary: 'bg-blue-500 text-white hover:bg-blue-600',
+    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
+  };
+
+  return (
+    <button className={`${baseClasses} ${variantClasses[variant]}`}>
+      {children}
+    </button>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    marginVertical: 8,
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 14,
-    color: '#666',
-  },
-});
+// ❌ 悪い例：インラインスタイル
+const BadButton = ({ children }) => (
+  <button style={{ backgroundColor: 'blue', color: 'white' }}>
+    {children}
+  </button>
+);
 ```
 
 ### カスタムフック
@@ -250,7 +254,7 @@ export interface UpdateEventRequest {
 ```typescript
 // src/components/__tests__/EventCard.test.tsx
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, screen } from '@testing-library/react';
 import { EventCard } from '../EventCard';
 
 const mockEvent = {
@@ -266,21 +270,17 @@ const mockEvent = {
 describe('EventCard', () => {
   it('renders event information correctly', () => {
     const mockOnPress = jest.fn();
-    const { getByText } = render(
-      <EventCard event={mockEvent} onPress={mockOnPress} />
-    );
+    render(<EventCard event={mockEvent} onPress={mockOnPress} />);
 
-    expect(getByText('Test Event')).toBeTruthy();
-    expect(getByText('Test Description')).toBeTruthy();
+    expect(screen.getByText('Test Event')).toBeInTheDocument();
+    expect(screen.getByText('Test Description')).toBeInTheDocument();
   });
 
-  it('calls onPress when pressed', () => {
+  it('calls onPress when clicked', () => {
     const mockOnPress = jest.fn();
-    const { getByText } = render(
-      <EventCard event={mockEvent} onPress={mockOnPress} />
-    );
+    render(<EventCard event={mockEvent} onPress={mockOnPress} />);
 
-    fireEvent.press(getByText('Test Event'));
+    fireEvent.click(screen.getByText('Test Event'));
     expect(mockOnPress).toHaveBeenCalledWith('1');
   });
 });
@@ -429,37 +429,6 @@ func (r *eventRepository) GetEventsWithParticipants(ctx context.Context) ([]*Eve
         WithParticipants().
         All(ctx)
 }
-```
-
-### React Native パフォーマンス
-```typescript
-// ✅ メモ化による最適化
-const EventList: React.FC<EventListProps> = ({ events, onEventPress }) => {
-  const memoizedEvents = useMemo(() => {
-    return events.filter(event => !event.isExpired);
-  }, [events]);
-
-  const renderEvent = useCallback((event: Event) => (
-    <EventCard
-      key={event.id}
-      event={event}
-      onPress={onEventPress}
-    />
-  ), [onEventPress]);
-
-  return (
-    <FlatList
-      data={memoizedEvents}
-      renderItem={({ item }) => renderEvent(item)}
-      keyExtractor={(item) => item.id}
-      getItemLayout={(data, index) => ({
-        length: 80,
-        offset: 80 * index,
-        index,
-      })}
-    />
-  );
-};
 ```
 
 ## 🧪 テスト戦略

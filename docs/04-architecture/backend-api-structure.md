@@ -10,10 +10,25 @@ backend/
 ├── cmd/
 │   └── server/
 │       └── main.go              # アプリケーションエントリーポイント
+├── graph/
+│   ├── schema.graphqls          # GraphQLスキーマ定義
+│   ├── generated.go             # gqlgen生成コード
+│   ├── resolver.go              # GraphQLリゾルバー基底
+│   ├── resolvers.go             # GraphQLリゾルバー実装
+│   ├── handler.go               # GraphQLハンドラー
+│   └── model/                   # GraphQLモデル
+├── ent/
+│   ├── schema/
+│   │   ├── user.go              # ユーザースキーマ
+│   │   ├── event.go             # イベントスキーマ
+│   │   └── participant.go       # 参加者スキーマ
+│   └── *.go                     # Ent生成コード
 ├── internal/
 │   ├── config/
 │   │   ├── config.go            # 設定管理
 │   │   └── config_test.go       # 設定テスト
+│   ├── database/
+│   │   └── database.go          # データベース接続管理
 │   ├── handler/
 │   │   ├── health.go            # ヘルスチェックハンドラー
 │   │   └── health_test.go       # ヘルスチェックテスト
@@ -21,15 +36,17 @@ backend/
 │   │   ├── auth.go              # 認証ミドルウェア
 │   │   ├── auth_test.go         # 認証テスト
 │   │   ├── cors.go              # CORSミドルウェア
+│   │   ├── database.go          # データベースミドルウェア
 │   │   ├── error.go             # エラーハンドリング
 │   │   └── logger.go            # ログミドルウェア
 │   └── routes/
 │       └── routes.go            # ルーター設定
 ├── go.mod                       # Go モジュール定義
 ├── go.sum                       # 依存関係チェックサム
+├── gqlgen.yml                   # GraphQL設定
+├── .air.toml                    # ホットリロード設定
 ├── Dockerfile.dev               # 開発用Dockerfile
-├── Dockerfile                   # 本番用Dockerfile
-└── .air.toml                    # ホットリロード設定
+└── Dockerfile                   # 本番用Dockerfile
 ```
 
 ## 実装済み機能
@@ -38,6 +55,8 @@ backend/
 - Cleanアーキテクチャに基づいた構造
 - `cmd/`: アプリケーションエントリーポイント
 - `internal/`: 内部パッケージ（外部からimport不可）
+- `graph/`: GraphQL実装（スキーマ、リゾルバー）
+- `ent/`: Ent ORM（スキーマ、生成コード）
 - レイヤー分離: handler, middleware, config, routes
 
 ### 2. Gin ルーター設定 ✅
@@ -51,7 +70,7 @@ backend/
 ### 3. ミドルウェア設定 ✅
 #### CORS ミドルウェア
 - **ファイル**: `internal/middleware/cors.go`
-- **機能**: フロントエンド（React Native, Expo）との通信許可
+- **機能**: フロントエンド（React）との通信許可
 
 #### ログ ミドルウェア
 - **ファイル**: `internal/middleware/logger.go`
@@ -74,12 +93,43 @@ backend/
   - 構造化エラーログ
   - HTTPステータスコード管理
 
+#### データベースミドルウェア
+- **ファイル**: `internal/middleware/database.go`
+- **機能**:
+  - データベースクライアントのコンテキスト注入
+  - ハンドラーでのデータベースアクセス簡素化
+
 ### 4. ヘルスチェックエンドポイント ✅
 - **ファイル**: `internal/handler/health.go`
 - **エンドポイント**:
   - `GET /health` - サービス状態確認
   - `GET /ping` - 疎通確認
   - `GET /api/v1/status` - API状態確認
+
+## GraphQL API実装 ✅
+
+### 1. GraphQLスキーマ設計
+- **ファイル**: `graph/schema.graphqls`
+- **エンティティ**:
+  - `User`: ユーザー情報（Node interface対応）
+  - `Event`: イベント情報（Node interface対応）
+  - `Participant`: 参加者情報（Node interface対応）
+- **Relay仕様**: Node interface、Connection pagination対応
+
+### 2. GraphQLエンドポイント
+```bash
+# GraphQL API（認証必須）
+POST /api/v1/graphql         # GraphQLクエリ・ミューテーション実行
+
+# GraphQL Playground（開発環境のみ）
+GET  /api/v1/graphql         # GraphQL Playground UI
+```
+
+### 3. Ent ORM統合
+- **gqlgen + Ent統合**: entgqlによる自動GraphQL生成
+- **型安全性**: 100%静的型付け
+- **自動フィルタ**: GraphQLクエリ条件の自動生成
+- **スキーマ同期**: DBスキーマとGraphQLスキーマの一貫性
 
 ## データベース統合 ✅
 
@@ -108,13 +158,19 @@ backend/
 ### 4. 環境変数設定
 ```bash
 # 必須環境変数
-DATABASE_HOST=postgres     # Docker Composeサービス名
-DATABASE_PORT=5432
-DATABASE_NAME=morrow_dev
-DATABASE_USER=morrow_user
-DATABASE_PASSWORD=morrow_password
-DATABASE_SSL_MODE=disable  # 開発環境用
+DB_HOST=postgres               # Docker Composeサービス名
+DB_PORT=5432
+DB_NAME=morrow_dev
+DB_USER=morrow_user
+DB_PASSWORD=morrow_password
+GO_ENV=development            # 環境設定
+PORT=8080                    # サーバーポート
 ```
+
+**SSL設定について:**
+- 開発環境では SSL は無効（sslmode=disable が PostgreSQL接続文字列に自動設定）
+- 本番環境では適切な SSL 設定が必要
+- Docker Compose内部通信は安全なプライベートネットワーク使用
 
 ## テスト構成 ✅
 
@@ -186,13 +242,27 @@ GET /api/v1/status
 - **将来対応**: AWS Cognito統合準備
 - **開発用**: Development token サポート
 
-## 技術仕様
+## 開発ツール設定 ✅
 
-### 使用技術
+### ホットリロード設定
+- **ツール**: Air (Live Reload for Go)
+- **設定ファイル**: `.air.toml`
+- **機能**:
+  - ソースコード変更時の自動リビルド
+  - プロセス自動再起動
+  - 開発効率の大幅向上
+- **使用方法**: Docker Compose経由で自動実行
+
+### 技術仕様
+
+#### 使用技術
 - **フレームワーク**: Gin v1.10.1
+- **GraphQL**: gqlgen v0.17.76
+- **ORM**: Ent v0.14.4
 - **ログライブラリ**: logrus v1.9.3
 - **テストライブラリ**: testify
 - **CORS**: gin-contrib/cors
+- **開発ツール**: Air (ホットリロード)
 
 ### 設定管理
 - **環境変数**: 12-Factor App準拠
@@ -214,7 +284,10 @@ GET  /api/v1/status       # API状態
 ```
 
 ### 認証必須エンドポイント
-現在は実装なし（Phase 2で追加予定）
+```bash
+# 現在実装されているエンドポイントなし（GraphQL以外）
+# GraphQLエンドポイントについては上記GraphQLセクション参照
+```
 
 ## テスト
 
@@ -237,20 +310,22 @@ docker-compose exec backend go test -v ./...
 
 ## 今後の拡張予定
 
-### Phase 1（継続）
-- [ ] Ent（ORM）統合
-- [ ] GraphQLエンドポイント実装
-- [ ] PostgreSQL接続
+### Phase 1（完了済み）
+- [x] Ent（ORM）統合
+- [x] GraphQLエンドポイント実装
+- [x] PostgreSQL接続
+- [x] 基本的なスキーマ設計（User, Event, Participant）
 
 ### Phase 2
 - [ ] Amazon Cognito認証統合
 - [ ] JWT トークン検証
-- [ ] ユーザー管理エンドポイント
+- [ ] ユーザー管理GraphQLミューテーション
+- [ ] イベント管理GraphQLミューテーション
 
 ### Phase 3
-- [ ] イベント管理API
-- [ ] リアルタイム通信（SSE）
-- [ ] チャット機能API
+- [ ] リアルタイム通信（GraphQL Subscription）
+- [ ] チャット機能GraphQL API
+- [ ] 高度なフィルタリング・ページネーション
 
 ## 開発ガイドライン
 

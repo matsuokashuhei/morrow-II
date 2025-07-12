@@ -26,7 +26,7 @@ go run cmd/server/main.go
 docker-compose exec frontend bash
 # コンテナ内でnpmコマンドを実行
 npm install
-npm start
+npm run dev
 ```
 
 ### 3. コミット前の必須チェック
@@ -77,16 +77,16 @@ code .
 
 ### ホットリロード機能
 - **バックエンド**: Air を使用した自動リロード
-- **フロントエンド**: React Native Metro bundler によるファストリフレッシュ
+- **フロントエンド**: Vite による高速なHMR（Hot Module Replacement）
 
 ### デバッグ機能
 ```bash
 # Go デバッガー（Delve）の使用
 docker-compose exec backend dlv debug cmd/server/main.go
 
-# React Native デバッガー
-# 開発アプリでデバッグメニューを開く
-# "Debug" を選択してブラウザデバッガーを起動
+# React デバッガー
+# ブラウザの開発者ツールを使用
+# React DevTools 拡張機能で状態管理の確認
 ```
 
 ## 📋 タスク管理
@@ -186,7 +186,10 @@ linters:
 ```json
 {
   "extends": [
-    "@expo/eslint-config-expo",
+    "eslint:recommended",
+    "@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "prettier"
   ],
   "rules": {
