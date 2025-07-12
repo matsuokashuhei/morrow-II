@@ -7,22 +7,25 @@
 
 import React from 'react';
 
-export interface ButtonProps {
+// Base component props for all UI components
+export interface BaseComponentProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export interface ButtonProps extends Omit<BaseComponentProps, 'children'> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
   children: React.ReactNode;
   onClick?: () => void;
-  className?: string;
   type?: 'button' | 'submit' | 'reset';
 }
 
-export interface CardProps {
+export interface CardProps extends BaseComponentProps {
   title?: string;
   description?: string;
-  children: React.ReactNode;
-  className?: string;
   padding?: 'sm' | 'md' | 'lg';
 }
 

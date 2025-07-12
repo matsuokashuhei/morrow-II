@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Modal } from '../components/ui/Modal';
@@ -7,6 +8,7 @@ import { EventCard } from '../components/EventCard';
 import { useEventStore, useUIStore } from '../store';
 
 const HomeScreen = () => {
+  const navigate = useNavigate();
   const { events, addEvent, deleteEvent, isLoading, error } = useEventStore();
 
   const { isCreateEventModalOpen, setCreateEventModalOpen } = useUIStore();
@@ -55,7 +57,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="responsive-container py-12">
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -120,7 +122,7 @@ const HomeScreen = () => {
               <Button
                 variant="secondary"
                 size="md"
-                onClick={() => (window.location.href = '/onboarding')}
+                onClick={() => navigate('/onboarding')}
               >
                 使い方を見る
               </Button>

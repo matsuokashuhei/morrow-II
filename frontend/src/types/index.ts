@@ -33,60 +33,21 @@ export interface Participant {
 /**
  * UI Component Props Types
  */
-export interface ButtonProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-  variant?: 'primary' | 'secondary' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
-  disabled?: boolean;
-  loading?: boolean;
-  className?: string;
-  type?: 'button' | 'submit' | 'reset';
-}
 
-export interface CardProps {
-  children: React.ReactNode;
-  className?: string;
-  padding?: 'sm' | 'md' | 'lg';
-  title?: string;
-  description?: string;
-}
-
-export interface InputProps {
-  label?: string;
-  type?: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
-  disabled?: boolean;
-  required?: boolean;
-  className?: string;
-}
-
-export interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-  children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  closeOnOverlay?: boolean;
-  showCloseButton?: boolean;
-}
-
-export interface NavigationProps {
-  items: NavigationItem[];
-  mobile?: boolean;
-  className?: string;
-}
-
-export interface NavigationItem {
-  label: string;
-  href: string;
-  active?: boolean;
-  external?: boolean;
-  icon?: React.ReactNode;
-}
+// Re-export from ui.ts to avoid duplication
+export type {
+  BaseComponentProps,
+  ButtonProps,
+  CardProps,
+  InputProps,
+  ModalProps,
+  NavigationProps,
+  NavigationItem,
+  LoadingProps,
+  ToastProps,
+  ToastContainerProps,
+  LayoutProps,
+} from './ui';
 
 /**
  * Screen Component Props

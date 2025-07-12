@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '../../utils/cn';
 import { Button } from './Button';
@@ -14,6 +14,9 @@ interface ModalProps {
   className?: string;
 }
 
+// Global modal counter to handle multiple modals
+let modalCount = 0;
+
 const Modal = ({
   isOpen,
   onClose,
@@ -24,7 +27,9 @@ const Modal = ({
   closeOnOverlayClick = true,
   className,
 }: ModalProps) => {
-  // Handle ESC key press
+  const previousBodyOverflow = useRef<string | null>(null);
+
+  // Handle ESC key press and body scroll lock
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
@@ -33,14 +38,26 @@ const Modal = ({
     };
 
     if (isOpen) {
+      // Store original overflow value when first modal opens
+      if (modalCount === 0) {
+        previousBodyOverflow.current = document.body.style.overflow || null;
+        document.body.style.overflow = 'hidden';
+      }
+
+      modalCount++;
       document.addEventListener('keydown', handleEsc);
-      // Prevent body scroll
-      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'unset';
+      if (isOpen) {
+        modalCount--;
+        document.removeEventListener('keydown', handleEsc);
+
+        // Only restore body overflow when all modals are closed
+        if (modalCount === 0) {
+          document.body.style.overflow = previousBodyOverflow.current || '';
+        }
+      }
     };
   }, [isOpen, onClose]);
 

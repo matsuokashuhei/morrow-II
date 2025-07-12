@@ -1,5 +1,14 @@
 import { create } from 'zustand';
 
+// Simple UUID v4 generator - more robust than Date.now() + Math.random()
+function generateId(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export interface Event {
   id: string;
   title: string;
@@ -70,7 +79,7 @@ export const useEventStore = create<EventState>(set => ({
   addEvent: eventData => {
     const newEvent: Event = {
       ...eventData,
-      id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `event-${generateId()}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
