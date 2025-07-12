@@ -26,13 +26,13 @@ Webアプリ開発とビジネス向け機能
 ## Phase 1: MVP開発アイテム
 
 ### 1.1 プロジェクト基盤・環境構築
-- [ ] **プロジェクト初期化**
+- [x] **プロジェクト初期化**
   - GitHub リポジトリ作成
-  - モノレポ構成（Go API + React Native）
+  - モノレポ構成（Go API + React Web）
   - 開発環境Docker設定
   - CI/CD パイプライン基本設定
 
-- [ ] **開発ツール・リンター設定**
+- [x] **開発ツール・リンター設定**
   - Go: gofmt, golangci-lint
   - TypeScript: Prettier, ESLint
   - Pre-commit hooks設定
@@ -65,19 +65,27 @@ Webアプリ開発とビジネス向け機能
   - Resolver基本実装
   - GraphiQL Playground設定
 
-### 1.3 React Native基本アプリ
-- [x] **React Nativeプロジェクト初期化**
-  - Expo/React Native CLI決定・設定
+### 1.3 React Web基本アプリ
+- [x] **React Webプロジェクト初期化**
+  - Vite + React プロジェクト設定
   - TypeScript設定
-  - ナビゲーション設定（React Navigation）
+  - ナビゲーション設定（React Router）
   - 状態管理設定（Zustand）
 
-- [ ] **基本画面・コンポーネント**
+- [x] **基本画面・コンポーネント**
   - スプラッシュ画面
-  - オンボーディング画面
-  - ホーム画面レイアウト
-  - 共通UIコンポーネント設計
-  - テーマ・スタイル設定
+  - オンボーディング画面（5段階フロー）
+  - ホーム画面レイアウト（ヘッダー、メイン、フッター）
+  - 共通UIコンポーネント設計（Button, Input, Modal等）
+  - テーマ・スタイル設定（Tailwind CSS）
+  - レスポンシブデザイン対応
+
+- [x] **コンポーネントライブラリ**
+  - UI Components: Button, Input, Modal, Loading, Card
+  - Form Components: FormField, TextArea, DatePicker, FormContainer
+  - Layout Components: Header, Footer, Sidebar, PageContainer
+  - Utility Components: Toast, Layout
+  - Type定義完備（ui.ts, screens.ts）
 
 - [ ] **GraphQLクライアント設定**
   - Apollo Client設定
