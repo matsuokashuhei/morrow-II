@@ -15,32 +15,37 @@
 
 ## 2. フロントエンド技術
 
-### 2.1 モバイルアプリケーション
-- **フレームワーク**: React Native
+### 2.1 Webアプリケーション ✅
+- **フレームワーク**: React 18.2.0
+- **言語**: TypeScript
+- **ビルドツール**: Vite 4.x
+- **状態管理**: Zustand 4.4.7
+- **UI ライブラリ**: カスタムコンポーネント
+- **CSS フレームワーク**: Tailwind CSS
+- **ルーティング**: React Router 6.20.1
+- **GraphQLクライアント**: Apollo Client 3.8.8
+- **テスト**: Jest + React Testing Library
+
+#### 選定理由
+- 高速な開発サーバーとビルド（Vite）
+- TypeScriptによる型安全性
+- 豊富なエコシステム
+- 高いパフォーマンス
+- Webファーストアプローチによる迅速な開発
+- GraphQLとの統合による効率的なデータ取得
+
+### 2.2 将来のモバイルアプリケーション（Phase 4検討中）
+- **フレームワーク**: React Native（検討中）
 - **言語**: JavaScript/TypeScript
-- **状態管理**: Redux Toolkit または Zustand
+- **状態管理**: Zustand
 - **UI コンポーネント**: React Native Elements または NativeBase
 - **ナビゲーション**: React Navigation
 
 #### 選定理由
+- Reactとの技術的親和性
 - iOS/Android両プラットフォーム対応
-- Webアプリとの技術スタック統一
 - 豊富なライブラリとコミュニティサポート
-- 開発効率の向上
-
-### 2.2 Webアプリケーション
-- **フレームワーク**: React
-- **言語**: TypeScript
-- **ビルドツール**: Vite
-- **状態管理**: Redux Toolkit または Zustand
-- **UI ライブラリ**: Material-UI (MUI) または Chakra UI
-- **CSS フレームワーク**: Tailwind CSS
-
-#### 選定理由
-- React Nativeとの技術的親和性
-- 豊富なエコシステム
-- TypeScriptによる型安全性
-- 高いパフォーマンス
+- Web版との技術スタック統一
 
 ## 3. バックエンド技術
 

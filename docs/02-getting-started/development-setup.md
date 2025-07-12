@@ -38,8 +38,8 @@ docker-compose up --build
 # バックエンドAPIの動作確認
 curl http://localhost:8080/health
 
-# フロントエンドの動作確認（別ターミナル）
-curl http://localhost:3000
+# フロントエンド（React + Vite）の動作確認
+open http://localhost:3000
 ```
 
 ✅ **すべて正常に動作すれば環境構築完了！**
@@ -101,6 +101,9 @@ cat ~/.ssh/id_ed25519.pub
     "ms-vscode.vscode-docker"
   ]
 }
+    "ms-vscode.vscode-docker"
+  ]
+}
 ```
 
 #### 設定ファイル（.vscode/settings.json）
@@ -140,7 +143,6 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - REACT_NATIVE_PACKAGER_HOSTNAME=0.0.0.0
 
   postgres:
     image: postgres:15-alpine
