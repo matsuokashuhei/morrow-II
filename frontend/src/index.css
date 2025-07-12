@@ -5,9 +5,9 @@
 /* CSS Custom Properties */
 :root {
   /* Brand Colors */
-  --color-primary: theme('colors.orange.600');
-  --color-primary-hover: theme('colors.orange.700');
-  --color-primary-light: theme('colors.orange.50');
+  --color-primary: #ea580c; /* Resolved from theme('colors.orange.600') */
+  --color-primary-hover: #c2410c; /* Resolved from theme('colors.orange.700') */
+  --color-primary-light: #fff7ed; /* Resolved from theme('colors.orange.50') */
 
   /* Typography */
   --font-family-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

@@ -13,20 +13,27 @@ interface OnboardingStep {
 const onboardingSteps: OnboardingStep[] = [
   {
     id: 1,
+    title: 'Morrowへようこそ',
+    description:
+      'イベントカウントダウン共有アプリです。大切な日を友達や家族と一緒に楽しみに待ちましょう。',
+    icon: '🎉',
+  },
+  {
+    id: 2,
     title: 'イベントを作成',
     description:
       '大切な予定やイベントを簡単に登録できます。誕生日、記念日、旅行など、楽しみにしている日を追加しましょう。',
     icon: '📅',
   },
   {
-    id: 2,
+    id: 3,
     title: 'カウントダウンを楽しむ',
     description:
       'リアルタイムで残り時間を表示します。日、時間、分、秒まで正確にカウントダウンして、ワクワク感を高めます。',
     icon: '⏰',
   },
   {
-    id: 3,
+    id: 4,
     title: '友達と共有',
     description:
       '作成したイベントを友人や家族と共有できます。みんなで一緒に楽しい瞬間を待ちましょう。',
@@ -43,11 +50,13 @@ const OnboardingScreen = () => {
       setCurrentStep(currentStep + 1);
     } else {
       // Complete onboarding and navigate to home
+      localStorage.setItem('hasSeenOnboarding', 'true');
       navigate('/');
     }
   };
 
   const handleSkip = () => {
+    localStorage.setItem('hasSeenOnboarding', 'true');
     navigate('/');
   };
 

@@ -36,14 +36,14 @@ describe('OnboardingScreen', () => {
 
   it('should render without crashing', () => {
     renderWithRouter();
-    expect(screen.getByText('イベントを作成')).toBeInTheDocument();
+    expect(screen.getByText('Morrowへようこそ')).toBeInTheDocument();
   });
 
   it('should display the first step by default', () => {
     renderWithRouter();
     expect(
       screen.getByText(
-        '大切な予定やイベントを簡単に登録できます。誕生日、記念日、旅行など、楽しみにしている日を追加しましょう。'
+        'イベントカウントダウン共有アプリです。大切な日を友達や家族と一緒に楽しみに待ちましょう。'
       )
     ).toBeInTheDocument();
   });
@@ -68,7 +68,7 @@ describe('OnboardingScreen', () => {
 
   it('should show correct step indicator', () => {
     renderWithRouter();
-    expect(screen.getByText('1 / 3')).toBeInTheDocument();
+    expect(screen.getByText('1 / 4')).toBeInTheDocument();
   });
 
   it('should set localStorage and navigate when skip is clicked', () => {
@@ -83,6 +83,6 @@ describe('OnboardingScreen', () => {
     renderWithRouter();
     const nextButton = screen.getByText('次へ');
     fireEvent.click(nextButton);
-    expect(screen.getByText('2 / 3')).toBeInTheDocument();
+    expect(screen.getByText('2 / 4')).toBeInTheDocument();
   });
 });

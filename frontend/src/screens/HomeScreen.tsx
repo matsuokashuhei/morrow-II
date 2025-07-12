@@ -5,7 +5,7 @@ import { Card } from '../components/ui/Card';
 import { Modal } from '../components/ui/Modal';
 import { Input } from '../components/ui/Input';
 import { EventCard } from '../components/EventCard';
-import { useEventStore, useUIStore } from '../store';
+import { useEventStore, useUIStore, Event } from '../store';
 
 const HomeScreen = () => {
   const navigate = useNavigate();
@@ -33,13 +33,13 @@ const HomeScreen = () => {
     setEventDescription('');
   };
 
-  const handleDeleteEvent = (eventToDelete: any) => {
+  const handleDeleteEvent = (eventToDelete: Event) => {
     if (window.confirm('このイベントを削除してもよろしいですか？')) {
       deleteEvent(eventToDelete.id);
     }
   };
 
-  const handleShareEvent = (eventToShare: any) => {
+  const handleShareEvent = (eventToShare: Event) => {
     // TODO: Implement sharing functionality
     const shareText = `${eventToShare.title} - ${new Date(eventToShare.date).toLocaleDateString('ja-JP')}`;
 
