@@ -6,19 +6,17 @@
     "^@/(.*)$": "<rootDir>/src/$1"
   },
   "transform": {
-    "^.+\\.(ts|tsx)$": ["ts-jest", {
-      "tsconfig": {
-        "types": ["jest", "@testing-library/jest-dom"]
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        "tsconfig": {
+          "types": ["jest", "@testing-library/jest-dom"]
+        }
       }
-    }],
+    ],
     "^.+\\.(js|jsx)$": "babel-jest"
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
-  "collectCoverageFrom": [
-    "src/**/*.{ts,tsx}",
-    "!src/**/*.d.ts"
-  ],
-  "transformIgnorePatterns": [
-    "node_modules/(?!(@testing-library|@apollo)/)"
-  ]
+  "collectCoverageFrom": ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],
+  "transformIgnorePatterns": ["node_modules/(?!(@testing-library|@apollo)/)"]
 }

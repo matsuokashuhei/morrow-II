@@ -12,7 +12,10 @@ export default function App() {
               <nav>
                 <ul className="flex space-x-4">
                   <li>
-                    <a href="/" className="hover:text-orange-200 transition-colors">
+                    <a
+                      href="/"
+                      className="hover:text-orange-200 transition-colors"
+                    >
                       ホーム
                     </a>
                   </li>

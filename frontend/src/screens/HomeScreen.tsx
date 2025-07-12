@@ -10,7 +10,8 @@ const HomeScreen = () => {
         </p>
         <div className="max-w-2xl mx-auto">
           <p className="text-lg text-gray-700 leading-relaxed mb-8">
-            Create, manage, and share your upcoming events with friends and family.
+            Create, manage, and share your upcoming events with friends and
+            family.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
