@@ -2,7 +2,7 @@
   "preset": "ts-jest",
   "testEnvironment": "jsdom",
   "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
-  "moduleNameMapping": {
+  "moduleNameMapper": {
     "^@/(.*)$": "<rootDir>/src/$1"
   },
   "transform": {
@@ -13,5 +13,8 @@
   "collectCoverageFrom": [
     "src/**/*.{ts,tsx}",
     "!src/**/*.d.ts"
+  ],
+  "transformIgnorePatterns": [
+    "node_modules/(?!(@testing-library|@apollo)/)"
   ]
 }

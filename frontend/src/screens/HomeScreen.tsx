@@ -14,7 +14,7 @@ const HomeScreen = () => {
           <p className="text-lg text-gray-700 leading-relaxed mb-8">
             Create, manage, and share your upcoming events with friends and family.
           </p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="text-orange-600 text-3xl mb-4">📅</div>
@@ -25,7 +25,7 @@ const HomeScreen = () => {
                 大切な日程を簡単に登録してカウントダウンを開始
               </p>
             </div>
-            
+
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="text-orange-600 text-3xl mb-4">⏰</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -35,7 +35,7 @@ const HomeScreen = () => {
                 残り時間を美しくリアルタイムでカウントダウン
               </p>
             </div>
-            
+
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="text-orange-600 text-3xl mb-4">👥</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -46,7 +46,7 @@ const HomeScreen = () => {
               </p>
             </div>
           </div>
-          
+
           <div className="mt-12">
             <button className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors">
               今すぐ始める
