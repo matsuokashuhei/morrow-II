@@ -1,11 +1,6 @@
-import { Button, Card } from '@/components/ui';
+import React from 'react';
 
 const HomeScreen = () => {
-  const handleGetStarted = () => {
-    // TODO: Navigate to event creation or login
-    console.log('Get started clicked');
-  };
-
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="text-center">
@@ -21,63 +16,41 @@ const HomeScreen = () => {
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            <Card>
-              <div 
-                className="text-orange-600 text-3xl mb-4" 
-                role="img" 
-                aria-label="Calendar emoji"
-              >
-                📅
-              </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="text-orange-600 text-3xl mb-4">📅</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 イベント作成
               </h3>
               <p className="text-gray-600">
                 大切な日程を簡単に登録してカウントダウンを開始
               </p>
-            </Card>
+            </div>
             
-            <Card>
-              <div 
-                className="text-orange-600 text-3xl mb-4" 
-                role="img" 
-                aria-label="Clock emoji"
-              >
-                ⏰
-              </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="text-orange-600 text-3xl mb-4">⏰</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 リアルタイム表示
               </h3>
               <p className="text-gray-600">
                 残り時間を美しくリアルタイムでカウントダウン
               </p>
-            </Card>
+            </div>
             
-            <Card>
-              <div 
-                className="text-orange-600 text-3xl mb-4" 
-                role="img" 
-                aria-label="People emoji"
-              >
-                👥
-              </div>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="text-orange-600 text-3xl mb-4">👥</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 友達と共有
               </h3>
               <p className="text-gray-600">
                 友人や家族と一緒にイベントを楽しみに待つ
               </p>
-            </Card>
+            </div>
           </div>
           
           <div className="mt-12">
-            <Button 
-              size="lg" 
-              onClick={handleGetStarted}
-              aria-label="Start using Morrow app"
-            >
+            <button className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors">
               今すぐ始める
-            </Button>
+            </button>
           </div>
         </div>
       </div>

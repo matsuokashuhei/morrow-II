@@ -2,25 +2,16 @@
   "preset": "ts-jest",
   "testEnvironment": "jsdom",
   "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
-  "moduleNameMapper": {
+  "moduleNameMapping": {
     "^@/(.*)$": "<rootDir>/src/$1"
   },
   "transform": {
-    "^.+\\.(ts|tsx)$": ["ts-jest", {
-      "useESM": true
-    }],
+    "^.+\\.(ts|tsx)$": "ts-jest",
     "^.+\\.(js|jsx)$": "babel-jest"
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "collectCoverageFrom": [
     "src/**/*.{ts,tsx}",
-    "!src/**/*.d.ts",
-    "!src/__tests__/test-utils.tsx"
-  ],
-  "extensionsToTreatAsEsm": [".ts", ".tsx"],
-  "testMatch": [
-    "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-    "<rootDir>/src/**/*.(test|spec).{js,jsx,ts,tsx}",
-    "!<rootDir>/src/**/__tests__/**/test-utils.{js,jsx,ts,tsx}"
+    "!src/**/*.d.ts"
   ]
 }
