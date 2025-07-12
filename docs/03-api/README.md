@@ -14,12 +14,12 @@ Morrow APIは、イベントカウントダウン共有アプリケーション�
 
 ### エンドポイント構成
 ```
-http://localhost:8080/        # 開発環境
-├── /api/v1/graphql          # GraphQL エンドポイント（POST: API, GET: Playground）
-├── /health                  # ヘルスチェック
-├── /ping                    # 疎通確認
-└── /api/v1/
-    └── /status              # API状態確認
+http://localhost:8080/          # 開発環境
+  ├── /api/v1/graphql          # GraphQL エンドポイント（POST: API, GET: Playground）
+  ├── /health                  # ヘルスチェック
+  ├── /ping                    # 疎通確認
+  └── /api/v1/
+      └── /status              # API状態確認
 ```
 
 **本番環境（予定）:**
