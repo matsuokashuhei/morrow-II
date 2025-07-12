@@ -59,12 +59,12 @@ describe('UI Components', () => {
       expect(screen.getByText('This field is required')).toBeInTheDocument();
     });
 
-    it('renders different variants', () => {
-      const { rerender } = render(<Input variant="default" data-testid="input" />);
-      expect(screen.getByTestId('input')).toHaveClass('bg-white');
+    it('renders different types', () => {
+      const { rerender } = render(<Input type="text" data-testid="input" />);
+      expect(screen.getByTestId('input')).toHaveAttribute('type', 'text');
 
-      rerender(<Input variant="filled" data-testid="input" />);
-      expect(screen.getByTestId('input')).toHaveClass('bg-gray-50');
+      rerender(<Input type="email" data-testid="input" />);
+      expect(screen.getByTestId('input')).toHaveAttribute('type', 'email');
     });
   });
 

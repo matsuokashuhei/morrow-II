@@ -43,6 +43,6 @@ describe('App', () => {
         </Routes>
       </MemoryRouter>
     );
-    expect(getByText('Skip')).toBeInTheDocument();
+    expect(getByText('スキップ')).toBeInTheDocument();
   });
 });
