@@ -144,13 +144,8 @@ frontend/
 - **軽量**: 最小限のボイラープレート
 - **TypeScript対応**: 完全な型安全性
 - **シンプルAPI**: 学習コストの低減
-│   ├── utils/                        # ユーティリティ
-│   │   ├── api.ts                    # API通信
-│   │   ├── date.ts                   # 日付処理
-│   │   └── validation.ts             # バリデーション
-│   └── constants/                    # 定数定義
-│       ├── colors.ts                 # カラーパレット
-│       └── config.ts                 # 設定定数
+
+#### ディレクトリ構造補足
 ├── 📁 assets/                        # 静的リソース
 │   ├── images/                       # 画像ファイル
 │   ├── fonts/                        # フォントファイル

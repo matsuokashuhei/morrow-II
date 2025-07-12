@@ -276,12 +276,15 @@ GET /api/v1/status
 GET  /health              # ヘルスチェック
 GET  /ping                # Ping-Pong
 GET  /api/v1/status       # API状態
-GET  /api/v1/graphql      # GraphQL Playground（開発環境のみ）
 ```
+
+### GraphQL エンドポイント
+GraphQL関連のエンドポイントについては、[GraphQL API実装](#graphql-api実装-✅) セクションを参照してください。
 
 ### 認証必須エンドポイント
 ```bash
-POST /api/v1/graphql      # GraphQL API（クエリ・ミューテーション）
+# 現在実装されているエンドポイントなし（GraphQL以外）
+# GraphQLエンドポイントについては上記GraphQLセクション参照
 ```
 
 ## テスト

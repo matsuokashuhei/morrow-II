@@ -101,9 +101,6 @@ cat ~/.ssh/id_ed25519.pub
     "ms-vscode.vscode-docker"
   ]
 }
-    "ms-vscode.vscode-docker"
-  ]
-}
 ```
 
 #### 設定ファイル（.vscode/settings.json）
