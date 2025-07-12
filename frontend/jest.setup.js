@@ -1,2 +1,2 @@
-// Jest setup file
-// Add any global test configuration here
+// Jest setup file for React DOM testing
+import '@testing-library/jest-dom';
