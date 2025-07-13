@@ -1,38 +1,13 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-import { Modal } from '../components/ui/Modal';
-import { Input } from '../components/ui/Input';
 import { EventCard } from '../components/EventCard';
-import { useEventStore, useUIStore, Event } from '../store';
+import { useEventStore, Event } from '../store';
 import { ROUTES } from '../constants/routes';
 
 const HomeScreen = () => {
   const navigate = useNavigate();
-  const { events, addEvent, deleteEvent, isLoading, error } = useEventStore();
-
-  const { isCreateEventModalOpen, setCreateEventModalOpen } = useUIStore();
-
-  const [eventTitle, setEventTitle] = useState('');
-  const [eventDate, setEventDate] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
-
-  const handleCreateEvent = () => {
-    if (!eventTitle || !eventDate) return;
-
-    addEvent({
-      title: eventTitle,
-      date: eventDate,
-      description: eventDescription,
-    });
-
-    setCreateEventModalOpen(false);
-    // Reset form
-    setEventTitle('');
-    setEventDate('');
-    setEventDescription('');
-  };
+  const { events, deleteEvent, isLoading, error } = useEventStore();
 
   const handleDeleteEvent = (eventToDelete: Event) => {
     if (window.confirm('このイベントを削除してもよろしいですか？')) {
@@ -113,7 +88,7 @@ const HomeScreen = () => {
         <div className="mt-12 space-y-4">
           <Button
             size="lg"
-            onClick={() => setCreateEventModalOpen(true)}
+            onClick={() => navigate(ROUTES.EVENT_CREATE)}
             loading={isLoading}
           >
             イベントを作成
@@ -148,7 +123,7 @@ const HomeScreen = () => {
               あなたのイベント ({events.length})
             </h2>
             <Button
-              onClick={() => setCreateEventModalOpen(true)}
+              onClick={() => navigate(ROUTES.EVENT_CREATE)}
               loading={isLoading}
             >
               新しいイベント
@@ -167,56 +142,6 @@ const HomeScreen = () => {
           </div>
         </div>
       )}
-
-      {/* Create Event Modal */}
-      <Modal
-        isOpen={isCreateEventModalOpen}
-        onClose={() => setCreateEventModalOpen(false)}
-        title="新しいイベントを作成"
-        size="md"
-      >
-        <div className="space-y-6">
-          <Input
-            label="イベント名"
-            placeholder="例: 誕生日パーティー"
-            value={eventTitle}
-            onChange={e => setEventTitle(e.target.value)}
-            required
-          />
-
-          <Input
-            label="イベント日時"
-            type="datetime-local"
-            value={eventDate}
-            onChange={e => setEventDate(e.target.value)}
-            required
-          />
-
-          <Input
-            label="説明（任意）"
-            placeholder="イベントの詳細を入力してください"
-            value={eventDescription}
-            onChange={e => setEventDescription(e.target.value)}
-          />
-
-          <div className="flex justify-end space-x-3 pt-4">
-            <Button
-              variant="secondary"
-              onClick={() => setCreateEventModalOpen(false)}
-            >
-              キャンセル
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleCreateEvent}
-              disabled={!eventTitle || !eventDate}
-              loading={isLoading}
-            >
-              作成
-            </Button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };
