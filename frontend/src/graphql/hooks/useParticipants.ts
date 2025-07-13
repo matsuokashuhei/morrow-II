@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import {
   useGetParticipantsQuery,
   useGetParticipantQuery,
@@ -8,9 +7,12 @@ import {
   GetParticipantsDocument,
   GetParticipantDocument,
   GetEventDocument,
-  type CreateParticipantInput,
-  type UpdateParticipantInput,
 } from '../generated';
+import {
+  createCreateMutationWrapper,
+  createUpdateMutationWrapper,
+  createDeleteMutationWrapper,
+} from './useMutationWrapper';
 
 // Custom hook for fetching all participants
 export function useParticipants() {
@@ -51,24 +53,10 @@ export function useCreateParticipant() {
       refetchQueries: [{ query: GetParticipantsDocument }],
     });
 
-  const createParticipant = useCallback(
-    async (input: CreateParticipantInput) => {
-      try {
-        const result = await createParticipantMutation({
-          variables: { input },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.createParticipant;
-      } catch (err) {
-        console.error('Failed to create participant:', err);
-        throw err;
-      }
-    },
-    [createParticipantMutation]
+  const createParticipant = createCreateMutationWrapper(
+    createParticipantMutation,
+    'create participant',
+    'createParticipant'
   );
 
   return {
@@ -89,24 +77,10 @@ export function useUpdateParticipant() {
       ],
     });
 
-  const updateParticipant = useCallback(
-    async (id: string, input: UpdateParticipantInput) => {
-      try {
-        const result = await updateParticipantMutation({
-          variables: { id, input },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.updateParticipant;
-      } catch (err) {
-        console.error('Failed to update participant:', err);
-        throw err;
-      }
-    },
-    [updateParticipantMutation]
+  const updateParticipant = createUpdateMutationWrapper(
+    updateParticipantMutation,
+    'update participant',
+    'updateParticipant'
   );
 
   return {
@@ -127,24 +101,10 @@ export function useDeleteParticipant() {
       ],
     });
 
-  const deleteParticipant = useCallback(
-    async (id: string) => {
-      try {
-        const result = await deleteParticipantMutation({
-          variables: { id },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.deleteParticipant;
-      } catch (err) {
-        console.error('Failed to delete participant:', err);
-        throw err;
-      }
-    },
-    [deleteParticipantMutation]
+  const deleteParticipant = createDeleteMutationWrapper(
+    deleteParticipantMutation,
+    'delete participant',
+    'deleteParticipant'
   );
 
   return {

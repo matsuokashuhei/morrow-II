@@ -25,7 +25,11 @@ export function DataListSection<T extends DataItem>({
     <Card className="p-6">
       <h2 className="text-2xl font-semibold mb-4">{title}</h2>
       {error ? (
-        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+        <div
+          className="bg-red-50 border border-red-200 rounded-md p-4"
+          role="alert"
+          aria-live="polite"
+        >
           <h3 className="text-red-800 font-medium">
             Error loading {title.toLowerCase()}:
           </h3>
