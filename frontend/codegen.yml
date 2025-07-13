@@ -1,0 +1,21 @@
+overwrite: true
+schema: "http://backend:8080/api/v1/graphql"
+documents: "src/graphql/queries/**/*.graphql"
+generates:
+  src/graphql/generated.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      useTypeImports: true
+      skipTypename: false
+      scalars:
+        ID: string
+        String: string
+        Boolean: boolean
+        Int: number
+        Float: number

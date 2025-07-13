@@ -1,0 +1,104 @@
+# Event Queries
+query GetEvents {
+  events {
+    id
+    title
+    description
+    startTime
+    endTime
+    emoji
+    visibility
+    createdAt
+    updatedAt
+    creator {
+      id
+      name
+      email
+    }
+    participants {
+      id
+      role
+      status
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+}
+
+query GetEvent($id: ID!) {
+  event(id: $id) {
+    id
+    title
+    description
+    startTime
+    endTime
+    emoji
+    visibility
+    createdAt
+    updatedAt
+    creator {
+      id
+      name
+      email
+      avatarUrl
+    }
+    participants {
+      id
+      role
+      status
+      joinedAt
+      user {
+        id
+        name
+        email
+        avatarUrl
+      }
+    }
+  }
+}
+
+# Event Mutations
+mutation CreateEvent($input: CreateEventInput!) {
+  createEvent(input: $input) {
+    id
+    title
+    description
+    startTime
+    endTime
+    emoji
+    visibility
+    createdAt
+    updatedAt
+    creator {
+      id
+      name
+      email
+    }
+  }
+}
+
+mutation UpdateEvent($id: ID!, $input: UpdateEventInput!) {
+  updateEvent(id: $id, input: $input) {
+    id
+    title
+    description
+    startTime
+    endTime
+    emoji
+    visibility
+    createdAt
+    updatedAt
+    creator {
+      id
+      name
+      email
+    }
+  }
+}
+
+mutation DeleteEvent($id: ID!) {
+  deleteEvent(id: $id)
+}

@@ -87,7 +87,7 @@ Webアプリ開発とビジネス向け機能
   - Utility Components: Toast, Layout
   - Type定義完備（ui.ts, screens.ts）
 
-- [ ] **GraphQLクライアント設定**
+- [x] **GraphQLクライアント設定**
   - Apollo Client設定
   - GraphQL Code Generation設定
   - TypeScript型定義自動生成
