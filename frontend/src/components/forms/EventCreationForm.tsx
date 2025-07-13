@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FormContainer } from './FormContainer';
 import EventDetailsSection from './EventDetailsSection';
 import EventDateTimeSection from './EventDateTimeSection';
@@ -79,23 +79,29 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
     }
   };
 
-  const handleInputChange = (field: keyof EventFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
-  };
+  const handleInputChange = useCallback(
+    (field: keyof EventFormData, value: string) => {
+      setFormData(prev => ({ ...prev, [field]: value }));
+      // Clear error when user starts typing
+      if (errors[field]) {
+        setErrors(prev => ({ ...prev, [field]: '' }));
+      }
+    },
+    [errors]
+  );
 
   // Create a register-like function for form fields
-  const register = (field: keyof EventFormData) => ({
-    value: formData[field],
-    onChange: (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-      handleInputChange(field, e.target.value);
-    },
-  });
+  const register = useCallback(
+    (field: keyof EventFormData) => ({
+      value: formData[field],
+      onChange: (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) => {
+        handleInputChange(field, e.target.value);
+      },
+    }),
+    [formData, handleInputChange]
+  );
 
   return (
     <FormContainer onSubmit={handleSubmit}>

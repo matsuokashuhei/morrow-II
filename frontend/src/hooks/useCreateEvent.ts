@@ -40,6 +40,6 @@ export const useCreateEvent = (): UseCreateEventReturn => {
   return {
     createEvent,
     loading,
-    error: error ? new Error(error.message) : undefined,
+    error,
   };
 };
