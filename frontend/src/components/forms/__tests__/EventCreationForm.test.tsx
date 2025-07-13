@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router-dom';
+import '@testing-library/jest-dom';
 import EventCreationForm from '../EventCreationForm';
 import {
   CreateEventDocument,
@@ -9,6 +10,19 @@ import {
 
 // Mock the useCreateEvent hook
 jest.mock('../../../hooks/useCreateEvent');
+
+const mockCreateEvent = jest.fn();
+const mockUseCreateEvent = jest.fn(() => ({
+  createEvent: mockCreateEvent,
+  loading: false,
+  error: null,
+}));
+
+// Set up the mock implementation
+beforeEach(() => {
+  const useCreateEventModule = require('../../../hooks/useCreateEvent');
+  useCreateEventModule.useCreateEvent = mockUseCreateEvent;
+});
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -67,6 +81,12 @@ const renderComponent = (props = {}) => {
 describe('EventCreationForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset to default mock
+    mockUseCreateEvent.mockReturnValue({
+      createEvent: mockCreateEvent,
+      loading: false,
+      error: null,
+    });
   });
 
   it('renders form with all required fields', () => {
@@ -86,6 +106,16 @@ describe('EventCreationForm', () => {
 
   it('shows validation errors for empty required fields', async () => {
     renderComponent();
+
+    // Clear the title field to trigger required validation
+    const titleInput = screen.getByLabelText('イベント名');
+    fireEvent.change(titleInput, { target: { value: '' } });
+
+    // Clear the startTime and endTime fields to trigger required validation
+    const startTimeInput = screen.getByLabelText('開始日時');
+    const endTimeInput = screen.getByLabelText('終了日時');
+    fireEvent.change(startTimeInput, { target: { value: '' } });
+    fireEvent.change(endTimeInput, { target: { value: '' } });
 
     const submitButton = screen.getByRole('button', { name: 'イベントを作成' });
     fireEvent.click(submitButton);
@@ -249,8 +279,7 @@ describe('EventCreationForm', () => {
 
   it('shows loading state during form submission', async () => {
     // Mock loading state
-    const useCreateEventMock = require('../../../hooks/useCreateEvent');
-    useCreateEventMock.useCreateEvent.mockReturnValue({
+    mockUseCreateEvent.mockReturnValue({
       createEvent: jest.fn(),
       loading: true,
       error: null,
@@ -266,11 +295,10 @@ describe('EventCreationForm', () => {
 
   it('displays error message when creation fails', () => {
     // Mock error state
-    const useCreateEventMock = require('../../../hooks/useCreateEvent');
-    useCreateEventMock.useCreateEvent.mockReturnValue({
+    mockUseCreateEvent.mockReturnValue({
       createEvent: jest.fn(),
       loading: false,
-      error: new Error('Network error'),
+      error: new Error('Network error') as any,
     });
 
     renderComponent();

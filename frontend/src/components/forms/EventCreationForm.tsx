@@ -98,8 +98,8 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
   });
 
   return (
-    <FormContainer>
-      <form onSubmit={handleSubmit} className="space-y-8">
+    <FormContainer onSubmit={handleSubmit}>
+      <div className="space-y-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900">
             新しいイベントを作成
@@ -131,7 +131,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
             {loading ? 'イベント作成中...' : 'イベントを作成'}
           </Button>
         </div>
-      </form>
+      </div>
     </FormContainer>
   );
 };
