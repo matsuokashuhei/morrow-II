@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from './src/components/ui/Navigation';
 import { Loading } from './src/components/ui/Loading';
+import { ROUTES } from './src/constants/routes';
 
 // Lazy load route components for better performance
 const HomeScreen = React.lazy(() => import('./src/screens/HomeScreen'));
@@ -11,8 +12,8 @@ const OnboardingScreen = React.lazy(
 
 export default function App() {
   const navigationItems = [
-    { label: 'ホーム', href: '/', active: true },
-    { label: '使い方', href: '/onboarding' },
+    { label: 'ホーム', href: ROUTES.HOME, active: true },
+    { label: '使い方', href: ROUTES.ONBOARDING },
   ];
 
   return (
@@ -31,8 +32,8 @@ export default function App() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Suspense fallback={<Loading size="lg" text="Loading..." />}>
             <Routes>
-              <Route path="/" element={<HomeScreen />} />
-              <Route path="/onboarding" element={<OnboardingScreen />} />
+              <Route path={ROUTES.HOME} element={<HomeScreen />} />
+              <Route path={ROUTES.ONBOARDING} element={<OnboardingScreen />} />
             </Routes>
           </Suspense>
         </main>

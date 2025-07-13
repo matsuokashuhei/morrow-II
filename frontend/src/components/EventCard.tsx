@@ -105,11 +105,13 @@ const EventCard = ({
                 size="sm"
                 onClick={() => onShare(event)}
                 className="p-2"
+                aria-label="Share event"
               >
                 <svg
                   className="w-4 h-4"
                   fill="currentColor"
                   viewBox="0 0 20 20"
+                  aria-hidden="true"
                 >
                   <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                 </svg>
@@ -121,11 +123,13 @@ const EventCard = ({
                 size="sm"
                 onClick={() => onEdit(event)}
                 className="p-2"
+                aria-label="Edit event"
               >
                 <svg
                   className="w-4 h-4"
                   fill="currentColor"
                   viewBox="0 0 20 20"
+                  aria-hidden="true"
                 >
                   <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                 </svg>
@@ -137,11 +141,13 @@ const EventCard = ({
                 size="sm"
                 onClick={() => onDelete(event)}
                 className="p-2"
+                aria-label="Delete event"
               >
                 <svg
                   className="w-4 h-4"
                   fill="currentColor"
                   viewBox="0 0 20 20"
+                  aria-hidden="true"
                 >
                   <path
                     fillRule="evenodd"

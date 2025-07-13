@@ -49,7 +49,7 @@ export interface ModalProps {
   title?: string;
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  closeOnOverlay?: boolean;
+  closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
   className?: string;
 }
