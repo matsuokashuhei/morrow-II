@@ -6,7 +6,7 @@ import {
   useEvent,
   useCreateEvent,
   useUpdateEvent,
-  useDeleteEvent
+  useDeleteEvent,
 } from '../useEvents';
 import {
   GetEventsDocument,
@@ -41,7 +41,11 @@ const mockEvents = [mockEvent];
 // Test wrapper component
 const createWrapper = (mocks: MockedResponse[]) => {
   return ({ children }: { children: ReactNode }) =>
-    React.createElement(MockedProvider, { mocks, addTypename: false }, children);
+    React.createElement(
+      MockedProvider,
+      { mocks, addTypename: false },
+      children
+    );
 };
 
 describe('useEvents', () => {

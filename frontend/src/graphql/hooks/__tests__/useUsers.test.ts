@@ -6,7 +6,7 @@ import {
   useUser,
   useCreateUser,
   useUpdateUser,
-  useDeleteUser
+  useDeleteUser,
 } from '../useUsers';
 import {
   GetUsersDocument,
@@ -32,7 +32,11 @@ const mockUsers = [mockUser];
 // Test wrapper component
 const createWrapper = (mocks: MockedResponse[]) => {
   return ({ children }: { children: ReactNode }) =>
-    React.createElement(MockedProvider, { mocks, addTypename: false }, children);
+    React.createElement(
+      MockedProvider,
+      { mocks, addTypename: false },
+      children
+    );
 };
 
 describe('useUsers', () => {
