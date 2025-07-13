@@ -13,7 +13,7 @@ const EventDateTimeSection: React.FC<EventDateTimeSectionProps> = ({
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">日時設定</h3>
-      
+
       <div className="space-y-4">
         {/* Start Date Time */}
         <DatePicker

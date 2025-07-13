@@ -19,7 +19,7 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">イベント詳細</h3>
-      
+
       <div className="space-y-4">
         {/* Event Title */}
         <FormField
@@ -43,7 +43,10 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
 
         {/* Emoji Picker */}
         <div className="space-y-2">
-          <label htmlFor="emoji" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="emoji"
+            className="block text-sm font-medium text-gray-700"
+          >
             絵文字
           </label>
           <div className="flex items-center space-x-3">

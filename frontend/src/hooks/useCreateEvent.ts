@@ -1,12 +1,14 @@
-import { 
-  CreateEventMutation, 
+import {
+  CreateEventMutation,
   CreateEventInput,
   GetEventsDocument,
-  useCreateEventMutation
+  useCreateEventMutation,
 } from '../graphql/generated';
 
 interface UseCreateEventReturn {
-  createEvent: (input: CreateEventInput) => Promise<CreateEventMutation['createEvent']>;
+  createEvent: (
+    input: CreateEventInput
+  ) => Promise<CreateEventMutation['createEvent']>;
   loading: boolean;
   error?: Error;
 }

@@ -53,7 +53,7 @@
 │   └── createEvent mutation完了
 ├── UI Components ✅
 │   ├── FormContainer
-│   ├── FormField  
+│   ├── FormField
 │   ├── Button
 │   ├── Card
 │   ├── DatePicker
@@ -117,18 +117,18 @@ const eventValidationSchema = yup.object({
     .required('イベント名は必須です')
     .min(1, '1文字以上入力してください')
     .max(100, '100文字以内で入力してください'),
-  
+
   description: yup.string()
     .max(500, '500文字以内で入力してください'),
-  
+
   startTime: yup.date()
     .required('開始日時は必須です')
     .min(new Date(), '現在時刻以降を選択してください'),
-  
+
   endTime: yup.date()
     .required('終了日時は必須です')
     .min(yup.ref('startTime'), '開始日時以降を選択してください'),
-  
+
   emoji: yup.string()
     .matches(/^.{0,1}$/, '絵文字は1文字以内で入力してください'),
 });
@@ -207,12 +207,12 @@ export const useCreateEvent = (): UseCreateEventReturn => {
 .event-form {
   /* Mobile: ~768px */
   @apply p-4 space-y-4;
-  
+
   /* Tablet: 768px~ */
   @media (min-width: 768px) {
     @apply p-6 space-y-6 max-w-2xl mx-auto;
   }
-  
+
   /* Desktop: 1024px~ */
   @media (min-width: 1024px) {
     @apply p-8 grid grid-cols-2 gap-8;

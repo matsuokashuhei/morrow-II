@@ -41,7 +41,10 @@ export default function App() {
             <Routes>
               <Route path={ROUTES.HOME} element={<HomeScreen />} />
               <Route path={ROUTES.ONBOARDING} element={<OnboardingScreen />} />
-              <Route path={ROUTES.EVENT_CREATE} element={<EventCreationScreen />} />
+              <Route
+                path={ROUTES.EVENT_CREATE}
+                element={<EventCreationScreen />}
+              />
               <Route path="/graphql-test" element={<GraphQLTestScreen />} />
             </Routes>
           </Suspense>

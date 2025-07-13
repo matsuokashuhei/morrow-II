@@ -57,7 +57,10 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
 
     if (!formData.endTime) {
       newErrors.endTime = '終了日時は必須です';
-    } else if (formData.startTime && new Date(formData.endTime) <= new Date(formData.startTime)) {
+    } else if (
+      formData.startTime &&
+      new Date(formData.endTime) <= new Date(formData.startTime)
+    ) {
       newErrors.endTime = '開始日時以降を選択してください';
     }
 
@@ -71,7 +74,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -79,7 +82,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
     try {
       // TODO: Get actual user ID from auth context
       const creatorId = '1'; // Temporary hardcoded user ID
-      
+
       await createEvent({
         title: formData.title,
         description: formData.description || undefined,
@@ -107,7 +110,9 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
   // Create a register-like function for form fields
   const register = (field: keyof FormData) => ({
     value: formData[field],
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    onChange: (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
       handleInputChange(field, e.target.value);
     },
   });
@@ -116,7 +121,9 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
     <FormContainer>
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">新しいイベントを作成</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            新しいイベントを作成
+          </h2>
           <p className="text-gray-600 mt-2">
             みんなで楽しみにできるイベントを作成しましょう
           </p>
@@ -131,7 +138,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
         )}
 
         <EventDetailsSection errors={errors} register={register} />
-        
+
         <EventDateTimeSection errors={errors} register={register} />
 
         <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
@@ -140,11 +147,7 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
               キャンセル
             </Button>
           )}
-          <Button 
-            type="submit" 
-            loading={loading}
-            disabled={loading}
-          >
+          <Button type="submit" loading={loading} disabled={loading}>
             {loading ? 'イベント作成中...' : 'イベントを作成'}
           </Button>
         </div>
