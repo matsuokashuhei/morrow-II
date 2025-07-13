@@ -1,0 +1,100 @@
+# Participant Queries
+query GetParticipants {
+  participants {
+    id
+    role
+    status
+    joinedAt
+    updatedAt
+    user {
+      id
+      name
+      email
+      avatarUrl
+    }
+    event {
+      id
+      title
+      startTime
+      endTime
+      emoji
+    }
+  }
+}
+
+query GetParticipant($id: ID!) {
+  participant(id: $id) {
+    id
+    role
+    status
+    joinedAt
+    updatedAt
+    user {
+      id
+      name
+      email
+      avatarUrl
+    }
+    event {
+      id
+      title
+      description
+      startTime
+      endTime
+      emoji
+      visibility
+      creator {
+        id
+        name
+        email
+      }
+    }
+  }
+}
+
+# Participant Mutations
+mutation CreateParticipant($input: CreateParticipantInput!) {
+  createParticipant(input: $input) {
+    id
+    role
+    status
+    joinedAt
+    updatedAt
+    user {
+      id
+      name
+      email
+    }
+    event {
+      id
+      title
+      startTime
+      endTime
+    }
+  }
+}
+
+mutation UpdateParticipant($id: ID!, $input: UpdateParticipantInput!) {
+  updateParticipant(id: $id, input: $input) {
+    id
+    role
+    status
+    joinedAt
+    updatedAt
+    user {
+      id
+      name
+      email
+    }
+    event {
+      id
+      title
+      startTime
+      endTime
+    }
+  }
+}
+
+mutation DeleteParticipant($id: ID!) {
+  deleteParticipant(id: $id)
+}

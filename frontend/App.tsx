@@ -9,11 +9,15 @@ const HomeScreen = React.lazy(() => import('./src/screens/HomeScreen'));
 const OnboardingScreen = React.lazy(
   () => import('./src/screens/OnboardingScreen')
 );
+const GraphQLTestScreen = React.lazy(
+  () => import('./src/screens/GraphQLTestScreen')
+);
 
 export default function App() {
   const navigationItems = [
     { label: 'ホーム', href: ROUTES.HOME, active: true },
     { label: '使い方', href: ROUTES.ONBOARDING },
+    { label: 'GraphQL Test', href: '/graphql-test' },
   ];
 
   return (
@@ -34,6 +38,7 @@ export default function App() {
             <Routes>
               <Route path={ROUTES.HOME} element={<HomeScreen />} />
               <Route path={ROUTES.ONBOARDING} element={<OnboardingScreen />} />
+              <Route path="/graphql-test" element={<GraphQLTestScreen />} />
             </Routes>
           </Suspense>
         </main>
