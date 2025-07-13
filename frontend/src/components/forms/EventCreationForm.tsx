@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormContainer } from './FormContainer';
 import EventDetailsSection from './EventDetailsSection';
 import EventDateTimeSection from './EventDateTimeSection';
@@ -25,32 +27,28 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
   // TODO: Replace with actual user ID from auth context in next phase
   const getMvpUserId = () => '1';
 
-  const [formData, setFormData] = useState<EventFormData>(
-    getDefaultEventFormValues(getMvpUserId())
-  );
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  // Use React Hook Form with Yup resolver
+  const {
+    register: rhfRegister,
+    handleSubmit,
+    formState: { errors: rhfErrors },
+    watch,
+  } = useForm<EventFormData>({
+    resolver: yupResolver(eventValidationSchema),
+    defaultValues: getDefaultEventFormValues(getMvpUserId()),
+  });
 
-  // Use Yup schema for validation
-  const validateForm = async (): Promise<boolean> => {
-    try {
-      await eventValidationSchema.validate(formData, { abortEarly: false });
-      setErrors({});
-      return true;
-    } catch (validationError: any) {
-      const newErrors: Record<string, string> = {};
-
-      if (validationError.inner) {
-        validationError.inner.forEach((error: any) => {
-          if (error.path) {
-            newErrors[error.path] = error.message;
-          }
-        });
+  // Convert React Hook Form errors to the format expected by child components
+  const errors = React.useMemo(() => {
+    const convertedErrors: Record<string, string> = {};
+    Object.keys(rhfErrors).forEach(key => {
+      const error = rhfErrors[key as keyof EventFormData];
+      if (error?.message) {
+        convertedErrors[key] = error.message;
       }
-
-      setErrors(newErrors);
-      return false;
-    }
-  };
+    });
+    return convertedErrors;
+  }, [rhfErrors]);
 
   const onSubmit = async (data: EventFormData) => {
     try {
@@ -70,41 +68,23 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const isValid = await validateForm();
-    if (isValid) {
-      await onSubmit(formData);
-    }
-  };
-
-  const handleInputChange = useCallback(
-    (field: keyof EventFormData, value: string) => {
-      setFormData(prev => ({ ...prev, [field]: value }));
-      // Clear error when user starts typing
-      if (errors[field]) {
-        setErrors(prev => ({ ...prev, [field]: '' }));
-      }
-    },
-    [errors]
-  );
-
-  // Create a register-like function for form fields
+  // Create a register function compatible with our existing child components
   const register = useCallback(
-    (field: keyof EventFormData) => ({
-      value: formData[field],
-      onChange: (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => {
-        handleInputChange(field, e.target.value);
-      },
-    }),
-    [formData, handleInputChange]
+    (field: keyof EventFormData) => {
+      const fieldRegistration = rhfRegister(field);
+      const fieldValue = watch(field);
+
+      return {
+        ...fieldRegistration,
+        value: fieldValue,
+        onChange: fieldRegistration.onChange,
+      };
+    },
+    [rhfRegister, watch]
   );
 
   return (
-    <FormContainer onSubmit={handleSubmit}>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900">

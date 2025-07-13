@@ -64,10 +64,10 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
         </div>
 
         {/* Visibility Settings */}
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+        <fieldset className="space-y-2">
+          <legend className="block text-sm font-medium text-gray-700">
             公開設定
-          </label>
+          </legend>
           <div className="space-y-2">
             <label className="flex items-center">
               <input
@@ -112,7 +112,7 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
           {errors.visibility && (
             <p className="text-sm text-red-600">{errors.visibility}</p>
           )}
-        </div>
+        </fieldset>
       </div>
     </div>
   );
