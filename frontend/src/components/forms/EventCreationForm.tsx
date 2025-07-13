@@ -80,8 +80,10 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
     }
 
     try {
-      // TODO: Get actual user ID from auth context
-      const creatorId = '1'; // Temporary hardcoded user ID
+      // MVP: Using default user ID until authentication is implemented
+      // TODO: Replace with actual user ID from auth context in next phase
+      const getMvpUserId = () => '1';
+      const creatorId = getMvpUserId();
 
       await createEvent({
         title: formData.title,

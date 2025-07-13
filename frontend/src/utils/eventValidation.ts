@@ -22,10 +22,10 @@ const getCurrentDateTime = () => {
 export const eventValidationSchema = yup.object({
   title: yup
     .string()
+    .trim()
     .required('イベント名は必須です')
     .min(1, '1文字以上入力してください')
-    .max(100, '100文字以内で入力してください')
-    .trim(),
+    .max(100, '100文字以内で入力してください'),
 
   description: yup
     .string()

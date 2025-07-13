@@ -1,15 +1,11 @@
 import React from 'react';
-// import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { FormField } from './FormField';
 import { TextArea } from './TextArea';
-// import { EventFormData } from '../../utils/eventValidation';
 import { EventVisibility } from '../../graphql/generated';
 
 interface EventDetailsSectionProps {
-  // errors: FieldErrors<EventFormData>;
-  // register: UseFormRegister<EventFormData>;
-  errors?: any;
-  register?: any;
+  errors: Record<string, string>;
+  register: any;
 }
 
 const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
@@ -26,7 +22,7 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
           label="イベント名"
           name="title"
           required
-          error={errors.title?.message}
+          error={errors.title}
           placeholder="例: 誕生日パーティー"
           {...register('title')}
         />
@@ -37,7 +33,7 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
           id="description"
           placeholder="イベントの詳細を入力してください（任意）"
           rows={3}
-          error={errors.description?.message}
+          error={errors.description}
           {...register('description')}
         />
 
@@ -63,7 +59,7 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
             </span>
           </div>
           {errors.emoji && (
-            <p className="text-sm text-red-600">{errors.emoji.message}</p>
+            <p className="text-sm text-red-600">{errors.emoji}</p>
           )}
         </div>
 
@@ -76,33 +72,45 @@ const EventDetailsSection: React.FC<EventDetailsSectionProps> = ({
             <label className="flex items-center">
               <input
                 type="radio"
+                name="visibility"
                 value={EventVisibility.Private}
+                checked={
+                  register('visibility').value === EventVisibility.Private
+                }
+                onChange={register('visibility').onChange}
                 className="mr-2"
-                {...register('visibility')}
               />
               <span className="text-sm">プライベート（自分のみ）</span>
             </label>
             <label className="flex items-center">
               <input
                 type="radio"
+                name="visibility"
                 value={EventVisibility.Shared}
+                checked={
+                  register('visibility').value === EventVisibility.Shared
+                }
+                onChange={register('visibility').onChange}
                 className="mr-2"
-                {...register('visibility')}
               />
               <span className="text-sm">共有（招待された人のみ）</span>
             </label>
             <label className="flex items-center">
               <input
                 type="radio"
+                name="visibility"
                 value={EventVisibility.Public}
+                checked={
+                  register('visibility').value === EventVisibility.Public
+                }
+                onChange={register('visibility').onChange}
                 className="mr-2"
-                {...register('visibility')}
               />
               <span className="text-sm">パブリック（誰でも閲覧可能）</span>
             </label>
           </div>
           {errors.visibility && (
-            <p className="text-sm text-red-600">{errors.visibility.message}</p>
+            <p className="text-sm text-red-600">{errors.visibility}</p>
           )}
         </div>
       </div>

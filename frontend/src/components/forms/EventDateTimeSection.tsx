@@ -2,8 +2,8 @@ import React from 'react';
 import { DatePicker } from './DatePicker';
 
 interface EventDateTimeSectionProps {
-  errors?: any;
-  register?: any;
+  errors: Record<string, string>;
+  register: any;
 }
 
 const EventDateTimeSection: React.FC<EventDateTimeSectionProps> = ({
@@ -20,8 +20,8 @@ const EventDateTimeSection: React.FC<EventDateTimeSectionProps> = ({
           label="開始日時"
           id="startTime"
           showTime
-          error={errors?.startTime?.message}
-          {...register?.('startTime')}
+          error={errors.startTime}
+          {...register('startTime')}
         />
 
         {/* End Date Time */}
@@ -29,8 +29,8 @@ const EventDateTimeSection: React.FC<EventDateTimeSectionProps> = ({
           label="終了日時"
           id="endTime"
           showTime
-          error={errors?.endTime?.message}
-          {...register?.('endTime')}
+          error={errors.endTime}
+          {...register('endTime')}
         />
 
         {/* Helper Text */}
