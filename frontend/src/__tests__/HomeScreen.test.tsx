@@ -88,10 +88,14 @@ describe('HomeScreen', () => {
     fireEvent.click(screen.getByText('イベントを作成'));
 
     // Fill required fields using more specific selectors
-    const titleInput = screen.getByPlaceholderText('例: 誕生日パーティー') as HTMLInputElement;
+    const titleInput = screen.getByPlaceholderText(
+      '例: 誕生日パーティー'
+    ) as HTMLInputElement;
     // For datetime-local input, we need to find it by type
     const allInputs = document.querySelectorAll('input');
-    const dateInput = Array.from(allInputs).find(input => input.type === 'datetime-local') as HTMLInputElement;
+    const dateInput = Array.from(allInputs).find(
+      input => input.type === 'datetime-local'
+    ) as HTMLInputElement;
 
     fireEvent.change(titleInput, { target: { value: 'Test Event' } });
     fireEvent.change(dateInput, { target: { value: '2025-07-20T15:00' } });
