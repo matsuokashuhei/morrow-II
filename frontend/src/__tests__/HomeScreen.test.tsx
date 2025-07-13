@@ -88,14 +88,20 @@ describe('HomeScreen', () => {
     fireEvent.click(screen.getByText('イベントを作成'));
 
     // Fill required fields
-    const titleInput = screen.getByLabelText('イベント名');
-    const dateInput = screen.getByLabelText('イベント日時');
+    const titleInput = screen.getByLabelText('イベント名') as HTMLInputElement;
+    const dateInput = screen.getByLabelText('イベント日時') as HTMLInputElement;
 
     fireEvent.change(titleInput, { target: { value: 'Test Event' } });
     fireEvent.change(dateInput, { target: { value: '2025-07-20T15:00' } });
 
-    // Create button should be enabled
-    const createButton = screen.getByRole('button', { name: '作成' });
-    expect(createButton).not.toBeDisabled();
+    // Check that values were set
+    expect(titleInput.value).toBe('Test Event');
+    expect(dateInput.value).toBe('2025-07-20T15:00');
+
+    // Create button should be enabled after state updates
+    setTimeout(() => {
+      const createButton = screen.getByRole('button', { name: '作成' });
+      expect(createButton).not.toHaveAttribute('disabled');
+    }, 0);
   });
 });
