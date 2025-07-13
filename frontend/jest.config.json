@@ -4,7 +4,8 @@
   "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"],
   "moduleNameMapper": {
     "^@/(.*)$": "<rootDir>/src/$1",
-    "^nanoid$": "<rootDir>/__mocks__/nanoid.js"
+    "^nanoid$": "<rootDir>/__mocks__/nanoid.js",
+    "^nanoid/(.*)$": "<rootDir>/__mocks__/nanoid.js"
   },
   "transform": {
     "^.+\\.(ts|tsx)$": [
@@ -19,5 +20,9 @@
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "collectCoverageFrom": ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],
-  "transformIgnorePatterns": ["node_modules/(?!(nanoid|@testing-library|@apollo)/)"]
+  "transformIgnorePatterns": [
+    "node_modules/(?!(nanoid|@testing-library|@apollo|clsx|tailwind-merge)/)"
+  ],
+  "testTimeout": 10000,
+  "maxWorkers": "50%"
 }

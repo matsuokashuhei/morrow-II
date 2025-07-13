@@ -84,7 +84,7 @@ describe('OnboardingScreen', () => {
 
     // Navigate to final step
     fireEvent.click(screen.getByText('次へ')); // Step 2
-    fireEvent.click(screen.getByText('次へ')); // Step 3  
+    fireEvent.click(screen.getByText('次へ')); // Step 3
     fireEvent.click(screen.getByText('次へ')); // Step 4
 
     expect(screen.getByText('友達と共有')).toBeInTheDocument();
