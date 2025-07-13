@@ -64,8 +64,12 @@ export const GraphQLTestScreen: React.FC = () => {
         <h3 className="text-lg font-medium mb-2">Connection Status</h3>
         <div className="flex items-center space-x-4 text-sm">
           <span className="flex items-center">
-            <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-            GraphQL API Connected
+            <div
+              className={`w-2 h-2 rounded-full mr-2 ${
+                eventsError || usersError ? 'bg-red-400' : 'bg-green-400'
+              }`}
+            ></div>
+            {eventsError || usersError ? 'GraphQL API Connection Error' : 'GraphQL API Connected'}
           </span>
           <span className="text-gray-600">Endpoint: {GRAPHQL_ENDPOINT}</span>
         </div>
