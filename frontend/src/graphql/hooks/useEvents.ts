@@ -5,6 +5,8 @@ import {
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,
+  GetEventsDocument,
+  GetEventDocument,
   type CreateEventInput,
   type UpdateEventInput,
 } from '../generated';
@@ -44,7 +46,7 @@ export function useEvent(id: string) {
 export function useCreateEvent() {
   const [createEventMutation, { loading, error }] = useCreateEventMutation({
     errorPolicy: 'all',
-    refetchQueries: ['GetEvents'],
+    refetchQueries: [{ query: GetEventsDocument }],
   });
 
   const createEvent = useCallback(
@@ -78,7 +80,7 @@ export function useCreateEvent() {
 export function useUpdateEvent() {
   const [updateEventMutation, { loading, error }] = useUpdateEventMutation({
     errorPolicy: 'all',
-    refetchQueries: ['GetEvents', 'GetEvent'],
+    refetchQueries: [{ query: GetEventsDocument }, { query: GetEventDocument }],
   });
 
   const updateEvent = useCallback(
@@ -112,7 +114,7 @@ export function useUpdateEvent() {
 export function useDeleteEvent() {
   const [deleteEventMutation, { loading, error }] = useDeleteEventMutation({
     errorPolicy: 'all',
-    refetchQueries: ['GetEvents'],
+    refetchQueries: [{ query: GetEventsDocument }],
   });
 
   const deleteEvent = useCallback(

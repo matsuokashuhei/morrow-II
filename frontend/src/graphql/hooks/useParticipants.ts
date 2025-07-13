@@ -5,6 +5,9 @@ import {
   useCreateParticipantMutation,
   useUpdateParticipantMutation,
   useDeleteParticipantMutation,
+  GetParticipantsDocument,
+  GetParticipantDocument,
+  GetEventDocument,
   type CreateParticipantInput,
   type UpdateParticipantInput,
 } from '../generated';
@@ -45,7 +48,10 @@ export function useCreateParticipant() {
   const [createParticipantMutation, { loading, error }] =
     useCreateParticipantMutation({
       errorPolicy: 'all',
-      refetchQueries: ['GetParticipants', 'GetEvent'],
+      refetchQueries: [
+        { query: GetParticipantsDocument },
+        { query: GetEventDocument },
+      ],
     });
 
   const createParticipant = useCallback(
@@ -80,7 +86,11 @@ export function useUpdateParticipant() {
   const [updateParticipantMutation, { loading, error }] =
     useUpdateParticipantMutation({
       errorPolicy: 'all',
-      refetchQueries: ['GetParticipants', 'GetParticipant', 'GetEvent'],
+      refetchQueries: [
+        { query: GetParticipantsDocument },
+        { query: GetParticipantDocument },
+        { query: GetEventDocument },
+      ],
     });
 
   const updateParticipant = useCallback(
@@ -115,7 +125,10 @@ export function useDeleteParticipant() {
   const [deleteParticipantMutation, { loading, error }] =
     useDeleteParticipantMutation({
       errorPolicy: 'all',
-      refetchQueries: ['GetParticipants', 'GetEvent'],
+      refetchQueries: [
+        { query: GetParticipantsDocument },
+        { query: GetEventDocument },
+      ],
     });
 
   const deleteParticipant = useCallback(

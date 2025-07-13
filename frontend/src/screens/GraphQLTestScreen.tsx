@@ -2,6 +2,7 @@ import React from 'react';
 import { useEvents, useUsers } from '../graphql/hooks';
 import { Loading } from '../components/ui/Loading';
 import { Card } from '../components/ui/Card';
+import { GRAPHQL_ENDPOINT } from '../graphql/constants';
 
 export const GraphQLTestScreen: React.FC = () => {
   const { events, loading: eventsLoading, error: eventsError } = useEvents();
@@ -95,11 +96,7 @@ export const GraphQLTestScreen: React.FC = () => {
             <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
             GraphQL API Connected
           </span>
-          <span className="text-gray-600">
-            Endpoint:{' '}
-            {import.meta.env.VITE_GRAPHQL_ENDPOINT ||
-              'http://localhost:8080/api/v1/graphql'}
-          </span>
+          <span className="text-gray-600">Endpoint: {GRAPHQL_ENDPOINT}</span>
         </div>
       </Card>
     </div>

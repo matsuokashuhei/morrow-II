@@ -5,12 +5,11 @@ import {
   from,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { GRAPHQL_ENDPOINT } from './constants';
 
 // GraphQL endpoint
 const httpLink = createHttpLink({
-  uri:
-    import.meta.env.VITE_GRAPHQL_ENDPOINT ||
-    'http://localhost:8080/api/v1/graphql',
+  uri: GRAPHQL_ENDPOINT,
 });
 
 // Error handling link

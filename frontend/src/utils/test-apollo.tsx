@@ -65,5 +65,4 @@ export const mockParticipant = {
 };
 
 // Re-export testing utilities
-export * from '@testing-library/react';
 export { MockedProvider } from '@apollo/client/testing';

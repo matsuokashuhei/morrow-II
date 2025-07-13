@@ -5,6 +5,8 @@ import {
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  GetUsersDocument,
+  GetUserDocument,
   type CreateUserInput,
   type UpdateUserInput,
 } from '../generated';
@@ -44,7 +46,7 @@ export function useUser(id: string) {
 export function useCreateUser() {
   const [createUserMutation, { loading, error }] = useCreateUserMutation({
     errorPolicy: 'all',
-    refetchQueries: ['GetUsers'],
+    refetchQueries: [{ query: GetUsersDocument }],
   });
 
   const createUser = useCallback(
@@ -78,7 +80,7 @@ export function useCreateUser() {
 export function useUpdateUser() {
   const [updateUserMutation, { loading, error }] = useUpdateUserMutation({
     errorPolicy: 'all',
-    refetchQueries: ['GetUsers', 'GetUser'],
+    refetchQueries: [{ query: GetUsersDocument }, { query: GetUserDocument }],
   });
 
   const updateUser = useCallback(
@@ -112,7 +114,7 @@ export function useUpdateUser() {
 export function useDeleteUser() {
   const [deleteUserMutation, { loading, error }] = useDeleteUserMutation({
     errorPolicy: 'all',
-    refetchQueries: ['GetUsers'],
+    refetchQueries: [{ query: GetUsersDocument }],
   });
 
   const deleteUser = useCallback(
