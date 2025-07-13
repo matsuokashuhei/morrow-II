@@ -50,40 +50,15 @@ export type {
 } from './ui';
 
 /**
- * Screen Component Props
+ * Screen Component Props - Re-exported from screens.ts to avoid duplication
  */
-export interface HomeScreenProps {
-  // Future props when needed
-}
-
-export interface OnboardingScreenProps {
-  // Future props when needed
-}
-
-/**
- * Onboarding Types
- */
-export interface OnboardingStep {
-  title: string;
-  description: string;
-  illustration?: string;
-  action?: 'next' | 'skip' | 'start';
-}
-
-export interface OnboardingState {
-  currentStep: number;
-  isCompleted: boolean;
-  hasSeenBefore: boolean;
-}
-
-/**
- * Screen State Types
- */
-export interface HomeScreenState {
-  selectedTab: 'events' | 'calendar' | 'profile';
-  searchQuery?: string;
-  filterBy?: 'all' | 'upcoming' | 'past';
-}
+export type {
+  HomeScreenProps,
+  OnboardingScreenProps,
+  OnboardingStep,
+  OnboardingState,
+  HomeScreenState,
+} from './screens';
 
 /**
  * API Response Types

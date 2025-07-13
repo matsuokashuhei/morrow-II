@@ -1,7 +1,13 @@
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomeScreen from './src/screens/HomeScreen';
-import OnboardingScreen from './src/screens/OnboardingScreen';
 import { Navigation } from './src/components/ui/Navigation';
+import { Loading } from './src/components/ui/Loading';
+
+// Lazy load route components for better performance
+const HomeScreen = React.lazy(() => import('./src/screens/HomeScreen'));
+const OnboardingScreen = React.lazy(
+  () => import('./src/screens/OnboardingScreen')
+);
 
 export default function App() {
   const navigationItems = [
@@ -23,10 +29,12 @@ export default function App() {
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Routes>
-            <Route path="/" element={<HomeScreen />} />
-            <Route path="/onboarding" element={<OnboardingScreen />} />
-          </Routes>
+          <Suspense fallback={<Loading size="lg" text="Loading..." />}>
+            <Routes>
+              <Route path="/" element={<HomeScreen />} />
+              <Route path="/onboarding" element={<OnboardingScreen />} />
+            </Routes>
+          </Suspense>
         </main>
       </Router>
     </div>

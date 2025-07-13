@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, forwardRef } from 'react';
 import { nanoid } from 'nanoid';
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;

@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className={cn('shadow-md', variants[variant], className)}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="responsive-container">
         <div className="flex justify-between items-center py-4">
           <div className="flex-1">
             {title && <h1 className="text-2xl font-bold">{title}</h1>}

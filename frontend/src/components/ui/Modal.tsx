@@ -1,6 +1,6 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from './Button';
 
 interface ModalProps {
@@ -14,8 +14,30 @@ interface ModalProps {
   className?: string;
 }
 
-// Global modal counter to handle multiple modals
-let modalCount = 0;
+// Modal context to manage multiple modals
+class ModalManager {
+  private static modalCount = 0;
+  private static originalBodyOverflow: string | null = null;
+
+  static openModal() {
+    if (this.modalCount === 0) {
+      this.originalBodyOverflow = document.body.style.overflow || null;
+      document.body.style.overflow = 'hidden';
+    }
+    this.modalCount++;
+  }
+
+  static closeModal() {
+    this.modalCount = Math.max(0, this.modalCount - 1);
+    if (this.modalCount === 0) {
+      document.body.style.overflow = this.originalBodyOverflow || '';
+    }
+  }
+
+  static getModalCount() {
+    return this.modalCount;
+  }
+}
 
 const Modal = ({
   isOpen,
@@ -27,8 +49,6 @@ const Modal = ({
   closeOnOverlayClick = true,
   className,
 }: ModalProps) => {
-  const previousBodyOverflow = useRef<string | null>(null);
-
   // Handle ESC key press and body scroll lock
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
@@ -38,25 +58,15 @@ const Modal = ({
     };
 
     if (isOpen) {
-      // Store original overflow value when first modal opens
-      if (modalCount === 0) {
-        previousBodyOverflow.current = document.body.style.overflow || null;
-        document.body.style.overflow = 'hidden';
-      }
-
-      modalCount++;
+      ModalManager.openModal();
       document.addEventListener('keydown', handleEsc);
     }
 
+    // Cleanup function
     return () => {
       if (isOpen) {
-        modalCount--;
+        ModalManager.closeModal();
         document.removeEventListener('keydown', handleEsc);
-
-        // Only restore body overflow when all modals are closed
-        if (modalCount === 0) {
-          document.body.style.overflow = previousBodyOverflow.current || '';
-        }
       }
     };
   }, [isOpen, onClose]);

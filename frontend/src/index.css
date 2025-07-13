@@ -49,8 +49,8 @@ html {
 body {
   font-family: var(--font-family-sans);
   line-height: 1.6;
-  color: theme('colors.gray.900');
-  background-color: theme('colors.gray.50');
+  color: #111827; /* Resolved from theme('colors.gray.900') */
+  background-color: #f9fafb; /* Resolved from theme('colors.gray.50') */
   margin: 0;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -137,6 +137,10 @@ body {
   }
 
   .responsive-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .page-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }

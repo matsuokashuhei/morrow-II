@@ -2,13 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-
-interface OnboardingStep {
-  id: number;
-  title: string;
-  description: string;
-  icon: string;
-}
+import { ROUTES } from '../constants/routes';
+import { OnboardingStep } from '../types/screens';
 
 const onboardingSteps: OnboardingStep[] = [
   {
@@ -51,13 +46,13 @@ const OnboardingScreen = () => {
     } else {
       // Complete onboarding and navigate to home
       localStorage.setItem('hasSeenOnboarding', 'true');
-      navigate('/');
+      navigate(ROUTES.HOME);
     }
   };
 
   const handleSkip = () => {
     localStorage.setItem('hasSeenOnboarding', 'true');
-    navigate('/');
+    navigate(ROUTES.HOME);
   };
 
   const handlePrevious = () => {

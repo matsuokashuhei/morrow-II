@@ -6,6 +6,7 @@ import { Modal } from '../components/ui/Modal';
 import { Input } from '../components/ui/Input';
 import { EventCard } from '../components/EventCard';
 import { useEventStore, useUIStore, Event } from '../store';
+import { ROUTES } from '../constants/routes';
 
 const HomeScreen = () => {
   const navigate = useNavigate();
@@ -42,16 +43,17 @@ const HomeScreen = () => {
   const handleShareEvent = (eventToShare: Event) => {
     // TODO: Implement sharing functionality
     const shareText = `${eventToShare.title} - ${new Date(eventToShare.date).toLocaleDateString('ja-JP')}`;
+    const currentUrl = window.location.origin + window.location.pathname;
 
     if (navigator.share) {
       navigator.share({
         title: eventToShare.title,
         text: shareText,
-        url: window.location.href,
+        url: currentUrl,
       });
     } else {
       // Fallback to clipboard
-      navigator.clipboard.writeText(`${shareText} - ${window.location.href}`);
+      navigator.clipboard.writeText(`${shareText} - ${currentUrl}`);
       alert('イベント情報をクリップボードにコピーしました！');
     }
   };
@@ -122,7 +124,7 @@ const HomeScreen = () => {
               <Button
                 variant="secondary"
                 size="md"
-                onClick={() => navigate('/onboarding')}
+                onClick={() => navigate(ROUTES.ONBOARDING)}
               >
                 使い方を見る
               </Button>
