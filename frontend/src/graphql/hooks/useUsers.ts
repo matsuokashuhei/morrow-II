@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { 
+import {
   useGetUsersQuery,
-  useGetUserQuery, 
+  useGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
   type CreateUserInput,
-  type UpdateUserInput
+  type UpdateUserInput,
 } from '../generated';
 
 // Custom hook for fetching all users
@@ -53,11 +53,11 @@ export function useCreateUser() {
         const result = await createUserMutation({
           variables: { input },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.createUser;
       } catch (err) {
         console.error('Failed to create user:', err);
@@ -87,11 +87,11 @@ export function useUpdateUser() {
         const result = await updateUserMutation({
           variables: { id, input },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.updateUser;
       } catch (err) {
         console.error('Failed to update user:', err);
@@ -121,11 +121,11 @@ export function useDeleteUser() {
         const result = await deleteUserMutation({
           variables: { id },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.deleteUser;
       } catch (err) {
         console.error('Failed to delete user:', err);

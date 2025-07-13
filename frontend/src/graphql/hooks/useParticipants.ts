@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { 
+import {
   useGetParticipantsQuery,
-  useGetParticipantQuery, 
+  useGetParticipantQuery,
   useCreateParticipantMutation,
   useUpdateParticipantMutation,
   useDeleteParticipantMutation,
   type CreateParticipantInput,
-  type UpdateParticipantInput
+  type UpdateParticipantInput,
 } from '../generated';
 
 // Custom hook for fetching all participants
@@ -42,10 +42,11 @@ export function useParticipant(id: string) {
 
 // Custom hook for creating a participant
 export function useCreateParticipant() {
-  const [createParticipantMutation, { loading, error }] = useCreateParticipantMutation({
-    errorPolicy: 'all',
-    refetchQueries: ['GetParticipants', 'GetEvent'],
-  });
+  const [createParticipantMutation, { loading, error }] =
+    useCreateParticipantMutation({
+      errorPolicy: 'all',
+      refetchQueries: ['GetParticipants', 'GetEvent'],
+    });
 
   const createParticipant = useCallback(
     async (input: CreateParticipantInput) => {
@@ -53,11 +54,11 @@ export function useCreateParticipant() {
         const result = await createParticipantMutation({
           variables: { input },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.createParticipant;
       } catch (err) {
         console.error('Failed to create participant:', err);
@@ -76,10 +77,11 @@ export function useCreateParticipant() {
 
 // Custom hook for updating a participant
 export function useUpdateParticipant() {
-  const [updateParticipantMutation, { loading, error }] = useUpdateParticipantMutation({
-    errorPolicy: 'all',
-    refetchQueries: ['GetParticipants', 'GetParticipant', 'GetEvent'],
-  });
+  const [updateParticipantMutation, { loading, error }] =
+    useUpdateParticipantMutation({
+      errorPolicy: 'all',
+      refetchQueries: ['GetParticipants', 'GetParticipant', 'GetEvent'],
+    });
 
   const updateParticipant = useCallback(
     async (id: string, input: UpdateParticipantInput) => {
@@ -87,11 +89,11 @@ export function useUpdateParticipant() {
         const result = await updateParticipantMutation({
           variables: { id, input },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.updateParticipant;
       } catch (err) {
         console.error('Failed to update participant:', err);
@@ -110,10 +112,11 @@ export function useUpdateParticipant() {
 
 // Custom hook for deleting a participant
 export function useDeleteParticipant() {
-  const [deleteParticipantMutation, { loading, error }] = useDeleteParticipantMutation({
-    errorPolicy: 'all',
-    refetchQueries: ['GetParticipants', 'GetEvent'],
-  });
+  const [deleteParticipantMutation, { loading, error }] =
+    useDeleteParticipantMutation({
+      errorPolicy: 'all',
+      refetchQueries: ['GetParticipants', 'GetEvent'],
+    });
 
   const deleteParticipant = useCallback(
     async (id: string) => {
@@ -121,11 +124,11 @@ export function useDeleteParticipant() {
         const result = await deleteParticipantMutation({
           variables: { id },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.deleteParticipant;
       } catch (err) {
         console.error('Failed to delete participant:', err);

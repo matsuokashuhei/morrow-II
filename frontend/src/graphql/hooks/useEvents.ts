@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { 
+import {
   useGetEventsQuery,
-  useGetEventQuery, 
+  useGetEventQuery,
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,
   type CreateEventInput,
-  type UpdateEventInput
+  type UpdateEventInput,
 } from '../generated';
 
 // Custom hook for fetching all events
@@ -53,11 +53,11 @@ export function useCreateEvent() {
         const result = await createEventMutation({
           variables: { input },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.createEvent;
       } catch (err) {
         console.error('Failed to create event:', err);
@@ -87,11 +87,11 @@ export function useUpdateEvent() {
         const result = await updateEventMutation({
           variables: { id, input },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.updateEvent;
       } catch (err) {
         console.error('Failed to update event:', err);
@@ -121,11 +121,11 @@ export function useDeleteEvent() {
         const result = await deleteEventMutation({
           variables: { id },
         });
-        
+
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
-        
+
         return result.data?.deleteEvent;
       } catch (err) {
         console.error('Failed to delete event:', err);

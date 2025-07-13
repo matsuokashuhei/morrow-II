@@ -27,9 +27,7 @@ export const GraphQLTestScreen: React.FC = () => {
           {usersError ? (
             <div className="bg-red-50 border border-red-200 rounded-md p-4">
               <h3 className="text-red-800 font-medium">Error loading users:</h3>
-              <p className="text-red-600 text-sm mt-1">
-                {usersError.message}
-              </p>
+              <p className="text-red-600 text-sm mt-1">{usersError.message}</p>
             </div>
           ) : users.length === 0 ? (
             <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
@@ -37,7 +35,7 @@ export const GraphQLTestScreen: React.FC = () => {
             </div>
           ) : (
             <ul className="space-y-2">
-              {users.map((user) => (
+              {users.map(user => (
                 <li
                   key={user.id}
                   className="bg-gray-50 rounded-md p-3 border border-gray-200"
@@ -55,10 +53,10 @@ export const GraphQLTestScreen: React.FC = () => {
           <h2 className="text-2xl font-semibold mb-4">Events</h2>
           {eventsError ? (
             <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <h3 className="text-red-800 font-medium">Error loading events:</h3>
-              <p className="text-red-600 text-sm mt-1">
-                {eventsError.message}
-              </p>
+              <h3 className="text-red-800 font-medium">
+                Error loading events:
+              </h3>
+              <p className="text-red-600 text-sm mt-1">{eventsError.message}</p>
             </div>
           ) : events.length === 0 ? (
             <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
@@ -66,7 +64,7 @@ export const GraphQLTestScreen: React.FC = () => {
             </div>
           ) : (
             <ul className="space-y-2">
-              {events.map((event) => (
+              {events.map(event => (
                 <li
                   key={event.id}
                   className="bg-gray-50 rounded-md p-3 border border-gray-200"
@@ -98,7 +96,9 @@ export const GraphQLTestScreen: React.FC = () => {
             GraphQL API Connected
           </span>
           <span className="text-gray-600">
-            Endpoint: {import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:8080/api/v1/graphql'}
+            Endpoint:{' '}
+            {import.meta.env.VITE_GRAPHQL_ENDPOINT ||
+              'http://localhost:8080/api/v1/graphql'}
           </span>
         </div>
       </Card>

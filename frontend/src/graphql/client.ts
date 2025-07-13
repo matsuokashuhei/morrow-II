@@ -1,9 +1,16 @@
-import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+  from,
+} from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 
 // GraphQL endpoint
 const httpLink = createHttpLink({
-  uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:8080/api/v1/graphql',
+  uri:
+    import.meta.env.VITE_GRAPHQL_ENDPOINT ||
+    'http://localhost:8080/api/v1/graphql',
 });
 
 // Error handling link
@@ -18,7 +25,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
   if (networkError) {
     console.error(`[Network error]: ${networkError}`);
-    
+
     // Handle specific network errors
     if (networkError.message.includes('Failed to fetch')) {
       console.error('Backend server appears to be down or unreachable');
