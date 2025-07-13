@@ -87,9 +87,11 @@ describe('HomeScreen', () => {
     // Open modal
     fireEvent.click(screen.getByText('イベントを作成'));
 
-    // Fill required fields
-    const titleInput = screen.getByLabelText('イベント名') as HTMLInputElement;
-    const dateInput = screen.getByLabelText('イベント日時') as HTMLInputElement;
+    // Fill required fields using more specific selectors
+    const titleInput = screen.getByPlaceholderText('例: 誕生日パーティー') as HTMLInputElement;
+    // For datetime-local input, we need to find it by type
+    const allInputs = document.querySelectorAll('input');
+    const dateInput = Array.from(allInputs).find(input => input.type === 'datetime-local') as HTMLInputElement;
 
     fireEvent.change(titleInput, { target: { value: 'Test Event' } });
     fireEvent.change(dateInput, { target: { value: '2025-07-20T15:00' } });
@@ -99,9 +101,7 @@ describe('HomeScreen', () => {
     expect(dateInput.value).toBe('2025-07-20T15:00');
 
     // Create button should be enabled after state updates
-    setTimeout(() => {
-      const createButton = screen.getByRole('button', { name: '作成' });
-      expect(createButton).not.toHaveAttribute('disabled');
-    }, 0);
+    const createButton = screen.getByRole('button', { name: '作成' });
+    expect(createButton).not.toBeDisabled();
   });
 });
