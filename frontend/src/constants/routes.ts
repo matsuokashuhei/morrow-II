@@ -7,6 +7,7 @@ export const ROUTES = {
   HOME: '/',
   ONBOARDING: '/onboarding',
   EVENTS: '/events',
+  EVENT_CREATE: '/events/create',
   PROFILE: '/profile',
   SETTINGS: '/settings',
 } as const;

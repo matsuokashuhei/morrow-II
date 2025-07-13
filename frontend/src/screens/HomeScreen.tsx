@@ -113,7 +113,7 @@ const HomeScreen = () => {
         <div className="mt-12 space-y-4">
           <Button
             size="lg"
-            onClick={() => setCreateEventModalOpen(true)}
+            onClick={() => navigate(ROUTES.EVENT_CREATE)}
             loading={isLoading}
           >
             イベントを作成
@@ -148,7 +148,7 @@ const HomeScreen = () => {
               あなたのイベント ({events.length})
             </h2>
             <Button
-              onClick={() => setCreateEventModalOpen(true)}
+              onClick={() => navigate(ROUTES.EVENT_CREATE)}
               loading={isLoading}
             >
               新しいイベント
