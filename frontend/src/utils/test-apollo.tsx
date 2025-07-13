@@ -1,13 +1,6 @@
 import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
-
-// Mock Apollo Client for testing
-export const mockApolloClient = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: 'http://localhost:8080/api/v1/graphql',
-});
 
 // Custom render function that includes Apollo Provider
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
