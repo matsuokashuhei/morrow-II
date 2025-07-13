@@ -2,6 +2,7 @@ import React from 'react';
 import { useEvents, useUsers } from '../graphql/hooks';
 import { Loading } from '../components/ui/Loading';
 import { Card } from '../components/ui/Card';
+import { DataListSection } from '../components/DataListSection';
 import { GRAPHQL_ENDPOINT } from '../graphql/constants';
 
 export const GraphQLTestScreen: React.FC = () => {
@@ -23,69 +24,39 @@ export const GraphQLTestScreen: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Users Section */}
-        <Card className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">Users</h2>
-          {usersError ? (
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <h3 className="text-red-800 font-medium">Error loading users:</h3>
-              <p className="text-red-600 text-sm mt-1">{usersError.message}</p>
-            </div>
-          ) : users.length === 0 ? (
-            <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-              <p className="text-gray-600">No users found</p>
-            </div>
-          ) : (
-            <ul className="space-y-2">
-              {users.map(user => (
-                <li
-                  key={user.id}
-                  className="bg-gray-50 rounded-md p-3 border border-gray-200"
-                >
-                  <div className="font-medium">{user.name}</div>
-                  <div className="text-sm text-gray-600">{user.email}</div>
-                </li>
-              ))}
-            </ul>
+        <DataListSection
+          title="Users"
+          data={users}
+          error={usersError}
+          renderItem={user => (
+            <>
+              <div className="font-medium">{user.name}</div>
+              <div className="text-sm text-gray-600">{user.email}</div>
+            </>
           )}
-        </Card>
+        />
 
         {/* Events Section */}
-        <Card className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">Events</h2>
-          {eventsError ? (
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <h3 className="text-red-800 font-medium">
-                Error loading events:
-              </h3>
-              <p className="text-red-600 text-sm mt-1">{eventsError.message}</p>
-            </div>
-          ) : events.length === 0 ? (
-            <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-              <p className="text-gray-600">No events found</p>
-            </div>
-          ) : (
-            <ul className="space-y-2">
-              {events.map(event => (
-                <li
-                  key={event.id}
-                  className="bg-gray-50 rounded-md p-3 border border-gray-200"
-                >
-                  <div className="font-medium flex items-center">
-                    {event.emoji && <span className="mr-2">{event.emoji}</span>}
-                    {event.title}
-                  </div>
-                  <div className="text-sm text-gray-600 mt-1">
-                    {event.description}
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    {new Date(event.startTime).toLocaleDateString()} -{' '}
-                    {new Date(event.endTime).toLocaleDateString()}
-                  </div>
-                </li>
-              ))}
-            </ul>
+        <DataListSection
+          title="Events"
+          data={events}
+          error={eventsError}
+          renderItem={event => (
+            <>
+              <div className="font-medium flex items-center">
+                {event.emoji && <span className="mr-2">{event.emoji}</span>}
+                {event.title}
+              </div>
+              <div className="text-sm text-gray-600 mt-1">
+                {event.description}
+              </div>
+              <div className="text-xs text-gray-500 mt-1">
+                {new Date(event.startTime).toLocaleDateString()} -{' '}
+                {new Date(event.endTime).toLocaleDateString()}
+              </div>
+            </>
           )}
-        </Card>
+        />
       </div>
 
       {/* Connection Status */}

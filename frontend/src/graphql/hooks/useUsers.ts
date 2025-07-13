@@ -6,7 +6,6 @@ import {
   useUpdateUserMutation,
   useDeleteUserMutation,
   GetUsersDocument,
-  GetUserDocument,
   type CreateUserInput,
   type UpdateUserInput,
 } from '../generated';
@@ -80,7 +79,7 @@ export function useCreateUser() {
 export function useUpdateUser() {
   const [updateUserMutation, { loading, error }] = useUpdateUserMutation({
     errorPolicy: 'all',
-    refetchQueries: [{ query: GetUsersDocument }, { query: GetUserDocument }],
+    refetchQueries: [{ query: GetUsersDocument }],
   });
 
   const updateUser = useCallback(

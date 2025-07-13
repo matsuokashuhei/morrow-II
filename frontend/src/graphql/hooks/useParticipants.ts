@@ -48,10 +48,7 @@ export function useCreateParticipant() {
   const [createParticipantMutation, { loading, error }] =
     useCreateParticipantMutation({
       errorPolicy: 'all',
-      refetchQueries: [
-        { query: GetParticipantsDocument },
-        { query: GetEventDocument },
-      ],
+      refetchQueries: [{ query: GetParticipantsDocument }],
     });
 
   const createParticipant = useCallback(
@@ -89,7 +86,6 @@ export function useUpdateParticipant() {
       refetchQueries: [
         { query: GetParticipantsDocument },
         { query: GetParticipantDocument },
-        { query: GetEventDocument },
       ],
     });
 

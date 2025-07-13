@@ -6,7 +6,6 @@ import {
   useUpdateEventMutation,
   useDeleteEventMutation,
   GetEventsDocument,
-  GetEventDocument,
   type CreateEventInput,
   type UpdateEventInput,
 } from '../generated';
@@ -80,7 +79,7 @@ export function useCreateEvent() {
 export function useUpdateEvent() {
   const [updateEventMutation, { loading, error }] = useUpdateEventMutation({
     errorPolicy: 'all',
-    refetchQueries: [{ query: GetEventsDocument }, { query: GetEventDocument }],
+    refetchQueries: [{ query: GetEventsDocument }],
   });
 
   const updateEvent = useCallback(
