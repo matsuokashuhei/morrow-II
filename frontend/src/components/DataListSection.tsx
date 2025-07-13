@@ -3,7 +3,7 @@ import { Card } from './ui/Card';
 
 interface DataItem {
   id: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface DataListSectionProps<T extends DataItem> {
