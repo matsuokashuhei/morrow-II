@@ -1,7 +1,21 @@
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomeScreen from './src/screens/HomeScreen';
+import { Navigation } from './src/components/ui/Navigation';
+import { Loading } from './src/components/ui/Loading';
+import { ROUTES } from './src/constants/routes';
+
+// Lazy load route components for better performance
+const HomeScreen = React.lazy(() => import('./src/screens/HomeScreen'));
+const OnboardingScreen = React.lazy(
+  () => import('./src/screens/OnboardingScreen')
+);
 
 export default function App() {
+  const navigationItems = [
+    { label: 'ホーム', href: ROUTES.HOME, active: true },
+    { label: '使い方', href: ROUTES.ONBOARDING },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -9,26 +23,19 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4">
               <h1 className="text-2xl font-bold">Morrow</h1>
-              <nav>
-                <ul className="flex space-x-4">
-                  <li>
-                    <a
-                      href="/"
-                      className="hover:text-orange-200 transition-colors"
-                    >
-                      ホーム
-                    </a>
-                  </li>
-                </ul>
-              </nav>
+              <Navigation items={navigationItems} />
+              <Navigation items={navigationItems} mobile />
             </div>
           </div>
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Routes>
-            <Route path="/" element={<HomeScreen />} />
-          </Routes>
+          <Suspense fallback={<Loading size="lg" text="Loading..." />}>
+            <Routes>
+              <Route path={ROUTES.HOME} element={<HomeScreen />} />
+              <Route path={ROUTES.ONBOARDING} element={<OnboardingScreen />} />
+            </Routes>
+          </Suspense>
         </main>
       </Router>
     </div>
