@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import {
   useGetEventsQuery,
   useGetEventQuery,
@@ -6,9 +5,12 @@ import {
   useUpdateEventMutation,
   useDeleteEventMutation,
   GetEventsDocument,
-  type CreateEventInput,
-  type UpdateEventInput,
 } from '../generated';
+import {
+  createCreateMutationWrapper,
+  createUpdateMutationWrapper,
+  createDeleteMutationWrapper,
+} from './useMutationWrapper';
 
 // Custom hook for fetching all events
 export function useEvents() {
@@ -48,24 +50,10 @@ export function useCreateEvent() {
     refetchQueries: [{ query: GetEventsDocument }],
   });
 
-  const createEvent = useCallback(
-    async (input: CreateEventInput) => {
-      try {
-        const result = await createEventMutation({
-          variables: { input },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.createEvent;
-      } catch (err) {
-        console.error('Failed to create event:', err);
-        throw err;
-      }
-    },
-    [createEventMutation]
+  const createEvent = createCreateMutationWrapper(
+    createEventMutation,
+    'create event',
+    'createEvent'
   );
 
   return {
@@ -82,24 +70,10 @@ export function useUpdateEvent() {
     refetchQueries: [{ query: GetEventsDocument }],
   });
 
-  const updateEvent = useCallback(
-    async (id: string, input: UpdateEventInput) => {
-      try {
-        const result = await updateEventMutation({
-          variables: { id, input },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.updateEvent;
-      } catch (err) {
-        console.error('Failed to update event:', err);
-        throw err;
-      }
-    },
-    [updateEventMutation]
+  const updateEvent = createUpdateMutationWrapper(
+    updateEventMutation,
+    'update event',
+    'updateEvent'
   );
 
   return {
@@ -116,24 +90,10 @@ export function useDeleteEvent() {
     refetchQueries: [{ query: GetEventsDocument }],
   });
 
-  const deleteEvent = useCallback(
-    async (id: string) => {
-      try {
-        const result = await deleteEventMutation({
-          variables: { id },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.deleteEvent;
-      } catch (err) {
-        console.error('Failed to delete event:', err);
-        throw err;
-      }
-    },
-    [deleteEventMutation]
+  const deleteEvent = createDeleteMutationWrapper(
+    deleteEventMutation,
+    'delete event',
+    'deleteEvent'
   );
 
   return {

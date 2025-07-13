@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import {
   useGetUsersQuery,
   useGetUserQuery,
@@ -6,9 +5,12 @@ import {
   useUpdateUserMutation,
   useDeleteUserMutation,
   GetUsersDocument,
-  type CreateUserInput,
-  type UpdateUserInput,
 } from '../generated';
+import {
+  createCreateMutationWrapper,
+  createUpdateMutationWrapper,
+  createDeleteMutationWrapper,
+} from './useMutationWrapper';
 
 // Custom hook for fetching all users
 export function useUsers() {
@@ -48,24 +50,10 @@ export function useCreateUser() {
     refetchQueries: [{ query: GetUsersDocument }],
   });
 
-  const createUser = useCallback(
-    async (input: CreateUserInput) => {
-      try {
-        const result = await createUserMutation({
-          variables: { input },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.createUser;
-      } catch (err) {
-        console.error('Failed to create user:', err);
-        throw err;
-      }
-    },
-    [createUserMutation]
+  const createUser = createCreateMutationWrapper(
+    createUserMutation,
+    'create user',
+    'createUser'
   );
 
   return {
@@ -82,24 +70,10 @@ export function useUpdateUser() {
     refetchQueries: [{ query: GetUsersDocument }],
   });
 
-  const updateUser = useCallback(
-    async (id: string, input: UpdateUserInput) => {
-      try {
-        const result = await updateUserMutation({
-          variables: { id, input },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.updateUser;
-      } catch (err) {
-        console.error('Failed to update user:', err);
-        throw err;
-      }
-    },
-    [updateUserMutation]
+  const updateUser = createUpdateMutationWrapper(
+    updateUserMutation,
+    'update user',
+    'updateUser'
   );
 
   return {
@@ -116,24 +90,10 @@ export function useDeleteUser() {
     refetchQueries: [{ query: GetUsersDocument }],
   });
 
-  const deleteUser = useCallback(
-    async (id: string) => {
-      try {
-        const result = await deleteUserMutation({
-          variables: { id },
-        });
-
-        if (result.errors) {
-          throw new Error(result.errors[0].message);
-        }
-
-        return result.data?.deleteUser;
-      } catch (err) {
-        console.error('Failed to delete user:', err);
-        throw err;
-      }
-    },
-    [deleteUserMutation]
+  const deleteUser = createDeleteMutationWrapper(
+    deleteUserMutation,
+    'delete user',
+    'deleteUser'
   );
 
   return {
