@@ -149,7 +149,7 @@ frontend/
 
 ---
 
-**作成日**: 2025年7月13日  
-**担当者**: GitHub Copilot  
-**優先度**: High (P2)  
+**作成日**: 2025年7月13日
+**担当者**: GitHub Copilot
+**優先度**: High (P2)
 **フェーズ**: Phase 1 MVP開発
