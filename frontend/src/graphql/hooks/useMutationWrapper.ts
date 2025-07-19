@@ -18,7 +18,7 @@ export function handleMutationResult<T>(
 /**
  * Common error logging for mutations
  */
-export function logMutationError(operationName: string, error: any): void {
+export function logMutationError(operationName: string, error: unknown): void {
   console.error(`Failed to ${operationName}:`, error);
 }
 
@@ -31,13 +31,13 @@ export function createCreateMutationWrapper<TData, TInput>(
   }) => Promise<FetchResult<TData>>,
   operationName: string,
   dataField: keyof TData
-) {
+): (input: TInput) => Promise<TData[keyof TData] | undefined> {
   return useCallback(
-    async (input: TInput) => {
+    async (input: TInput): Promise<TData[keyof TData] | undefined> => {
       try {
         const result = await mutationFn({ variables: { input } });
         return handleMutationResult(result, dataField);
-      } catch (err) {
+      } catch (err: unknown) {
         logMutationError(operationName, err);
         throw err;
       }
@@ -55,13 +55,13 @@ export function createUpdateMutationWrapper<TData, TInput>(
   }) => Promise<FetchResult<TData>>,
   operationName: string,
   dataField: keyof TData
-) {
+): (id: string, input: TInput) => Promise<TData[keyof TData] | undefined> {
   return useCallback(
-    async (id: string, input: TInput) => {
+    async (id: string, input: TInput): Promise<TData[keyof TData] | undefined> => {
       try {
         const result = await mutationFn({ variables: { id, input } });
         return handleMutationResult(result, dataField);
-      } catch (err) {
+      } catch (err: unknown) {
         logMutationError(operationName, err);
         throw err;
       }
@@ -79,13 +79,13 @@ export function createDeleteMutationWrapper<TData>(
   }) => Promise<FetchResult<TData>>,
   operationName: string,
   dataField: keyof TData
-) {
+): (id: string) => Promise<TData[keyof TData] | undefined> {
   return useCallback(
-    async (id: string) => {
+    async (id: string): Promise<TData[keyof TData] | undefined> => {
       try {
         const result = await mutationFn({ variables: { id } });
         return handleMutationResult(result, dataField);
-      } catch (err) {
+      } catch (err: unknown) {
         logMutationError(operationName, err);
         throw err;
       }

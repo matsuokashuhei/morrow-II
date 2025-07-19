@@ -16,6 +16,7 @@ import {
   DeleteUserDocument,
   DeleteEventDocument,
 } from '../generated';
+import { getGraphQLEndpoint } from '../../utils/environment';
 
 describe('GraphQL Implementation Summary', () => {
   describe('Generated GraphQL Documents', () => {
@@ -130,9 +131,7 @@ describe('GraphQL Implementation Summary', () => {
   describe('Environment Configuration', () => {
     it('should have GraphQL endpoint configured', () => {
       // Test environment variable setup
-      const endpoint =
-        (globalThis as any).import?.meta?.env?.VITE_GRAPHQL_ENDPOINT ||
-        'http://localhost:8080/api/v1/graphql';
+      const endpoint = getGraphQLEndpoint();
       expect(endpoint).toBeTruthy();
       expect(endpoint).toContain('graphql');
     });

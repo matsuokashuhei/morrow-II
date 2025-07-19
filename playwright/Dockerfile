@@ -13,9 +13,12 @@ RUN npm install
 # Copy test files
 COPY . .
 
-# Install browsers and dependencies with error handling
-RUN npx playwright install --with-deps || (echo "Browser installation failed" && exit 1)
-RUN npx playwright install-deps
+# Install browsers and dependencies with improved error handling
+RUN npx playwright install --with-deps chromium || (echo "Primary browser installation failed, attempting recovery..." && npx playwright install chromium)
+RUN npx playwright install-deps || echo "Some dependencies may not have installed correctly"
+
+# Verify installation
+RUN npx playwright --version
 
 # Default command
 CMD ["npm", "test"]

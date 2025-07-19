@@ -3,7 +3,7 @@ import { useEvents, useUsers } from '../graphql/hooks';
 import { Loading } from '../components/ui/Loading';
 import { Card } from '../components/ui/Card';
 import { DataListSection } from '../components/DataListSection';
-import { GRAPHQL_ENDPOINT } from '../graphql/constants';
+import { getGraphQLEndpoint } from '../utils/environment';
 
 export const GraphQLTestScreen: React.FC = () => {
   const { events, loading: eventsLoading, error: eventsError } = useEvents();
@@ -73,7 +73,7 @@ export const GraphQLTestScreen: React.FC = () => {
               ? 'GraphQL API Connection Error'
               : 'GraphQL API Connected'}
           </span>
-          <span className="text-gray-600">Endpoint: {GRAPHQL_ENDPOINT}</span>
+          <span className="text-gray-600">Endpoint: {getGraphQLEndpoint()}</span>
         </div>
       </Card>
     </div>

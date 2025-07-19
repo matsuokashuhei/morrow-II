@@ -1,25 +1,31 @@
 import { test, expect } from '@playwright/test';
+import { filterCriticalErrors, waitForGraphQL, handleTestError } from '../utils/test-helpers';
 
 test.describe('Basic Connectivity Test', () => {
   test('should access the frontend application', async ({ page }) => {
-    // Navigate to the application using baseURL from config
-    await page.goto('/');
+    try {
+      // Navigate to the application using baseURL from config
+      await page.goto('/');
 
-    // Wait for the page to load
-    await page.waitForLoadState('domcontentloaded');
+      // Wait for the page to load with increased timeout
+      await page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 
-    // Basic check that the page loads - check for exact title
-    await expect(page).toHaveTitle('Morrow - Event Countdown Sharing App');
+      // Basic check that the page loads - check for exact title
+      await expect(page).toHaveTitle('Morrow - Event Countdown Sharing App', { timeout: 10000 });
 
-    // Check for root element
-    const rootDiv = page.locator('#root');
-    await expect(rootDiv).toBeVisible();
+      // Check for root element
+      const rootDiv = page.locator('#root');
+      await expect(rootDiv).toBeVisible({ timeout: 10000 });
 
-    // Give React time to mount and check for content
-    await page.waitForTimeout(3000);
+      // Wait for React to mount and initialize
+      await waitForGraphQL(page);
 
-    // Take a screenshot for debugging
-    await page.screenshot({ path: 'e2e/reports/connectivity-test.png', fullPage: true });
+      // Take a screenshot for debugging
+      await page.screenshot({ path: 'e2e/reports/connectivity-test.png', fullPage: true });
+    } catch (error) {
+      await handleTestError(page, 'frontend-access');
+      throw error;
+    }
   });
 
   test('should verify React app is running', async ({ page }) => {

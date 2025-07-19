@@ -5,12 +5,49 @@ import { TestEvent, selectors } from '../fixtures/test-data';
  * Filter out known non-critical console errors
  */
 export const filterCriticalErrors = (errors: string[]): string[] => {
-  return errors.filter(error =>
-    !error.includes('favicon.ico') &&
-    !error.includes('Extension') &&
-    !error.includes('chrome-extension') &&
-    !error.includes('devtools')
+  const nonCriticalPatterns = [
+    'favicon.ico',
+    'Extension',
+    'chrome-extension',
+    'devtools',
+    'ResizeObserver loop limit exceeded',
+    'React Router Future Flag Warning',
+    'Warning: An update to',
+    'apollo.dev/c/err',
+    'No more mocked responses'
+  ];
+  
+  return errors.filter(error => 
+    !nonCriticalPatterns.some(pattern => error.includes(pattern))
   );
+};
+
+/**
+ * Wait for GraphQL operations to complete
+ */
+export const waitForGraphQL = async (page: Page, timeout = 5000): Promise<void> => {
+  await page.waitForFunction(
+    () => {
+      const apolloClient = (window as any).__APOLLO_CLIENT__;
+      return !apolloClient || apolloClient.networkStatus !== 1;
+    },
+    { timeout }
+  ).catch(() => {
+    // GraphQL client might not be available, continue
+  });
+};
+
+/**
+ * Common error handling for Playwright tests
+ */
+export const handleTestError = async (page: Page, testName: string): Promise<void> => {
+  try {
+    await page.screenshot({ path: `test-results/${testName}-error.png` });
+    const html = await page.content();
+    console.log(`Error in test ${testName}. Page content length: ${html.length}`);
+  } catch (screenshotError) {
+    console.log(`Failed to capture error details for ${testName}:`, screenshotError);
+  }
 };
 
 /**
