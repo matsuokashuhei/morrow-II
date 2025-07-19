@@ -7,12 +7,14 @@ import { Card } from '../components/ui/Card';
 import { ROUTES } from '../constants/routes';
 import { useGetEventsQuery } from '../graphql/generated';
 import { Event } from '../store';
+import { useNotification } from '../contexts/NotificationContext';
 
 type FilterType = 'all' | 'upcoming' | 'ended';
 
 const EventListScreen: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<FilterType>('all');
+  const { addNotification } = useNotification();
 
   const { data, loading, error, refetch } = useGetEventsQuery({
     errorPolicy: 'all',
@@ -73,23 +75,29 @@ const EventListScreen: React.FC = () => {
   }, [events, searchTerm, filterType]);
 
   const handleEventEdit = (event: Event) => {
-    alert(
-      'The edit functionality is not yet implemented. Please try again later.'
-    );
+    addNotification({
+      type: 'info',
+      title: '機能準備中',
+      message: '編集機能は現在開発中です。しばらくお待ちください。',
+    });
     console.log('Edit event:', event);
   };
 
   const handleEventDelete = (event: Event) => {
-    alert(
-      'The delete functionality is not yet implemented. Please try again later.'
-    );
+    addNotification({
+      type: 'info',
+      title: '機能準備中',
+      message: '削除機能は現在開発中です。しばらくお待ちください。',
+    });
     console.log('Delete event:', event);
   };
 
   const handleEventShare = (event: Event) => {
-    alert(
-      'The share functionality is not yet implemented. Please try again later.'
-    );
+    addNotification({
+      type: 'info',
+      title: '機能準備中',
+      message: '共有機能は次期バージョンで実装予定です。',
+    });
     console.log('Share event:', event);
   };
 

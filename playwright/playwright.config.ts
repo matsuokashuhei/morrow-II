@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as os from 'os';
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -12,7 +13,11 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 6, // ローカル並列度を増加
+  workers: process.env.CI
+    ? 1
+    : (process.env.WORKER_COUNT
+        ? parseInt(process.env.WORKER_COUNT, 10)
+        : Math.max(1, os.cpus().length - 1)), // Default to one less than the number of CPU cores
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html', { outputFolder: 'reports/html' }],

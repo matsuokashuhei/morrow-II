@@ -7,9 +7,11 @@ import { Card } from '../components/ui/Card';
 import { ROUTES } from '../constants/routes';
 import { useGetEventQuery } from '../graphql/generated';
 import { Event } from '../store';
+import { useNotification } from '../contexts/NotificationContext';
 
 const EventDetailScreen: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { addNotification } = useNotification();
 
   const { data, loading, error, refetch } = useGetEventQuery({
     variables: { id: id || '' },
@@ -36,17 +38,29 @@ const EventDetailScreen: React.FC = () => {
   }, [data?.event]);
 
   const handleEventEdit = (event: Event) => {
-    alert('Edit functionality is not yet implemented.');
+    addNotification({
+      type: 'info',
+      title: '機能準備中',
+      message: '編集機能は現在開発中です。',
+    });
     console.log('Edit event:', event);
   };
 
   const handleEventDelete = (event: Event) => {
-    alert('Delete functionality is not yet implemented.');
+    addNotification({
+      type: 'info',
+      title: '機能準備中',
+      message: '削除機能は現在開発中です。',
+    });
     console.log('Delete event:', event);
   };
 
   const handleEventShare = (event: Event) => {
-    alert('Share functionality is not yet implemented.');
+    addNotification({
+      type: 'info',
+      title: '機能準備中',
+      message: '共有機能は次期バージョンで実装予定です。',
+    });
     console.log('Share event:', event);
   };
 

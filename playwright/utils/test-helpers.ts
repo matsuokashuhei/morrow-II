@@ -2,6 +2,18 @@ import { Page, expect } from '@playwright/test';
 import { TestEvent, selectors } from '../fixtures/test-data';
 
 /**
+ * Filter out known non-critical console errors
+ */
+export const filterCriticalErrors = (errors: string[]): string[] => {
+  return errors.filter(error =>
+    !error.includes('favicon.ico') &&
+    !error.includes('Extension') &&
+    !error.includes('chrome-extension') &&
+    !error.includes('devtools')
+  );
+};
+
+/**
  * Helper functions for E2E tests
  */
 export class TestHelpers {
@@ -79,7 +91,7 @@ export class TestHelpers {
   async waitForGraphQLOperation(operationName: string) {
     await this.page.waitForResponse(response =>
       response.url().includes('/query') &&
-      response.request().postData()?.includes(operationName)
+      (response.request().postData()?.includes(operationName) ?? false)
     );
   }
 
@@ -88,8 +100,8 @@ export class TestHelpers {
    */
   async searchEvents(searchTerm: string) {
     await this.page.fill(selectors.eventList.searchInput, searchTerm);
-    // Wait for search to take effect
-    await this.page.waitForTimeout(500);
+    // Wait for search results to update
+    await this.page.waitForSelector(selectors.eventList.eventCard);
   }
 
   /**

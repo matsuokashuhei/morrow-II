@@ -60,7 +60,8 @@ test.describe('Basic Connectivity Test', () => {
 
   test('should verify backend API is accessible', async ({ page }) => {
     // Test basic GraphQL introspection query
-    const response = await page.request.post('http://backend:8080/api/v1/graphql', {
+    const graphqlEndpoint = process.env.GRAPHQL_ENDPOINT || 'http://backend:8080/api/v1/graphql';
+    const response = await page.request.post(graphqlEndpoint, {
       data: {
         query: `
           {

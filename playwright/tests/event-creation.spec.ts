@@ -281,7 +281,7 @@ test.describe('Event Creation Flow', () => {
 
     test('should handle GraphQL errors gracefully', async ({ page }) => {
       // Mock GraphQL error response
-      await page.route('**/query', route => {
+      await page.route('**/api/v1/graphql', route => {
         route.fulfill({
           status: 200,
           contentType: 'application/json',
@@ -306,7 +306,7 @@ test.describe('Event Creation Flow', () => {
   test.describe('Loading States', () => {
     test('should show loading state during form submission', async ({ page }) => {
       // Delay the GraphQL response to see loading state
-      await page.route('**/query', route => {
+      await page.route('**/api/v1/graphql', route => {
         setTimeout(() => route.continue(), 1000);
       });
 

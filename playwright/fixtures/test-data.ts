@@ -13,6 +13,15 @@ export interface TestEvent {
 }
 
 /**
+ * Get a fixed base date for consistent test results
+ * This avoids time-dependent test failures
+ */
+const getBaseDate = (): Date => {
+  // Use a fixed date in the future for consistent tests
+  return new Date('2025-08-01T10:00:00.000Z');
+};
+
+/**
  * Sample events for testing
  */
 export const mockEvents: TestEvent[] = [
@@ -20,32 +29,32 @@ export const mockEvents: TestEvent[] = [
     title: '誕生日パーティー',
     description: '今年も楽しい誕生日パーティーを開催します！',
     emoji: '🎂',
-    startTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-    endTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000).toISOString(), // 4 hours later
+    startTime: new Date(getBaseDate().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from base date
+    endTime: new Date(getBaseDate().getTime() + 7 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000).toISOString(), // 4 hours later
     visibility: 'public',
   },
   {
     title: '結婚式',
     description: '人生の特別な日',
     emoji: '💒',
-    startTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
-    endTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000).toISOString(), // 6 hours later
+    startTime: new Date(getBaseDate().getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from base date
+    endTime: new Date(getBaseDate().getTime() + 30 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000).toISOString(), // 6 hours later
     visibility: 'private',
   },
   {
     title: '卒業式',
     description: '学生生活の集大成',
     emoji: '🎓',
-    startTime: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(), // 60 days from now
-    endTime: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(), // 3 hours later
+    startTime: new Date(getBaseDate().getTime() + 60 * 24 * 60 * 60 * 1000).toISOString(), // 60 days from base date
+    endTime: new Date(getBaseDate().getTime() + 60 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(), // 3 hours later
     visibility: 'public',
   },
   {
     title: '過去のイベント',
     description: '既に終了したイベント',
     emoji: '📅',
-    startTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
-    endTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
+    startTime: new Date(getBaseDate().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days before base date
+    endTime: new Date(getBaseDate().getTime() - 7 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2 hours later
     visibility: 'public',
   },
 ];

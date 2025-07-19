@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { filterCriticalErrors } from '../utils/test-helpers';
 
 test.describe('GraphQL Test Screen', () => {
   test.beforeEach(async ({ page }) => {
@@ -400,12 +401,7 @@ test.describe('GraphQL Test Screen', () => {
       await page.waitForTimeout(2000);
 
       // Filter out known non-critical errors
-      const criticalErrors = errors.filter(error =>
-        !error.includes('favicon') &&
-        !error.includes('sourcemap') &&
-        !error.includes('DevTools') &&
-        !error.includes('GraphQL subscription') // GraphQL-specific non-critical errors
-      );
+      const criticalErrors = filterCriticalErrors(errors);
 
       expect(criticalErrors).toHaveLength(0);
     });

@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from './src/components/ui/Navigation';
 import { Loading } from './src/components/ui/Loading';
 import { ROUTES } from './src/constants/routes';
+import { NotificationProvider } from './src/contexts/NotificationContext';
+import { NotificationContainer } from './src/components/ui/NotificationContainer';
 
 // Lazy load route components for better performance
 const HomeScreen = React.lazy(() => import('./src/screens/HomeScreen'));
@@ -26,39 +28,41 @@ export default function App() {
   const navigationItems = [
     { label: 'ホーム', href: ROUTES.HOME, active: true },
     { label: 'イベント', href: ROUTES.EVENTS, active: false },
-    { label: '使い方', href: ROUTES.ONBOARDING },
-    { label: 'GraphQL Test', href: '/graphql-test' },
+    { label: 'GraphQL Test', href: '/graphql-test', active: false },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <header className="bg-orange-600 text-white shadow-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-4">
-              <h1 className="text-2xl font-bold">Morrow</h1>
-              <Navigation items={navigationItems} />
-              <Navigation items={navigationItems} mobile />
+    <NotificationProvider>
+      <div className="min-h-screen bg-gray-50">
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <header className="bg-orange-600 text-white shadow-md">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center py-4">
+                <h1 className="text-2xl font-bold">Morrow</h1>
+                <Navigation items={navigationItems} />
+                <Navigation items={navigationItems} mobile />
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Suspense fallback={<Loading size="lg" text="Loading..." />}>
-            <Routes>
-              <Route path={ROUTES.HOME} element={<HomeScreen />} />
-              <Route path={ROUTES.ONBOARDING} element={<OnboardingScreen />} />
-              <Route path={ROUTES.EVENTS} element={<EventListScreen />} />
-              <Route path="/events/:id" element={<EventDetailScreen />} />
-              <Route
-                path={ROUTES.EVENT_CREATE}
-                element={<EventCreationScreen />}
-              />
-              <Route path="/graphql-test" element={<GraphQLTestScreen />} />
-            </Routes>
-          </Suspense>
-        </main>
-      </Router>
-    </div>
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <Suspense fallback={<Loading size="lg" text="Loading..." />}>
+              <Routes>
+                <Route path={ROUTES.HOME} element={<HomeScreen />} />
+                <Route path={ROUTES.ONBOARDING} element={<OnboardingScreen />} />
+                <Route path={ROUTES.EVENTS} element={<EventListScreen />} />
+                <Route path="/events/:id" element={<EventDetailScreen />} />
+                <Route
+                  path={ROUTES.EVENT_CREATE}
+                  element={<EventCreationScreen />}
+                />
+                <Route path="/graphql-test" element={<GraphQLTestScreen />} />
+              </Routes>
+            </Suspense>
+          </main>
+          <NotificationContainer />
+        </Router>
+      </div>
+    </NotificationProvider>
   );
 }
