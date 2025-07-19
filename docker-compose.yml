@@ -46,6 +46,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev
     container_name: morrow-frontend
+    depends_on:
+      - backend
     environment:
       - NODE_ENV=development
     ports:
@@ -72,6 +74,22 @@ services:
       - ./backend:/app
     depends_on:
       - postgres
+    networks:
+      - morrow-network
+    profiles:
+      - tools
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.54.1-jammy
+    container_name: morrow-playwright
+    depends_on:
+      - frontend
+    environment:
+      - NODE_ENV=development
+    ports:
+        - "9323:9323"  # Playwright test server
+    volumes:
+      - ./playwright:/app
+    working_dir: /app
     networks:
       - morrow-network
     profiles:

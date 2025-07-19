@@ -18,6 +18,7 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true, // Docker環境での外部アクセスを許可
+    allowedHosts: ['frontend', 'localhost', '127.0.0.1'], // Dockerコンテナ間通信用
   },
   build: {
     outDir: 'dist',

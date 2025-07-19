@@ -298,6 +298,141 @@
 - **タスク管理**: GitHub Issues + Projects
 - **ドキュメント**: GitHub Wiki または Notion
 
+## 7. テスト戦略・品質保証
+
+### 7.1 テストピラミッド構成
+
+#### フロントエンド テスト
+- **Unit Tests**: Jest + React Testing Library
+  - コンポーネント単体テスト
+  - ユーティリティ関数テスト
+  - カスタムフック（Zustand）テスト
+- **Integration Tests**: Jest + React Testing Library
+  - Apollo Client統合テスト
+  - ルーティングテスト
+  - フォームバリデーションテスト
+- **E2E Tests**: Playwright ✅
+  - ユーザージャーニー完全テスト
+  - クロスブラウザテスト（Chrome, Firefox, Safari）
+  - モバイルブラウザテスト（iOS Safari, Android Chrome）
+  - レスポンシブデザインテスト
+
+#### バックエンド テスト
+- **Unit Tests**: Go標準テスト + Testify
+  - Handler関数テスト
+  - Service層ロジックテスト
+  - Ent リポジトリテスト
+- **Integration Tests**: Go + TestContainer
+  - GraphQL API統合テスト
+  - データベース統合テスト
+  - 認証・認可テスト
+- **Contract Tests**: GraphQL Schema Validation
+  - フロントエンド・バックエンド間の契約テスト
+  - Apollo Client Codegen検証
+
+### 7.2 E2Eテスト詳細（Playwright）
+
+#### テスト環境
+- **実行環境**: Docker Compose + Playwright Container
+- **ブラウザエンジン**:
+  - Chromium（Desktop/Mobile）
+  - Firefox（Desktop）
+  - WebKit（Desktop/Mobile Safari）
+- **テストデータ**: JSON Fixtures + ファクトリー関数
+- **Page Object Pattern**: 再利用可能なページ操作クラス
+
+#### カバレッジ対象
+- **ユーザーフロー**:
+  - 初回訪問・オンボーディング（4段階）
+  - イベント作成・編集・削除
+  - イベント共有・参加
+  - チャット機能（SSE統合）
+- **レスポンシブテスト**:
+  - Mobile (360px), Tablet (768px), Desktop (1024px+)
+- **アクセシビリティ**:
+  - ARIA属性検証
+  - キーボードナビゲーション
+  - スクリーンリーダー対応
+
+#### CI/CD統合
+- **実行タイミング**:
+  - Pull Request時（critical path）
+  - main/develop ブランチマージ時（full suite）
+  - 夜間スケジュール実行（regression）
+- **並列実行**: 最大5プロジェクト同時実行
+- **失敗時対応**:
+  - スクリーンショット・ビデオ保存
+  - 自動リトライ（flakyテスト対策）
+  - Slack通知
+
+#### テストデータ戦略
+```typescript
+// fixtures/events.json - テストデータ定義
+{
+  "validEvent": {
+    "title": "Playwright Test Event",
+    "description": "E2E テスト用イベント",
+    "startDate": "2025-12-31T23:59:59Z",
+    "endDate": "2026-01-01T00:00:00Z"
+  },
+  "invalidEvent": {
+    "title": "", // バリデーションエラー用
+    "startDate": "2020-01-01T00:00:00Z" // 過去日付エラー
+  }
+}
+```
+
+#### パフォーマンステスト
+- **Page Load Metrics**: Core Web Vitals測定
+- **API Response Time**: GraphQL query/mutation レスポンス時間
+- **SSE Connection**: リアルタイム通信レイテンシ
+
+### 7.3 テスト環境管理
+
+#### 開発環境テスト
+```bash
+# ローカル開発
+make dev              # バックエンド・フロントエンド起動
+make test:unit        # 単体テスト実行
+make test:e2e         # E2Eテスト実行
+make test:all         # 全テスト実行
+
+# Docker環境
+docker compose --profile tools run --rm playwright npm test
+```
+
+#### CI/CD環境
+- **GitHub Actions**:
+  - マトリックス実行（複数Node.js/Go バージョン）
+  - アーティファクト保存（テストレポート・ログ）
+  - Codecov統合（カバレッジレポート）
+- **テスト並列化**:
+  - フロントエンド・バックエンド並列実行
+  - E2Eテスト分散実行（browser matrix）
+
+### 7.4 品質メトリクス目標
+
+#### カバレッジ目標
+- **Unit Tests**: 85%以上
+- **Integration Tests**: 70%以上
+- **E2E Critical Path**: 100%（主要ユーザーフロー）
+
+#### パフォーマンス目標
+- **First Contentful Paint**: 1.5秒以内
+- **Largest Contentful Paint**: 2.5秒以内
+- **Cumulative Layout Shift**: 0.1以下
+- **GraphQL Response**: 95%ile 200ms以下
+
+#### 品質ゲート
+- **Pull Request**:
+  - 全テスト合格
+  - カバレッジ閾値維持
+  - Playwright E2E合格
+- **リリース判定**:
+  - E2E full suite 合格
+  - パフォーマンス閾値クリア
+  - セキュリティスキャン合格
+
 ## 8. パフォーマンス・スケーラビリティ
 
 ### 8.1 パフォーマンス最適化
