@@ -25,7 +25,7 @@ const EventListScreen: React.FC<EventListScreenProps> = () => {
   const events = useMemo(() => {
     if (!data?.events) return [];
 
-    return data.events.map((event) => ({
+    return data.events.map(event => ({
       id: event.id,
       title: event.title,
       description: event.description || '',
@@ -48,7 +48,7 @@ const EventListScreen: React.FC<EventListScreenProps> = () => {
     if (searchTerm.trim()) {
       const searchLower = searchTerm.toLowerCase();
       filtered = filtered.filter(
-        (event) =>
+        event =>
           event.title.toLowerCase().includes(searchLower) ||
           event.description.toLowerCase().includes(searchLower)
       );
@@ -57,7 +57,7 @@ const EventListScreen: React.FC<EventListScreenProps> = () => {
     // Apply type filter
     if (filterType !== 'all') {
       const now = new Date();
-      filtered = filtered.filter((event) => {
+      filtered = filtered.filter(event => {
         const eventDate = new Date(event.date);
         if (filterType === 'upcoming') {
           return eventDate > now;
@@ -69,7 +69,9 @@ const EventListScreen: React.FC<EventListScreenProps> = () => {
     }
 
     // Sort by date (upcoming first)
-    return filtered.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return filtered.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
   }, [events, searchTerm, filterType]);
 
   const handleEventEdit = (event: Event) => {
@@ -173,7 +175,9 @@ const EventListScreen: React.FC<EventListScreenProps> = () => {
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
                 placeholder="イベントを検索..."
                 value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchTerm(e.target.value)
+                }
               />
             </div>
           </div>
@@ -183,7 +187,9 @@ const EventListScreen: React.FC<EventListScreenProps> = () => {
             <select
               className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
               value={filterType}
-              onChange={e => setFilterType(e.target.value as FilterType)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setFilterType(e.target.value as FilterType)
+              }
             >
               <option value="all">すべて</option>
               <option value="upcoming">開催予定</option>
@@ -258,7 +264,7 @@ const EventListScreen: React.FC<EventListScreenProps> = () => {
         </Card>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredEvents.map((event) => (
+          {filteredEvents.map(event => (
             <Link
               key={event.id}
               to={`/events/${event.id}`}
