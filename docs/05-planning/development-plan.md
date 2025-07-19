@@ -1,25 +1,25 @@
 # Morrow - 開発アイテムリスト
 
-## 📊 開発進捗サマリー（2025年7月13日時点）
+## 📊 開発進捗サマリー（2025年7月19日時点）
 
-### Phase 1: MVP開発 進捗状況 
-**完了: 8/12 アイテム (67%)**
+### Phase 1: MVP開発 進捗状況
+**完了: 9/12 アイテム (75%)**
 
 #### ✅ 完了済み (2025年6月-7月)
 - **1.1 プロジェクト基盤・環境構築**: 100% 完了
 - **1.2 バックエンドAPI基盤**: 100% 完了（Go+Gin, Ent ORM, PostgreSQL, GraphQL）
 - **1.3 React Web基本アプリ**: 100% 完了（Vite+React+TypeScript, UI Components, GraphQL Client）
-- **1.4 イベント作成機能**: 100% 完了（React Hook Form, Yup validation, GraphQL mutation）
+- **1.4 イベント管理機能**: 83% 完了（作成機能 + 一覧・詳細表示機能）
 
 #### 🔄 次のステップ
-- **イベント一覧・詳細表示**: 計画中
 - **イベント編集・削除**: 計画中
+- **ユーザー認証システム**: 計画中
 
 ### 🏗️ 技術基盤の現在状況
 - **バックエンド**: Go 1.22 + Gin + Ent ORM + PostgreSQL + GraphQL (gqlgen)
 - **フロントエンド**: React + Vite + TypeScript + Tailwind CSS + Apollo Client
 - **インフラ**: Docker Compose開発環境 + GitHub Actions CI/CD
-- **テスト**: 169テスト通過（GraphQL: 65+テスト, UI Components: 24テスト）
+- **テスト**: 170テスト通過（GraphQL: 65+テスト, UI Components: 30+テスト, Screen Tests: 10+テスト）
 
 ## 概要
 このドキュメントは、Morrowアプリの開発に必要な全てのアイテムを整理し、GitHub Issue管理の準備として作成されています。
@@ -48,6 +48,13 @@ Webアプリ開発とビジネス向け機能
 
 ### 最近の主要マイルストーン
 
+#### PR #17 (2025/07/19): イベント一覧・詳細表示機能完成
+- EventListScreen実装（検索・フィルタリング機能付き）
+- EventDetailScreen実装（詳細情報表示・ブレッドクラム）
+- リアルタイムカウントダウン表示
+- GraphQL Query統合（GetEvents, GetEvent）
+- レスポンシブデザイン対応
+
 #### PR #27 (2025/07/13): React Hook Form + Yup統合
 - EventCreationFormにReact Hook Form導入
 - Yup schema validationによる堅牢な入力検証
@@ -65,7 +72,7 @@ Webアプリ開発とビジネス向け機能
 - 完全なCRUD操作（Users, Events, Participants）
 - 包括的な技術文書作成
 
-#### PR #24 (2025/07/13): React Web UI完全実装  
+#### PR #24 (2025/07/13): React Web UI完全実装
 - 4段階オンボーディングフロー
 - レスポンシブホーム画面（Hero, Features, Statistics）
 - 完全なUIコンポーネントライブラリ
@@ -91,7 +98,7 @@ Webアプリ開発とビジネス向け機能
 
 #### PR #11 (2025/06/29): PostgreSQL統合完了
 - PostgreSQL 15.13 Docker設定
-- Ent ORM自動マイグレーション  
+- Ent ORM自動マイグレーション
 - 包括的データベーステスト（21テスト通過）
 - 詳細な技術文書整備
 
@@ -181,11 +188,13 @@ Webアプリ開発とビジネス向け機能
   - GraphQL mutation実装（CreateEvent mutation）
   - エラーハンドリングとローディング状態管理
 
-- [ ] **イベント一覧・詳細表示**
-  - イベント一覧画面
-  - イベント詳細画面
+- [x] **イベント一覧・詳細表示** (#17 - 2025/07/19完了)
+  - イベント一覧画面（EventListScreen）
+  - イベント詳細画面（EventDetailScreen）
   - カウントダウン表示機能
   - 検索・フィルタリング基本機能
+  - GraphQL Query統合（GetEvents, GetEvent）
+  - レスポンシブデザイン対応
 
 - [ ] **イベント編集・削除**
   - イベント編集フォーム
@@ -426,8 +435,8 @@ Webアプリ開発とビジネス向け機能
 
 ---
 
-**作成日**: 2025年6月22日  
-**最終更新**: 2025年7月13日  
-**バージョン**: 2.0  
-**現在の進捗**: Phase 1 MVP開発 67% 完了 (8/12 アイテム)  
-**次のアクション**: イベント一覧・詳細表示機能の実装開始
+**作成日**: 2025年6月22日
+**最終更新**: 2025年7月19日
+**バージョン**: 2.1
+**現在の進捗**: Phase 1 MVP開発 75% 完了 (9/12 アイテム)
+**次のアクション**: イベント編集・削除機能の実装開始

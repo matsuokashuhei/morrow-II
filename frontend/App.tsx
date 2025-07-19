@@ -15,10 +15,17 @@ const GraphQLTestScreen = React.lazy(
 const EventCreationScreen = React.lazy(
   () => import('./src/screens/EventCreationScreen')
 );
+const EventListScreen = React.lazy(
+  () => import('./src/screens/EventListScreen')
+);
+const EventDetailScreen = React.lazy(
+  () => import('./src/screens/EventDetailScreen')
+);
 
 export default function App() {
   const navigationItems = [
     { label: 'ホーム', href: ROUTES.HOME, active: true },
+    { label: 'イベント', href: ROUTES.EVENTS },
     { label: '使い方', href: ROUTES.ONBOARDING },
     { label: 'GraphQL Test', href: '/graphql-test' },
   ];
@@ -41,6 +48,8 @@ export default function App() {
             <Routes>
               <Route path={ROUTES.HOME} element={<HomeScreen />} />
               <Route path={ROUTES.ONBOARDING} element={<OnboardingScreen />} />
+              <Route path={ROUTES.EVENTS} element={<EventListScreen />} />
+              <Route path="/events/:id" element={<EventDetailScreen />} />
               <Route
                 path={ROUTES.EVENT_CREATE}
                 element={<EventCreationScreen />}
