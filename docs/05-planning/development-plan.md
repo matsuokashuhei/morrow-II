@@ -1,5 +1,26 @@
 # Morrow - 開発アイテムリスト
 
+## 📊 開発進捗サマリー（2025年7月13日時点）
+
+### Phase 1: MVP開発 進捗状況 
+**完了: 8/12 アイテム (67%)**
+
+#### ✅ 完了済み (2025年6月-7月)
+- **1.1 プロジェクト基盤・環境構築**: 100% 完了
+- **1.2 バックエンドAPI基盤**: 100% 完了（Go+Gin, Ent ORM, PostgreSQL, GraphQL）
+- **1.3 React Web基本アプリ**: 100% 完了（Vite+React+TypeScript, UI Components, GraphQL Client）
+- **1.4 イベント作成機能**: 100% 完了（React Hook Form, Yup validation, GraphQL mutation）
+
+#### 🔄 次のステップ
+- **イベント一覧・詳細表示**: 計画中
+- **イベント編集・削除**: 計画中
+
+### 🏗️ 技術基盤の現在状況
+- **バックエンド**: Go 1.22 + Gin + Ent ORM + PostgreSQL + GraphQL (gqlgen)
+- **フロントエンド**: React + Vite + TypeScript + Tailwind CSS + Apollo Client
+- **インフラ**: Docker Compose開発環境 + GitHub Actions CI/CD
+- **テスト**: 169テスト通過（GraphQL: 65+テスト, UI Components: 24テスト）
+
 ## 概要
 このドキュメントは、Morrowアプリの開発に必要な全てのアイテムを整理し、GitHub Issue管理の準備として作成されています。
 
@@ -23,42 +44,101 @@ Webアプリ開発とビジネス向け機能
 
 ---
 
+## 📋 詳細な完了実績
+
+### 最近の主要マイルストーン
+
+#### PR #27 (2025/07/13): React Hook Form + Yup統合
+- EventCreationFormにReact Hook Form導入
+- Yup schema validationによる堅牢な入力検証
+- アクセシビリティ改善（fieldset, legend使用）
+
+#### PR #26 (2025/07/13): イベント作成機能完全実装
+- 包括的なイベント作成フロー実装
+- リアルタイムフォーム validation
+- GraphQL mutation統合
+- 完全なTypeScript型安全性
+
+#### PR #25 (2025/07/13): GraphQLクライアント完全実装
+- Apollo Client + GraphQL Code Generation
+- 169テスト実装（65+ GraphQL専用テスト）
+- 完全なCRUD操作（Users, Events, Participants）
+- 包括的な技術文書作成
+
+#### PR #24 (2025/07/13): React Web UI完全実装  
+- 4段階オンボーディングフロー
+- レスポンシブホーム画面（Hero, Features, Statistics）
+- 完全なUIコンポーネントライブラリ
+- SEO最適化 + PWA対応
+
+#### PR #23 (2025/07/12): React Native → React移行完了
+- .expo/ ディレクトリ削除
+- 全ドキュメント React 対応更新
+- フロントエンド構造文書新規作成
+- 移行完了監査レポート作成
+
+#### PR #20-#22 (2025/07/12): React移行と品質向上
+- React Native から React + Vite への完全移行
+- ESLint, Jest, TypeScript設定最適化
+- bundle splitting とパフォーマンス最適化
+- アクセシビリティ強化
+
+#### PR #13 (2025/07/06): GraphQL API基盤完成
+- gqlgen + Ent 統合
+- 全CRUD操作リゾルバー実装
+- GraphQL Playground 提供
+- PostgreSQL完全対応
+
+#### PR #11 (2025/06/29): PostgreSQL統合完了
+- PostgreSQL 15.13 Docker設定
+- Ent ORM自動マイグレーション  
+- 包括的データベーステスト（21テスト通過）
+- 詳細な技術文書整備
+
+#### PR #4-#6, #9 (2025/06/29): 基盤構築完了
+- Dockerモノレポ環境構築
+- Go + Gin APIサーバー基盤
+- Ent スキーマ設計・実装
+- 開発ツール・リンター完全設定
+
+---
+
 ## Phase 1: MVP開発アイテム
 
 ### 1.1 プロジェクト基盤・環境構築
-- [x] **プロジェクト初期化**
+- [x] **プロジェクト初期化** (#4 - 2025/06/29完了)
   - GitHub リポジトリ作成
   - モノレポ構成（Go API + React Web）
   - 開発環境Docker設定
   - CI/CD パイプライン基本設定
 
-- [x] **開発ツール・リンター設定**
+- [x] **開発ツール・リンター設定** (#5 - 2025/06/29完了)
   - Go: gofmt, golangci-lint
   - TypeScript: Prettier, ESLint
   - Pre-commit hooks設定
   - GitHub Actions基本ワークフロー
 
 ### 1.2 バックエンドAPI基盤
-- [x] **Go + Gin APIサーバー基盤構築**
+- [x] **Go + Gin APIサーバー基盤構築** (#6 - 2025/06/29完了)
   - プロジェクト構造設計
   - Gin ルーター設定
   - ミドルウェア設定（CORS, ログ, 認証）
   - ヘルスチェックエンドポイント
 
-- [x] **Ent スキーマ設計・実装**
+- [x] **Ent スキーマ設計・実装** (#9 - 2025/06/29完了)
   - Entプロジェクト初期化
   - ユーザーエンティティ定義
   - イベントエンティティ定義
   - 参加者関連エンティティ定義
   - リレーション設計
 
-- [x] **データベース設定**
+- [x] **データベース設定** (#11 - 2025/06/29完了)
   - PostgreSQL Docker設定
   - Ent Schema Code生成
   - Atlas マイグレーション設定
   - 初期データ投入スクリプト
 
-- [x] **GraphQL API実装**
+- [x] **GraphQL API実装** (#13 - 2025/07/06完了)
   - gqlgen初期設定
   - entgql統合設定
   - GraphQLスキーマ自動生成
@@ -66,39 +146,40 @@ Webアプリ開発とビジネス向け機能
   - GraphiQL Playground設定
 
 ### 1.3 React Web基本アプリ
-- [x] **React Webプロジェクト初期化**
+- [x] **React Webプロジェクト初期化** (#20-#23 - 2025/07/12完了)
   - Vite + React プロジェクト設定
   - TypeScript設定
-  - ナビゲーション設定（React Router）
-  - 状態管理設定（Zustand）
+  - React Native → React Web完全移行
+  - ESLint・Jest・TypeScript設定最適化
 
-- [x] **基本画面・コンポーネント**
-  - スプラッシュ画面
-  - オンボーディング画面（5段階フロー）
-  - ホーム画面レイアウト（ヘッダー、メイン、フッター）
-  - 共通UIコンポーネント設計（Button, Input, Modal等）
-  - テーマ・スタイル設定（Tailwind CSS）
-  - レスポンシブデザイン対応
+- [x] **基本画面・コンポーネント** (#24 - 2025/07/13完了)
+  - オンボーディング画面（4段階フロー with progress indicator）
+  - ホーム画面（Hero section, Feature showcase, Statistics）
+  - 共通UIコンポーネント設計（Button, Card, Input, Modal, Steps）
+  - テーマ・スタイル設定（Tailwind CSS + 完全レスポンシブ）
+  - SEO最適化とPWA manifest設定
 
-- [x] **コンポーネントライブラリ**
-  - UI Components: Button, Input, Modal, Loading, Card
-  - Form Components: FormField, TextArea, DatePicker, FormContainer
-  - Layout Components: Header, Footer, Sidebar, PageContainer
-  - Utility Components: Toast, Layout
-  - Type定義完備（ui.ts, screens.ts）
+- [x] **コンポーネントライブラリ** (#24 - 2025/07/13完了)
+  - UI Components: Button（variants, sizes, loading states）, Card（padding options）
+  - Input components: 完全なアクセシビリティ対応
+  - Modal: React portal + keyboard navigation
+  - Steps: Progress indicator component
+  - 完全なTypeScript型定義
 
-- [x] **GraphQLクライアント設定**
+- [x] **GraphQLクライアント設定** (#25 - 2025/07/13完了)
   - Apollo Client設定
   - GraphQL Code Generation設定
   - TypeScript型定義自動生成
-  - 基本クエリ・ミューテーション実装
+  - 169テスト通過の包括的テストスイート実装
+  - 完全なCRUD操作（Users, Events, Participants）
 
 ### 1.4 基本的なイベント管理機能
-- [ ] **イベント作成機能**
-  - イベント作成フォーム
-  - 日時選択UI
-  - バリデーション実装
-  - GraphQL mutation実装
+- [x] **イベント作成機能** (#26-#27 - 2025/07/13完了)
+  - イベント作成フォーム（React Hook Form + Yup validation）
+  - 日時選択UI（開始・終了時刻、過去日時バリデーション）
+  - 包括的バリデーション実装（タイトル、説明、絵文字、公開設定）
+  - GraphQL mutation実装（CreateEvent mutation）
+  - エラーハンドリングとローディング状態管理
 
 - [ ] **イベント一覧・詳細表示**
   - イベント一覧画面
@@ -345,6 +426,8 @@ Webアプリ開発とビジネス向け機能
 
 ---
 
-**作成日**: 2025年6月22日
-**バージョン**: 1.0
-**次のアクション**: GitHub Issueテンプレート作成・Issue一括作成
+**作成日**: 2025年6月22日  
+**最終更新**: 2025年7月13日  
+**バージョン**: 2.0  
+**現在の進捗**: Phase 1 MVP開発 67% 完了 (8/12 アイテム)  
+**次のアクション**: イベント一覧・詳細表示機能の実装開始
