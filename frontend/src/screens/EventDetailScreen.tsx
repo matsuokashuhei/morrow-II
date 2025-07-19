@@ -8,9 +8,7 @@ import { ROUTES } from '../constants/routes';
 import { useGetEventQuery } from '../graphql/generated';
 import { Event } from '../store';
 
-interface EventDetailScreenProps {}
-
-const EventDetailScreen: React.FC<EventDetailScreenProps> = () => {
+const EventDetailScreen: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, loading, error, refetch } = useGetEventQuery({
@@ -38,17 +36,17 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = () => {
   }, [data?.event]);
 
   const handleEventEdit = (event: Event) => {
-    // TODO: Navigate to edit screen when implemented
+    alert('Edit functionality is not yet implemented.');
     console.log('Edit event:', event);
   };
 
   const handleEventDelete = (event: Event) => {
-    // TODO: Implement delete functionality
+    alert('Delete functionality is not yet implemented.');
     console.log('Delete event:', event);
   };
 
   const handleEventShare = (event: Event) => {
-    // TODO: Implement share functionality (Phase 2)
+    alert('Share functionality is not yet implemented.');
     console.log('Share event:', event);
   };
 

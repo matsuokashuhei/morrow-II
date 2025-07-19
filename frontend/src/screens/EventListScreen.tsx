@@ -8,11 +8,9 @@ import { ROUTES } from '../constants/routes';
 import { useGetEventsQuery } from '../graphql/generated';
 import { Event } from '../store';
 
-interface EventListScreenProps {}
-
 type FilterType = 'all' | 'upcoming' | 'ended';
 
-const EventListScreen: React.FC<EventListScreenProps> = () => {
+const EventListScreen: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<FilterType>('all');
 
@@ -75,17 +73,23 @@ const EventListScreen: React.FC<EventListScreenProps> = () => {
   }, [events, searchTerm, filterType]);
 
   const handleEventEdit = (event: Event) => {
-    // TODO: Navigate to edit screen when implemented
+    alert(
+      'The edit functionality is not yet implemented. Please try again later.'
+    );
     console.log('Edit event:', event);
   };
 
   const handleEventDelete = (event: Event) => {
-    // TODO: Implement delete functionality
+    alert(
+      'The delete functionality is not yet implemented. Please try again later.'
+    );
     console.log('Delete event:', event);
   };
 
   const handleEventShare = (event: Event) => {
-    // TODO: Implement share functionality (Phase 2)
+    alert(
+      'The share functionality is not yet implemented. Please try again later.'
+    );
     console.log('Share event:', event);
   };
 

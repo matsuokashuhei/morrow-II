@@ -25,7 +25,7 @@ const EventDetailScreen = React.lazy(
 export default function App() {
   const navigationItems = [
     { label: 'ホーム', href: ROUTES.HOME, active: true },
-    { label: 'イベント', href: ROUTES.EVENTS },
+    { label: 'イベント', href: ROUTES.EVENTS, active: false },
     { label: '使い方', href: ROUTES.ONBOARDING },
     { label: 'GraphQL Test', href: '/graphql-test' },
   ];
