@@ -69,7 +69,7 @@ format-frontend: ## Format TypeScript/JavaScript code
 	docker-compose run --rm frontend npm run format
 
 # Testing commands
-.PHONY: test test-backend test-frontend test-coverage
+.PHONY: test test-backend test-frontend test-coverage test-e2e test-e2e-dev test-e2e-fast test-e2e-smoke
 
 test: test-backend test-frontend ## Run all tests
 
@@ -82,6 +82,22 @@ test-frontend: ## Run React Native tests
 test-coverage: ## Run tests with coverage
 	docker run --rm -v $(PWD)/backend:/app -w /app -e CGO_ENABLED=1 golang:1.23-alpine sh -c "apk add --no-cache gcc musl-dev && go test -v -race -coverprofile=coverage.out -covermode=atomic ./..."
 	docker-compose run --rm frontend npm run test:coverage
+
+# E2E Testing commands
+test-e2e: ## Run full E2E test suite (all browsers)
+	docker-compose --profile tools run --rm playwright npm test
+
+test-e2e-dev: ## Run E2E tests in development mode (Chrome only, fast)
+	docker-compose --profile tools run --rm playwright npm run test:dev
+
+test-e2e-fast: ## Run E2E tests super fast (Chrome only, no screenshots/videos)
+	docker-compose --profile tools run --rm playwright npm run test:fast
+
+test-e2e-smoke: ## Run critical path tests only (fastest)
+	docker-compose --profile tools run --rm playwright npm run test:smoke-full
+
+test-e2e-connectivity: ## Run basic connectivity tests only
+	docker-compose --profile tools run --rm playwright npm run test:smoke
 
 # Pre-commit validation
 .PHONY: pre-commit validate

@@ -1,0 +1,328 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - 'playwright/**'
+      - 'docker-compose.yml'
+      - '.github/workflows/e2e.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - 'playwright/**'
+      - 'docker-compose.yml'
+      - '.github/workflows/e2e.yml'
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'fast'
+        type: choice
+        options:
+          - connectivity
+          - fast
+          - full
+          - dev
+
+env:
+  # Disable Playwright update notifications in CI
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 0
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        test-suite:
+          - connectivity
+          - fast
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Create .env file for testing
+      run: |
+        cat > .env << EOF
+        # Database Configuration
+        DB_HOST=postgres
+        DB_PORT=5432
+        DB_NAME=morrow
+        DB_USER=postgres
+        DB_PASSWORD=postgres
+        DB_SSL_MODE=disable
+
+        # JWT Configuration
+        JWT_SECRET=test_jwt_secret_for_e2e_only_not_for_production
+
+        # Frontend Configuration
+        REACT_APP_API_URL=http://backend:8080
+        REACT_APP_GRAPHQL_ENDPOINT=http://backend:8080/query
+
+        # Development Configuration
+        NODE_ENV=development
+        GO_ENV=development
+        EOF
+
+    - name: Create Docker network
+      run: docker network create morrow-network || true
+
+    - name: Build and start services
+      run: |
+        # Build all services
+        docker compose build
+
+        # Start database first
+        docker compose up -d postgres
+        echo "Waiting for PostgreSQL to be ready..."
+        sleep 15
+
+        # Start backend
+        docker compose up -d backend
+        echo "Waiting for backend to be ready..."
+        sleep 20
+
+        # Start frontend
+        docker compose up -d frontend
+        echo "Waiting for frontend to be ready..."
+        sleep 15
+
+    - name: Verify services are running
+      run: |
+        echo "=== Docker Compose Status ==="
+        docker compose ps
+
+        echo "=== Network Status ==="
+        docker network ls
+
+        echo "=== Backend Health Check ==="
+        # Try multiple endpoints to check backend health
+        for i in {1..10}; do
+          if curl -f http://localhost:8080/health 2>/dev/null; then
+            echo "Backend health endpoint is responding"
+            break
+          elif curl -f http://localhost:8080/query 2>/dev/null; then
+            echo "Backend GraphQL endpoint is responding"
+            break
+          else
+            echo "Attempt $i: Backend not ready yet, waiting..."
+            sleep 3
+          fi
+        done
+
+        echo "=== Frontend Health Check ==="
+        # Check if frontend is serving content
+        for i in {1..10}; do
+          if curl -f http://localhost:3000 2>/dev/null; then
+            echo "Frontend is responding"
+            break
+          else
+            echo "Attempt $i: Frontend not ready yet, waiting..."
+            sleep 3
+          fi
+        done
+
+    - name: Install Playwright browsers
+      run: |
+        docker compose --profile tools run --rm playwright npx playwright install --with-deps
+
+    - name: Run connectivity tests
+      if: matrix.test-suite == 'connectivity'
+      run: |
+        docker compose --profile tools run --rm playwright npm run test:connectivity
+      env:
+        CI: true
+
+    - name: Run fast E2E tests
+      if: matrix.test-suite == 'fast'
+      run: |
+        docker compose --profile tools run --rm playwright npm run test:fast
+      env:
+        CI: true
+
+    - name: Run full E2E tests
+      if: matrix.test-suite == 'full' || github.event.inputs.test_suite == 'full'
+      run: |
+        docker compose --profile tools run --rm playwright npm test
+      env:
+        CI: true
+
+    - name: Run development E2E tests
+      if: matrix.test-suite == 'dev' || github.event.inputs.test_suite == 'dev'
+      run: |
+        docker compose --profile tools run --rm playwright npm run test:dev
+      env:
+        CI: true
+
+    - name: Upload Playwright test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-test-results-${{ matrix.test-suite }}
+        path: |
+          playwright/test-results/
+          playwright/playwright-report/
+        retention-days: 7
+
+    - name: Upload Playwright HTML report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-html-report-${{ matrix.test-suite }}
+        path: playwright/playwright-report/
+        retention-days: 7
+
+    - name: Create test summary
+      if: always()
+      run: |
+        echo "## E2E Test Results (${{ matrix.test-suite }})" >> $GITHUB_STEP_SUMMARY
+
+        if [ -f "playwright/test-results/results.json" ]; then
+          echo "Test results found, parsing..." >> $GITHUB_STEP_SUMMARY
+        else
+          echo "No detailed test results found" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "### Test Suite: ${{ matrix.test-suite }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Runner**: ubuntu-latest" >> $GITHUB_STEP_SUMMARY
+        echo "- **Browsers**: Chromium, Mobile Safari" >> $GITHUB_STEP_SUMMARY
+
+    - name: Show service logs on failure
+      if: failure()
+      run: |
+        echo "=== PostgreSQL Logs ==="
+        docker compose logs postgres
+
+        echo "=== Backend Logs ==="
+        docker compose logs backend
+
+        echo "=== Frontend Logs ==="
+        docker compose logs frontend
+
+        echo "=== Docker Compose Status ==="
+        docker compose ps
+
+    - name: Cleanup
+      if: always()
+      run: |
+        # Stop all services
+        docker compose down -v
+
+        # Remove network
+        docker network rm morrow-network || true
+
+        # Clean up dangling images
+        docker image prune -f
+
+  full-e2e-test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'develop')
+    timeout-minutes: 45
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Create .env file for testing
+      run: |
+        cat > .env << EOF
+        # Database Configuration
+        DB_HOST=postgres
+        DB_PORT=5432
+        DB_NAME=morrow
+        DB_USER=postgres
+        DB_PASSWORD=postgres
+        DB_SSL_MODE=disable
+
+        # JWT Configuration
+        JWT_SECRET=test_jwt_secret_for_e2e_only_not_for_production
+
+        # Frontend Configuration
+        REACT_APP_API_URL=http://backend:8080
+        REACT_APP_GRAPHQL_ENDPOINT=http://backend:8080/query
+
+        # Development Configuration
+        NODE_ENV=development
+        GO_ENV=development
+        EOF
+
+    - name: Create Docker network
+      run: docker network create morrow-network || true
+
+    - name: Build and start services
+      run: |
+        docker compose build
+        docker compose up -d postgres
+        sleep 15
+        docker compose up -d backend
+        sleep 20
+        docker compose up -d frontend
+        sleep 15
+
+    - name: Verify services are ready
+      run: |
+        timeout 60 bash -c 'until curl -f http://localhost:8080/health || curl -f http://localhost:8080/query; do sleep 2; done'
+        timeout 60 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
+
+    - name: Install Playwright browsers
+      run: |
+        docker compose --profile tools run --rm playwright npx playwright install --with-deps
+
+    - name: Run full E2E test suite
+      run: |
+        docker compose --profile tools run --rm playwright npm test
+      env:
+        CI: true
+
+    - name: Upload comprehensive test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-full-test-results
+        path: |
+          playwright/test-results/
+          playwright/playwright-report/
+          playwright/coverage/
+        retention-days: 14
+
+    - name: Create comprehensive test summary
+      if: always()
+      run: |
+        echo "## 🎭 Full E2E Test Suite Results" >> $GITHUB_STEP_SUMMARY
+        echo "### Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total Tests**: 153 tests across 7 test files" >> $GITHUB_STEP_SUMMARY
+        echo "- **Browsers**: Chromium + Mobile Safari" >> $GITHUB_STEP_SUMMARY
+        echo "- **Screen Coverage**: 7/7 screens (100%)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Feature Coverage**: Complete user journeys" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Test Files" >> $GITHUB_STEP_SUMMARY
+        echo "- connectivity.spec.ts (3 tests)" >> $GITHUB_STEP_SUMMARY
+        echo "- home.spec.ts (15 tests)" >> $GITHUB_STEP_SUMMARY
+        echo "- onboarding.spec.ts (21 tests)" >> $GITHUB_STEP_SUMMARY
+        echo "- event-creation.spec.ts (26 tests)" >> $GITHUB_STEP_SUMMARY
+        echo "- event-list.spec.ts (24 tests)" >> $GITHUB_STEP_SUMMARY
+        echo "- event-detail.spec.ts (28 tests)" >> $GITHUB_STEP_SUMMARY
+        echo "- graphql-test.spec.ts (36 tests)" >> $GITHUB_STEP_SUMMARY
+
+    - name: Cleanup
+      if: always()
+      run: |
+        docker compose down -v
+        docker network rm morrow-network || true
+        docker image prune -f

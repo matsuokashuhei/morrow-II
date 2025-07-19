@@ -1,0 +1,35 @@
+{
+  "name": "morrow-e2e-tests",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "End-to-end tests for Morrow application using Playwright",
+  "scripts": {
+    "test": "playwright test",
+    "test:dev": "playwright test --config=playwright.dev.config.ts",
+    "test:fast": "playwright test --config=playwright.dev.config.ts --project=chromium",
+    "test:smoke": "playwright test tests/connectivity.spec.ts --config=playwright.dev.config.ts",
+    "test:smoke-full": "playwright test --config=playwright.smoke.config.ts",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:mobile": "playwright test --project='Mobile Chrome' --project='Mobile Safari'",
+    "test:connectivity": "playwright test tests/connectivity.spec.ts",
+    "test:home": "playwright test tests/home.spec.ts",
+    "test:onboarding": "playwright test tests/onboarding.spec.ts",
+    "test:events": "playwright test tests/event-creation.spec.ts",
+    "report": "playwright show-report reports/html",
+    "install-browsers": "playwright install",
+    "install-deps": "playwright install-deps"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "@types/node": "^22.10.5"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
