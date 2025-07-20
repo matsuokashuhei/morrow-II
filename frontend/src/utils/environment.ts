@@ -17,14 +17,18 @@ const getEnvVariable = (viteKey: string, fallback: string): string => {
   }
 
   // In browser environment, try to access import.meta.env
-  try {
-    // Use eval to avoid syntax errors in Jest environment
-    const importMeta = eval('import.meta');
-    if (importMeta && importMeta.env && importMeta.env[viteKey]) {
-      return importMeta.env[viteKey];
+  // Use conditional access to avoid Jest parsing issues
+  const hasImportMeta = typeof globalThis !== 'undefined' && 
+                        'import' in globalThis && 
+                        (globalThis as any).import &&
+                        (globalThis as any).import.meta &&
+                        (globalThis as any).import.meta.env;
+                        
+  if (hasImportMeta) {
+    const env = (globalThis as any).import.meta.env;
+    if (env[viteKey]) {
+      return env[viteKey];
     }
-  } catch (error) {
-    // Fall back to default if import.meta is not available
   }
 
   return fallback;
