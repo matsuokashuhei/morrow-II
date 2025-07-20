@@ -26,7 +26,7 @@ const getEnvVariable = (viteKey: string, fallback: string): string => {
   } catch (error) {
     // Fall back to default if import.meta is not available
   }
-  
+
   return fallback;
 };
 
