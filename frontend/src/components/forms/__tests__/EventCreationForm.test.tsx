@@ -121,9 +121,9 @@ describe('EventCreationForm', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('イベント名は必須です')).toBeInTheDocument();
-      expect(screen.getByText('開始日時は必須です')).toBeInTheDocument();
-      expect(screen.getByText('終了日時は必須です')).toBeInTheDocument();
+      expect(screen.getAllByText('タイトルは必須です')).toHaveLength(2);
+      expect(screen.getAllByText('開始日時は必須です')).toHaveLength(2);
+      expect(screen.getAllByText('終了日時は必須です')).toHaveLength(2);
     });
   });
 
@@ -141,8 +141,8 @@ describe('EventCreationForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('100文字以内で入力してください')
-      ).toBeInTheDocument();
+        screen.getAllByText('100文字以内で入力してください')
+      ).toHaveLength(2); // Should appear in both error summary and field error
     });
   });
 
@@ -160,8 +160,8 @@ describe('EventCreationForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('500文字以内で入力してください')
-      ).toBeInTheDocument();
+        screen.getAllByText('500文字以内で入力してください')
+      ).toHaveLength(2); // Should appear in both error summary and field error
     });
   });
 
@@ -182,8 +182,8 @@ describe('EventCreationForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('現在時刻以降を選択してください')
-      ).toBeInTheDocument();
+        screen.getAllByText('過去の日時は選択できません')
+      ).toHaveLength(2); // Should appear in both error summary and field error
     });
   });
 
@@ -211,8 +211,8 @@ describe('EventCreationForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('開始日時以降を選択してください')
-      ).toBeInTheDocument();
+        screen.getAllByText('終了時刻は開始時刻より後に設定してください')
+      ).toHaveLength(2); // Should appear in both error summary and field error
     });
   });
 
@@ -229,8 +229,8 @@ describe('EventCreationForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('絵文字は2文字以内で入力してください')
-      ).toBeInTheDocument();
+        screen.getAllByText('絵文字は2文字以内で入力してください')
+      ).toHaveLength(2); // Should appear in both error summary and field error
     });
   });
 
