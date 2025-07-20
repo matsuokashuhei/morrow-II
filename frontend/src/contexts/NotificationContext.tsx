@@ -37,7 +37,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const addNotification = useCallback(
     (notification: Omit<Notification, 'id'>) => {
-      const id = Math.random().toString(36).substr(2, 9);
+      const id = crypto.randomUUID();
       const duration = notification.duration || 5000;
       const newNotification: Notification = {
         ...notification,

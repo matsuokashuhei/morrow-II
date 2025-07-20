@@ -435,10 +435,19 @@ test.describe('Event Detail Screen', () => {
       const h1Element = eventDetailPage.page.locator('h1');
       const errorMessage = eventDetailPage.page.locator('text=/イベントが見つかりません|Event not found|404/i');
 
+      const waitForWithTimeout = async (promise: Promise<void>, name: string): Promise<string | null> => {
+        try {
+          await promise;
+          return name;
+        } catch (error) {
+          return null;
+        }
+      };
+
       // Wait for either the title or error message to appear
-      await Promise.race([
-        h1Element.waitFor({ timeout: 5000 }).catch(() => null),
-        errorMessage.waitFor({ timeout: 5000 }).catch(() => null)
+      const result = await Promise.race([
+        waitForWithTimeout(h1Element.waitFor({ timeout: 5000 }), 'h1Element'),
+        waitForWithTimeout(errorMessage.waitFor({ timeout: 5000 }), 'errorMessage')
       ]);
 
       let originalContent: string | null = null;
@@ -466,9 +475,9 @@ test.describe('Event Detail Screen', () => {
       await eventDetailPage.page.waitForLoadState('networkidle');
 
       // Wait for the same type of content to appear
-      await Promise.race([
-        h1Element.waitFor({ timeout: 5000 }).catch(() => null),
-        errorMessage.waitFor({ timeout: 5000 }).catch(() => null)
+      const returnResult = await Promise.race([
+        waitForWithTimeout(h1Element.waitFor({ timeout: 5000 }), 'h1Element'),
+        waitForWithTimeout(errorMessage.waitFor({ timeout: 5000 }), 'errorMessage')
       ]);
 
       let returnContent: string | null = null;

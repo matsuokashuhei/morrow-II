@@ -255,7 +255,11 @@ test.describe('Event Creation Flow', () => {
       const eventData = formTestData.validEvent;
 
       // Monitor GraphQL requests
-      const graphqlRequests: any[] = [];
+      interface GraphQLRequest {
+        url: string;
+        postData?: string | null;
+      }
+      const graphqlRequests: GraphQLRequest[] = [];
       page.on('request', request => {
         if (request.url().includes('/query') && request.method() === 'POST') {
           graphqlRequests.push({

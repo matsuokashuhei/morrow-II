@@ -260,7 +260,7 @@ test.describe('Onboarding Flow', () => {
   test.describe('Error Handling', () => {
     test('should handle navigation errors gracefully', async ({ page }) => {
       // Test with slow network
-      await page.route('**/*', route => {
+      await page.route('/api/**', route => {
         setTimeout(() => route.continue(), 100);
       });
 
