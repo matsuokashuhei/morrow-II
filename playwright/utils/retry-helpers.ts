@@ -1,16 +1,23 @@
 import { Page, Locator } from '@playwright/test';
 
 /**
+ * Custom error interface for retry operation failures
+ */
+export interface RetryError {
+  message: string;
+  stack?: string;
+}
+
+/**
  * Custom error class for retry operation failures
  */
 export class RetryOperationError extends Error {
   constructor(
     public readonly operationName: string,
     public readonly attempts: number,
-    public readonly lastError: Error | unknown
+    public readonly lastError: RetryError
   ) {
-    const errorMessage = lastError instanceof Error ? lastError.message : String(lastError);
-    super(`Failed to ${operationName} after ${attempts} attempts. Last error: ${errorMessage}`);
+    super(`Failed to ${operationName} after ${attempts} attempts. Last error: ${lastError.message}`);
     this.name = 'RetryOperationError';
   }
 }
