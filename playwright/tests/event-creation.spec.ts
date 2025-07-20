@@ -249,25 +249,32 @@ test.describe('Event Creation Flow', () => {
   });
 
   test.describe('GraphQL Integration', () => {
-    test.skip('should send correct GraphQL mutation on form submission', async ({ page }) => {
-      // SKIP: This test interferes with Apollo Client form rendering when monitoring/mocking GraphQL requests
-      // TODO: Fix in next iteration with proper Apollo MockedProvider setup
+    test('should send correct GraphQL mutation on form submission', async ({ page }) => {
       const eventData = formTestData.validEvent;
 
-      // Monitor GraphQL requests
+      // Set up GraphQL endpoint variable for more maintainable tests
+      const graphqlEndpoint = process.env.GRAPHQL_ENDPOINT || 'http://backend:8080/api/v1/graphql';
+
+      // Monitor GraphQL requests with improved pattern matching
       interface GraphQLRequest {
         url: string;
         postData?: string | null;
       }
       const graphqlRequests: GraphQLRequest[] = [];
-      page.on('request', request => {
-        if (request.url().includes('/query') && request.method() === 'POST') {
-          graphqlRequests.push({
-            url: request.url(),
-            postData: request.postData(),
-          });
-        }
+      
+      // Use more specific pattern to avoid conflicts
+      await page.route('**/api/v1/graphql', route => {
+        graphqlRequests.push({
+          url: route.request().url(),
+          postData: route.request().postData(),
+        });
+        // Continue with the request to avoid breaking the form
+        route.continue();
       });
+
+      // Navigate and wait for form to be ready
+      await eventCreationPage.navigate();
+      await page.waitForLoadState('networkidle');
 
       // Fill and submit form
       await eventCreationPage.fillTitle(eventData.title);
@@ -286,43 +293,43 @@ test.describe('Event Creation Flow', () => {
       expect(createEventMutation).toBeTruthy();
     });
 
-    test.skip('should handle GraphQL errors gracefully', async ({ page }) => {
-      // SKIP: This test blocks GraphQL requests which prevents Apollo Client form rendering
-      // TODO: Fix in next iteration with proper Apollo MockedProvider setup
-      // Mock GraphQL error response - need to handle both CreateEvent mutation and GetEvents query
+    test('should handle GraphQL errors gracefully', async ({ page }) => {
+      // Set up error response for CreateEvent mutation while allowing other queries
       await page.route('**/api/v1/graphql', route => {
         const postData = route.request().postData();
 
-        if (postData?.includes('GetEvents')) {
-          // Allow GetEvents query to succeed so form can render
+        if (postData?.includes('CreateEvent')) {
+          // Mock CreateEvent mutation error
           route.fulfill({
             status: 200,
             contentType: 'application/json',
             body: JSON.stringify({
-              data: {
-                events: []
-              }
-            })
-          });
-        } else if (postData?.includes('CreateEvent')) {
-          // Mock CreateEvent mutation to fail
-          route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({
-              errors: [{ message: 'Internal server error' }]
+              errors: [
+                {
+                  message: 'Event creation failed: Invalid data',
+                  extensions: {
+                    code: 'VALIDATION_ERROR'
+                  }
+                }
+              ]
             })
           });
         } else {
-          // Let other requests through
+          // Allow other queries (like GetEvents) to proceed normally
           route.continue();
         }
       });
 
       const eventData = formTestData.validEvent;
+
+      // Navigate and fill form
+      await eventCreationPage.navigate();
       await eventCreationPage.fillTitle(eventData.title);
+      await eventCreationPage.fillDescription(eventData.description);
+      await eventCreationPage.fillEmoji(eventData.emoji);
       await eventCreationPage.fillStartTime(eventData.startTime);
       await eventCreationPage.fillEndTime(eventData.endTime);
+      await eventCreationPage.selectVisibility(eventData.visibility);
 
       await eventCreationPage.submit();
 

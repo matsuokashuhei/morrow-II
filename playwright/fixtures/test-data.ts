@@ -13,12 +13,15 @@ export interface TestEvent {
 }
 
 /**
- * Get a fixed base date for consistent test results
- * This avoids time-dependent test failures
+ * Get a dynamic base date for consistent test results
+ * This avoids time-dependent test failures by using a date 6 months in the future
  */
 const getBaseDate = (): Date => {
-  // Use a fixed date in the future for consistent tests
-  return new Date('2025-08-01T10:00:00.000Z');
+  // Use a dynamic date 6 months in the future for consistent tests
+  const sixMonthsFromNow = new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000);
+  // Set to a fixed time for consistency within test runs
+  sixMonthsFromNow.setHours(10, 0, 0, 0);
+  return sixMonthsFromNow;
 };
 
 /**

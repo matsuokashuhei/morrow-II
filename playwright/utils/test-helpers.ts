@@ -12,8 +12,8 @@ import { TestEvent, selectors } from '../fixtures/test-data';
  * These are typically unexpected issues that may indicate a problem with the application
  * under test or the test environment.
  *
- * @param {string[]} errors - An array of error messages captured from the console.
- * @returns {string[]} - A filtered array containing only critical error messages.
+ * @param errors - An array of error messages captured from the console.
+ * @returns A filtered array containing only critical error messages.
  *
  * @example
  * const errors = [
@@ -50,6 +50,18 @@ export const filterCriticalErrors = (errors: string[]): string[] => {
 };
 
 /**
+ * Interface for window object with Apollo Client properties
+ */
+interface WindowWithApolloClient extends Window {
+  __APOLLO_CLIENT__?: { 
+    networkStatus?: number;
+    queryManager?: {
+      inFlightLinkObservables?: Map<string, any>;
+    };
+  };
+}
+
+/**
  * Waits for GraphQL operations to complete by monitoring the Apollo Client network status.
  *
  * This function is useful in E2E tests when you need to ensure that all pending GraphQL
@@ -60,9 +72,9 @@ export const filterCriticalErrors = (errors: string[]): string[] => {
  * global window object, which can happen during initial page loads or in test environments
  * where the client hasn't been initialized yet.
  *
- * @param {Page} page - The Playwright page object representing the browser page.
- * @param {number} [timeout=5000] - Maximum time to wait in milliseconds (default: 5000).
- * @returns {Promise<void>} - A promise that resolves when GraphQL operations are complete.
+ * @param page - The Playwright page object representing the browser page.
+ * @param timeout - Maximum time to wait in milliseconds (default: 5000).
+ * @returns A promise that resolves when GraphQL operations are complete.
  *
  * @example
  * // Wait for GraphQL operations after navigation
@@ -77,7 +89,7 @@ export const filterCriticalErrors = (errors: string[]): string[] => {
 export const waitForGraphQL = async (page: Page, timeout = 5000): Promise<void> => {
   await page.waitForFunction(
     () => {
-      const apolloClient = (window as any).__APOLLO_CLIENT__;
+      const apolloClient = (window as WindowWithApolloClient).__APOLLO_CLIENT__;
       return !apolloClient || apolloClient.networkStatus !== 1;
     },
     { timeout }

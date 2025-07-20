@@ -3,6 +3,14 @@ import { selectors } from '../fixtures/test-data';
 import { retryInputFill } from './retry-helpers';
 
 /**
+ * Visibility mapping constants
+ */
+const VISIBILITY_MAPPING: Record<'public' | 'private', string> = {
+  public: 'shared',
+  private: 'private',
+} as const;
+
+/**
  * Page Object for Home Screen
  */
 export class HomePage {
@@ -167,7 +175,7 @@ export class EventCreationPage {
 
   async selectVisibility(visibility: 'public' | 'private') {
     // Handle radio button selection instead of select dropdown
-    const visibilityValue = visibility === 'public' ? 'shared' : 'private';
+    const visibilityValue = VISIBILITY_MAPPING[visibility];
     const radioButton = this.page.locator(`[data-testid="visibility-${visibilityValue}"]`);
     await radioButton.click();
   }

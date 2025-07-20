@@ -3,6 +3,23 @@
  */
 
 /**
+ * Interface for window object with Vite environment variables
+ */
+interface ViteWindow extends Window {
+  __VITE_ENV__?: Record<string, string>;
+  process?: {
+    env?: Record<string, string>;
+  };
+}
+
+/**
+ * Interface for import.meta with environment variables
+ */
+interface ImportMetaWithEnv {
+  env: Record<string, string>;
+}
+
+/**
  * Checks if we're running in a test environment
  */
 const isTestEnvironment = (): boolean => {
@@ -39,19 +56,35 @@ const getBrowserEnvVariable = (viteKey: string, fallback: string): string => {
   try {
     // In browser environment, try to access environment variables from global scope
     // This is safer for Jest compatibility
-    if (typeof window !== 'undefined' && (window as any).__VITE_ENV__) {
-      const env = (window as any).__VITE_ENV__;
+    if (typeof window !== 'undefined' && (window as ViteWindow).__VITE_ENV__) {
+      const env = (window as ViteWindow).__VITE_ENV__;
       if (env && env[viteKey]) {
         return env[viteKey];
       }
     }
     
     // Try another common pattern for Vite env access
-    if (typeof window !== 'undefined' && (window as any).process?.env) {
-      const env = (window as any).process.env;
+    if (typeof window !== 'undefined' && (window as ViteWindow).process?.env) {
+      const env = (window as ViteWindow).process?.env;
       if (env && env[viteKey]) {
         return env[viteKey];
       }
+    }
+
+    // Try to access import.meta.env safely with better Jest compatibility
+    try {
+      // Check if import.meta exists and is an object before accessing
+      const hasImportMeta = typeof (globalThis as any).import !== 'undefined' && 
+                          (globalThis as any).import.meta;
+      
+      if (hasImportMeta) {
+        const importMeta = (globalThis as any).import.meta as ImportMetaWithEnv;
+        if (importMeta.env && importMeta.env[viteKey]) {
+          return importMeta.env[viteKey];
+        }
+      }
+    } catch (error) {
+      // Fallback if import.meta.env is not accessible
     }
   } catch (error) {
     // Fallback to the default value if env is not accessible

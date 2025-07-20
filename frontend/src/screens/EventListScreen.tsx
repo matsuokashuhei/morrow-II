@@ -9,6 +9,7 @@ import { useGetEventsQuery } from '../graphql/generated';
 import { Event } from '../store';
 import { useNotification } from '../contexts/NotificationContext';
 import { convertGraphQLEvents, processEvents } from '../utils/eventUtils';
+import { createCommonNotifications } from '../utils/notificationHelpers';
 
 type FilterType = 'all' | 'upcoming' | 'ended';
 
@@ -33,36 +34,22 @@ const EventListScreen: React.FC = () => {
     return processEvents(events, searchTerm, filterType);
   }, [events, searchTerm, filterType]);
 
-  const showFeatureComingSoonNotification = (
-    message: string,
-    title: string = '機能準備中',
-    type: 'info' | 'success' | 'warning' | 'error' = 'info'
-  ) => {
-    addNotification({
-      type,
-      title,
-      message,
-    });
-  };
+  // Create common notification helpers
+  const { showEditFeatureComingSoon, showDeleteFeatureComingSoon, showShareFeatureComingSoon } = 
+    createCommonNotifications(addNotification);
 
   const handleEventEdit = (event: Event) => {
-    showFeatureComingSoonNotification(
-      '編集機能は現在開発中です。しばらくお待ちください。'
-    );
+    showEditFeatureComingSoon();
     console.log('Edit event:', event);
   };
 
   const handleEventDelete = (event: Event) => {
-    showFeatureComingSoonNotification(
-      '削除機能は現在開発中です。しばらくお待ちください。'
-    );
+    showDeleteFeatureComingSoon();
     console.log('Delete event:', event);
   };
 
   const handleEventShare = (event: Event) => {
-    showFeatureComingSoonNotification(
-      '共有機能は次期バージョンで実装予定です。'
-    );
+    showShareFeatureComingSoon();
     console.log('Share event:', event);
   };
 

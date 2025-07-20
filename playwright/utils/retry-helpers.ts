@@ -1,6 +1,21 @@
 import { Page, Locator } from '@playwright/test';
 
 /**
+ * Custom error class for retry operation failures
+ */
+export class RetryOperationError extends Error {
+  constructor(
+    public readonly operationName: string,
+    public readonly attempts: number,
+    public readonly lastError: Error | unknown
+  ) {
+    const errorMessage = lastError instanceof Error ? lastError.message : String(lastError);
+    super(`Failed to ${operationName} after ${attempts} attempts. Last error: ${errorMessage}`);
+    this.name = 'RetryOperationError';
+  }
+}
+
+/**
  * Configuration options for retry operations
  */
 export interface RetryOptions {
@@ -43,10 +58,7 @@ export const retryOperation = async <T>(
     } catch (error) {
       attempts++;
       if (attempts >= config.maxAttempts) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        throw new Error(
-          `Failed to ${operationName} after ${config.maxAttempts} attempts. Last error: ${errorMessage}`
-        );
+        throw new RetryOperationError(operationName, attempts, error);
       }
       
       // Wait before retrying with incremental backoff
