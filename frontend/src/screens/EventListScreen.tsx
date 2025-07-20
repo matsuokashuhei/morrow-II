@@ -74,7 +74,11 @@ const EventListScreen: React.FC = () => {
     );
   }, [events, searchTerm, filterType]);
 
-  const showFeatureComingSoonNotification = (message: string, title: string = '機能準備中', type: 'info' | 'success' | 'warning' | 'error' = 'info') => {
+  const showFeatureComingSoonNotification = (
+    message: string,
+    title: string = '機能準備中',
+    type: 'info' | 'success' | 'warning' | 'error' = 'info'
+  ) => {
     addNotification({
       type,
       title,
@@ -83,17 +87,23 @@ const EventListScreen: React.FC = () => {
   };
 
   const handleEventEdit = (event: Event) => {
-    showFeatureComingSoonNotification('編集機能は現在開発中です。しばらくお待ちください。');
+    showFeatureComingSoonNotification(
+      '編集機能は現在開発中です。しばらくお待ちください。'
+    );
     console.log('Edit event:', event);
   };
 
   const handleEventDelete = (event: Event) => {
-    showFeatureComingSoonNotification('削除機能は現在開発中です。しばらくお待ちください。');
+    showFeatureComingSoonNotification(
+      '削除機能は現在開発中です。しばらくお待ちください。'
+    );
     console.log('Delete event:', event);
   };
 
   const handleEventShare = (event: Event) => {
-    showFeatureComingSoonNotification('共有機能は次期バージョンで実装予定です。');
+    showFeatureComingSoonNotification(
+      '共有機能は次期バージョンで実装予定です。'
+    );
     console.log('Share event:', event);
   };
 

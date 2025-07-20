@@ -50,7 +50,7 @@ dev: ## Run full development environment
 	docker compose up
 
 # Linting and formatting commands
-.PHONY: lint lint-backend lint-frontend format format-backend format-frontend
+.PHONY: lint lint-backend lint-frontend format format-backend format-frontend type-check format-check
 
 lint: lint-backend lint-frontend ## Run all linters
 
@@ -67,6 +67,12 @@ format-backend: ## Format Go code
 
 format-frontend: ## Format TypeScript/JavaScript code
 	docker compose run --rm frontend npm run format
+
+type-check: ## Run TypeScript type checking
+	docker compose run --rm frontend npm run type-check
+
+format-check: ## Check if code formatting is correct
+	docker compose run --rm frontend npm run format:check
 
 # Testing commands
 .PHONY: test test-backend test-frontend test-coverage test-e2e test-e2e-dev test-e2e-fast test-e2e-smoke
@@ -102,12 +108,14 @@ test-e2e-connectivity: ## Run basic connectivity tests only
 # Pre-commit validation
 .PHONY: pre-commit validate
 
-pre-commit: format lint test ## Run pre-commit validation (format, lint, test)
+pre-commit: format lint type-check format-check test ## Run pre-commit validation (format, lint, type-check, format-check, test)
 
 validate: ## Validate project before push
 	@echo "Running project validation..."
 	@make format
 	@make lint
+	@make type-check
+	@make format-check
 	@make test
 	@echo "✅ All validation passed!"
 
