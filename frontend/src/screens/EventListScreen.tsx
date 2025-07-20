@@ -8,6 +8,7 @@ import { ROUTES } from '../constants/routes';
 import { useGetEventsQuery } from '../graphql/generated';
 import { Event } from '../store';
 import { useNotification } from '../contexts/NotificationContext';
+import { convertGraphQLEvents, processEvents } from '../utils/eventUtils';
 
 type FilterType = 'all' | 'upcoming' | 'ended';
 
@@ -24,54 +25,12 @@ const EventListScreen: React.FC = () => {
   // Convert GraphQL events to local Event type
   const events = useMemo(() => {
     if (!data?.events) return [];
-
-    return data.events.map(event => ({
-      id: event.id,
-      title: event.title,
-      description: event.description || '',
-      date: event.startTime,
-      createdAt: event.createdAt,
-      updatedAt: event.updatedAt,
-      endTime: event.endTime,
-      emoji: event.emoji || '',
-      visibility: event.visibility,
-    }));
+    return convertGraphQLEvents(data.events);
   }, [data?.events]);
 
   // Filter and search events
   const filteredEvents = useMemo(() => {
-    if (!events) return [];
-
-    let filtered = events;
-
-    // Apply search filter
-    if (searchTerm.trim()) {
-      const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(
-        event =>
-          event.title.toLowerCase().includes(searchLower) ||
-          event.description.toLowerCase().includes(searchLower)
-      );
-    }
-
-    // Apply type filter
-    if (filterType !== 'all') {
-      const now = new Date();
-      filtered = filtered.filter(event => {
-        const eventDate = new Date(event.date);
-        if (filterType === 'upcoming') {
-          return eventDate > now;
-        } else if (filterType === 'ended') {
-          return eventDate <= now;
-        }
-        return true;
-      });
-    }
-
-    // Sort by date (upcoming first)
-    return filtered.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    );
+    return processEvents(events, searchTerm, filterType);
   }, [events, searchTerm, filterType]);
 
   const showFeatureComingSoonNotification = (

@@ -8,6 +8,7 @@ import { ROUTES } from '../constants/routes';
 import { useGetEventQuery } from '../graphql/generated';
 import { Event } from '../store';
 import { useNotification } from '../contexts/NotificationContext';
+import { formatEventStartDate, formatMetadataDate } from '../utils/dateUtils';
 
 const EventDetailScreen: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -288,33 +289,19 @@ const EventDetailScreen: React.FC = () => {
             <div>
               <dt className="text-sm font-medium text-gray-500">開始日時</dt>
               <dd className="mt-1 text-sm text-gray-900">
-                {new Date(event.date).toLocaleDateString('ja-JP', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {formatEventStartDate(new Date(event.date))}
               </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">作成日</dt>
               <dd className="mt-1 text-sm text-gray-900">
-                {new Date(event.createdAt).toLocaleDateString('ja-JP', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+                {formatMetadataDate(new Date(event.createdAt))}
               </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">最終更新</dt>
               <dd className="mt-1 text-sm text-gray-900">
-                {new Date(event.updatedAt).toLocaleDateString('ja-JP', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+                {formatMetadataDate(new Date(event.updatedAt))}
               </dd>
             </div>
           </div>

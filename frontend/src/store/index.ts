@@ -6,6 +6,9 @@ export interface Event {
   title: string;
   description?: string;
   date: string;
+  endTime?: string;
+  emoji?: string;
+  visibility?: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -1,4 +1,4 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { EventCard } from '../components/EventCard';
@@ -113,24 +113,6 @@ const HomeScreen = () => {
               </Button>
             </div>
           )}
-
-          {/* Navigation links for tests */}
-          <div className="mt-8 text-center space-x-4">
-            <Link
-              to={ROUTES.EVENTS}
-              data-testid="events-list-link"
-              className="inline-block px-4 py-2 text-orange-600 hover:text-orange-700 font-medium border border-orange-600 rounded-lg hover:bg-orange-50 transition-colors"
-            >
-              イベント一覧
-            </Link>
-            <Link
-              to={ROUTES.EVENTS}
-              data-testid="events-link"
-              className="inline-block px-4 py-2 text-orange-600 hover:text-orange-700 font-medium border border-orange-600 rounded-lg hover:bg-orange-50 transition-colors"
-            >
-              イベント
-            </Link>
-          </div>
         </div>
       </div>
 
@@ -149,6 +131,7 @@ const HomeScreen = () => {
               あなたのイベント ({events.length})
             </h2>
             <Button
+              data-testid="new-event-btn"
               onClick={() => navigate(ROUTES.EVENT_CREATE)}
               loading={isLoading}
             >

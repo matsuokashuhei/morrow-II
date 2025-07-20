@@ -1,5 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 import { selectors } from '../fixtures/test-data';
+import { retryInputFill } from './retry-helpers';
 
 /**
  * Page Object for Home Screen
@@ -130,36 +131,20 @@ export class EventCreationPage {
   }
 
   async fillTitle(title: string) {
-    // When GraphQL is mocked, the form might not render immediately
-    // Try a more patient approach for tests that mock GraphQL behavior
-    let attempts = 0;
-    const maxAttempts = 5;
-
-    while (attempts < maxAttempts) {
-      try {
-        // Check if the form is visible first
-        await this.form.waitFor({ state: 'visible', timeout: 2000 });
-        // Then check if the title input is visible and interactable
-        await this.titleInput.waitFor({ state: 'visible', timeout: 2000 });
-        await this.titleInput.fill(title);
-        return; // Success, exit function
-      } catch (error) {
-        attempts++;
-        if (attempts >= maxAttempts) {
-          const errorMessage = error instanceof Error ? error.message : String(error);
-          throw new Error(`Failed to fill title after ${maxAttempts} attempts. Last error: ${errorMessage}`);
-        }
-        // Wait a bit before retrying, especially for GraphQL mocking scenarios
-        await this.page.waitForTimeout(1000 + (attempts * 500));
-        // Try to trigger a re-render by clicking somewhere else and back
-        try {
-          await this.page.click('body');
-          await this.page.waitForTimeout(500);
-        } catch (e) {
-          // Ignore click errors
-        }
+    // Use the generic retry utility for form interactions
+    await retryInputFill(
+      this.page,
+      this.form,
+      this.titleInput,
+      title,
+      {
+        maxAttempts: 5,
+        baseWaitTime: 1000,
+        waitIncrement: 500,
+        timeout: 2000,
+        triggerRerender: true,
       }
-    }
+    );
   }
 
   async fillDescription(description: string) {

@@ -57,6 +57,7 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
                 <Link
                   key={index}
                   to={item.to}
+                  data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                   className={cn(
                     'block px-3 py-2 rounded-md text-base transition-colors',
                     item.active
@@ -82,6 +83,7 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
           <li key={index}>
             <Link
               to={item.to}
+              data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
               className={cn(
                 'px-3 py-2 rounded-md text-sm font-medium transition-colors',
                 item.active
