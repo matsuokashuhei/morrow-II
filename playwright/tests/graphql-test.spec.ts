@@ -302,8 +302,12 @@ test.describe('GraphQL Test Screen', () => {
         // Raw data should be properly formatted
         const rawContent = await rawDataContainer.textContent();
         if (rawContent) {
-          // Should contain JSON-like structure
-          expect(rawContent).toMatch(/[{}\\[\\]]/);
+          // Should contain valid JSON structure
+          try {
+            JSON.parse(rawContent);
+          } catch (e) {
+            throw new Error('Raw content is not valid JSON');
+          }
         }
       }
     });
