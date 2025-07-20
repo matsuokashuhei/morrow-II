@@ -74,11 +74,11 @@ const getBrowserEnvVariable = (viteKey: string, fallback: string): string => {
     // Try to access import.meta.env safely with better Jest compatibility
     try {
       // Check if import.meta exists and is an object before accessing
-      const hasImportMeta = typeof (globalThis as any).import !== 'undefined' && 
-                          (globalThis as any).import.meta;
+      const hasImportMeta = typeof globalThis.import !== 'undefined' && 
+                          globalThis.import.meta;
       
       if (hasImportMeta) {
-        const importMeta = (globalThis as any).import.meta as ImportMetaWithEnv;
+        const importMeta = globalThis.import.meta as ImportMetaWithEnv;
         if (importMeta.env && importMeta.env[viteKey]) {
           return importMeta.env[viteKey];
         }
