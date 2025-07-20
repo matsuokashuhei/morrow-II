@@ -12,10 +12,10 @@ import (
 func TestInitLogger(t *testing.T) {
 	// テスト用に環境変数をクリア
 	originalEnv := os.Getenv("GO_ENV")
-	defer os.Setenv("GO_ENV", originalEnv)
+	defer func() { _ = os.Setenv("GO_ENV", originalEnv) }()
 
 	// Development環境のテスト
-	os.Setenv("GO_ENV", "development")
+	_ = os.Setenv("GO_ENV", "development")
 	// グローバル変数をリセット
 	globalLogger = nil
 	once = sync.Once{}
@@ -34,10 +34,10 @@ func TestInitLogger(t *testing.T) {
 func TestInitLogger_Production(t *testing.T) {
 	// テスト用に環境変数を設定
 	originalEnv := os.Getenv("GO_ENV")
-	defer os.Setenv("GO_ENV", originalEnv)
+	defer func() { _ = os.Setenv("GO_ENV", originalEnv) }()
 
 	// Production環境のテスト
-	os.Setenv("GO_ENV", "production")
+	_ = os.Setenv("GO_ENV", "production")
 	// グローバル変数をリセット
 	globalLogger = nil
 	once = sync.Once{}

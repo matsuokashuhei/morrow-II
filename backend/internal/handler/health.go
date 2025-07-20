@@ -64,7 +64,7 @@ func (h *HealthHandler) Health(c *gin.Context) {
 
 func (h *HealthHandler) Ping(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"message": "pong",
+		"message":   "pong",
 		"timestamp": time.Now().UTC().Format(time.RFC3339),
 	})
 }

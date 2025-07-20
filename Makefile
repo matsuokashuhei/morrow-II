@@ -55,7 +55,7 @@ dev: ## Run full development environment
 lint: lint-backend lint-frontend ## Run all linters
 
 lint-backend: ## Run Go linter
-	docker run --rm -v $(PWD):/workspace -w /workspace/backend golangci/golangci-lint:latest golangci-lint run --timeout=5m
+	docker compose run --rm backend golangci-lint run --timeout=5m
 
 lint-frontend: ## Run TypeScript/JavaScript linter
 	docker compose run --rm frontend npm run lint

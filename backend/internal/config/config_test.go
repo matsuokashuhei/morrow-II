@@ -9,13 +9,13 @@ import (
 
 func TestNew(t *testing.T) {
 	// Setup - Clear environment variables
-	os.Unsetenv("PORT")
-	os.Unsetenv("DB_HOST")
-	os.Unsetenv("DB_PORT")
-	os.Unsetenv("DB_NAME")
-	os.Unsetenv("DB_USER")
-	os.Unsetenv("DB_PASSWORD")
-	os.Unsetenv("GO_ENV")
+	_ = os.Unsetenv("PORT")
+	_ = os.Unsetenv("DB_HOST")
+	_ = os.Unsetenv("DB_PORT")
+	_ = os.Unsetenv("DB_NAME")
+	_ = os.Unsetenv("DB_USER")
+	_ = os.Unsetenv("DB_PASSWORD")
+	_ = os.Unsetenv("GO_ENV")
 
 	// Execute
 	cfg := New()
@@ -32,13 +32,13 @@ func TestNew(t *testing.T) {
 
 func TestNewWithEnvironmentVariables(t *testing.T) {
 	// Setup
-	os.Setenv("PORT", "9000")
-	os.Setenv("DB_HOST", "test-host")
-	os.Setenv("DB_PORT", "5433")
-	os.Setenv("DB_NAME", "test_db")
-	os.Setenv("DB_USER", "test_user")
-	os.Setenv("DB_PASSWORD", "test_pass")
-	os.Setenv("GO_ENV", "test")
+	_ = os.Setenv("PORT", "9000")
+	_ = os.Setenv("DB_HOST", "test-host")
+	_ = os.Setenv("DB_PORT", "5433")
+	_ = os.Setenv("DB_NAME", "test_db")
+	_ = os.Setenv("DB_USER", "test_user")
+	_ = os.Setenv("DB_PASSWORD", "test_pass")
+	_ = os.Setenv("GO_ENV", "test")
 
 	// Execute
 	cfg := New()
@@ -53,13 +53,13 @@ func TestNewWithEnvironmentVariables(t *testing.T) {
 	assert.Equal(t, "test", cfg.Env)
 
 	// Cleanup
-	os.Unsetenv("PORT")
-	os.Unsetenv("DB_HOST")
-	os.Unsetenv("DB_PORT")
-	os.Unsetenv("DB_NAME")
-	os.Unsetenv("DB_USER")
-	os.Unsetenv("DB_PASSWORD")
-	os.Unsetenv("GO_ENV")
+	_ = os.Unsetenv("PORT")
+	_ = os.Unsetenv("DB_HOST")
+	_ = os.Unsetenv("DB_PORT")
+	_ = os.Unsetenv("DB_NAME")
+	_ = os.Unsetenv("DB_USER")
+	_ = os.Unsetenv("DB_PASSWORD")
+	_ = os.Unsetenv("GO_ENV")
 }
 
 func TestConfig_DatabaseURL(t *testing.T) {

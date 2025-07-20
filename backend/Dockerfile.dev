@@ -2,7 +2,7 @@
 FROM golang:1.23-alpine
 
 # Install necessary packages
-RUN apk add --no-cache git curl build-base
+RUN apk add --no-cache git curl build-base binutils-gold
 
 # Set working directory
 WORKDIR /app
@@ -11,6 +11,7 @@ WORKDIR /app
 RUN go install github.com/air-verse/air@v1.60.0
 RUN go install github.com/99designs/gqlgen@latest
 RUN go install entgo.io/ent/cmd/ent@latest
+RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 # Copy go mod files for caching dependencies
 COPY go.mod go.sum* ./

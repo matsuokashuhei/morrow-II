@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
+	_ "github.com/lib/pq" // PostgreSQLドライバー
 	"github.com/matsuokashuhei/morrow-backend/ent"
 	"github.com/matsuokashuhei/morrow-backend/internal/config"
 	"github.com/sirupsen/logrus"
-	_ "github.com/lib/pq" // PostgreSQLドライバー
 )
 
 // Client wraps the Ent client with additional functionality
@@ -80,7 +80,7 @@ func (c *Client) HealthCheck(ctx context.Context) error {
 func (c *Client) AutoMigrate(ctx context.Context) error {
 	c.logger.Info("Starting database migration")
 
-	if err := c.Client.Schema.Create(ctx); err != nil {
+	if err := c.Schema.Create(ctx); err != nil {
 		c.logger.WithError(err).Error("Database migration failed")
 		return fmt.Errorf("failed to create schema resources: %w", err)
 	}

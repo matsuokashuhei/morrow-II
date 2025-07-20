@@ -140,9 +140,9 @@ describe('EventCreationForm', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(
-        screen.getAllByText('100文字以内で入力してください')
-      ).toHaveLength(2); // Should appear in both error summary and field error
+      expect(screen.getAllByText('100文字以内で入力してください')).toHaveLength(
+        2
+      ); // Should appear in both error summary and field error
     });
   });
 
@@ -159,9 +159,9 @@ describe('EventCreationForm', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(
-        screen.getAllByText('500文字以内で入力してください')
-      ).toHaveLength(2); // Should appear in both error summary and field error
+      expect(screen.getAllByText('500文字以内で入力してください')).toHaveLength(
+        2
+      ); // Should appear in both error summary and field error
     });
   });
 
@@ -181,9 +181,7 @@ describe('EventCreationForm', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(
-        screen.getAllByText('過去の日時は選択できません')
-      ).toHaveLength(2); // Should appear in both error summary and field error
+      expect(screen.getAllByText('過去の日時は選択できません')).toHaveLength(2); // Should appear in both error summary and field error
     });
   });
 
