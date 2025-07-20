@@ -123,10 +123,43 @@ export class EventCreationPage {
   async navigate() {
     await this.page.goto('/events/create');
     await this.page.waitForLoadState('networkidle');
+    // Wait for page title to be visible to ensure page structure is ready
+    await this.page.locator('[data-testid="page-title"]').waitFor({ state: 'visible', timeout: 10000 });
+    // Give additional time for React components to render completely, especially with GraphQL mocking
+    await this.page.waitForTimeout(3000);
   }
 
   async fillTitle(title: string) {
-    await this.titleInput.fill(title);
+    // When GraphQL is mocked, the form might not render immediately
+    // Try a more patient approach for tests that mock GraphQL behavior
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    while (attempts < maxAttempts) {
+      try {
+        // Check if the form is visible first
+        await this.form.waitFor({ state: 'visible', timeout: 2000 });
+        // Then check if the title input is visible and interactable
+        await this.titleInput.waitFor({ state: 'visible', timeout: 2000 });
+        await this.titleInput.fill(title);
+        return; // Success, exit function
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          throw new Error(`Failed to fill title after ${maxAttempts} attempts. Last error: ${errorMessage}`);
+        }
+        // Wait a bit before retrying, especially for GraphQL mocking scenarios
+        await this.page.waitForTimeout(1000 + (attempts * 500));
+        // Try to trigger a re-render by clicking somewhere else and back
+        try {
+          await this.page.click('body');
+          await this.page.waitForTimeout(500);
+        } catch (e) {
+          // Ignore click errors
+        }
+      }
+    }
   }
 
   async fillDescription(description: string) {
@@ -148,7 +181,10 @@ export class EventCreationPage {
   }
 
   async selectVisibility(visibility: 'public' | 'private') {
-    await this.visibilitySelect.selectOption(visibility);
+    // Handle radio button selection instead of select dropdown
+    const visibilityValue = visibility === 'public' ? 'shared' : 'private';
+    const radioButton = this.page.locator(`[data-testid="visibility-${visibilityValue}"]`);
+    await radioButton.click();
   }
 
   async submit() {
@@ -157,6 +193,17 @@ export class EventCreationPage {
 
   async cancel() {
     await this.cancelButton.click();
+  }
+
+  // Field-level error message accessors
+  async getTitleErrorMessage() {
+    const errorElement = this.page.locator('[data-testid="title-error-message"]');
+    return await errorElement.isVisible() ? await errorElement.textContent() : null;
+  }
+
+  async hasFieldError(fieldName: string): Promise<boolean> {
+    const errorElement = this.page.locator(`[data-testid="${fieldName}-error-message"]`);
+    return await errorElement.isVisible();
   }
 }
 
@@ -179,7 +226,7 @@ export class EventListPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.pageTitle = page.locator('h1').filter({ hasText: 'イベント一覧' });
+    this.pageTitle = page.locator('[data-testid="page-title"]');
     this.searchInput = page.locator(selectors.eventList.searchInput);
     this.filterSelect = page.locator('select').filter({ hasText: /すべて|開催予定|終了済み/ });
     this.filterAllButton = page.locator(selectors.eventList.filterAll);
@@ -187,7 +234,7 @@ export class EventListPage {
     this.filterEndedButton = page.locator(selectors.eventList.filterEnded);
     this.eventCards = page.locator(selectors.eventList.eventCard);
     this.createButton = page.locator(selectors.eventList.createButton);
-    this.newEventButton = page.locator('text=新しいイベント').first();
+    this.newEventButton = page.locator('[data-testid="new-event-btn"]');
     this.emptyState = page.locator(selectors.eventList.emptyState);
     this.clearFiltersButton = page.locator('text=フィルターをクリア');
   }
@@ -195,6 +242,8 @@ export class EventListPage {
   async navigate() {
     await this.page.goto('/events');
     await this.page.waitForLoadState('networkidle');
+    // Give time for React components to render
+    await this.page.waitForTimeout(2000);
   }
 
   async search(term: string) {

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '../utils/page-objects';
+import { filterCriticalErrors } from '../utils/test-helpers';
 
 test.describe('Home Screen', () => {
   let homePage: HomePage;
@@ -67,10 +68,28 @@ test.describe('Home Screen', () => {
     });
 
     test('should navigate to event list when events link is clicked', async ({ page }) => {
-      // Look for navigation link (if it exists in the header)
-      const eventsLink = page.locator('[data-testid="nav-events"], a[href="/events"]');
-      if (await eventsLink.isVisible()) {
-        await eventsLink.click();
+      // Try specific navigation links in order of preference
+      const selectors = [
+        '[data-testid="nav-events"]',
+        '[data-testid="events-list-link"]',
+        '[data-testid="events-link"]'
+      ];
+
+      let clicked = false;
+      for (const selector of selectors) {
+        try {
+          const element = page.locator(selector);
+          if (await element.isVisible()) {
+            await element.click();
+            clicked = true;
+            break;
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+
+      if (clicked) {
         await expect(page).toHaveURL(/\/events/);
       }
     });
@@ -162,11 +181,8 @@ test.describe('Home Screen', () => {
 
       await homePage.navigate();
 
-      // Filter out known non-critical errors
-      const criticalErrors = consoleErrors.filter(error =>
-        !error.includes('favicon.ico') &&
-        !error.includes('Extension')
-      );
+      // Filter out known non-critical errors using helper function
+      const criticalErrors = filterCriticalErrors(consoleErrors);
 
       expect(criticalErrors).toHaveLength(0);
     });

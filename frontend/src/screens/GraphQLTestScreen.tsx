@@ -10,21 +10,22 @@ export const GraphQLTestScreen: React.FC = () => {
   const { users, loading: usersLoading, error: usersError } = useUsers();
 
   if (eventsLoading || usersLoading) {
-    return <Loading size="lg" text="Loading GraphQL data..." />;
+    return <div data-testid="graphql-loading"><Loading size="lg" text="Loading GraphQL data..." /></div>;
   }
 
   return (
-    <div className="space-y-6">
+    <div data-testid="graphql-test-screen" className="space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">GraphQL Test</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 data-testid="page-title" className="text-3xl font-bold text-gray-900">GraphQL Test</h1>
+        <p data-testid="page-description" className="text-gray-600 mt-2">
           Testing GraphQL client integration with Apollo Client
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div data-testid="data-sections" className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Users Section */}
         <DataListSection
+          data-testid="users-section"
           title="Users"
           data={users}
           error={usersError}
@@ -38,6 +39,7 @@ export const GraphQLTestScreen: React.FC = () => {
 
         {/* Events Section */}
         <DataListSection
+          data-testid="events-section"
           title="Events"
           data={events}
           error={eventsError}
@@ -60,7 +62,7 @@ export const GraphQLTestScreen: React.FC = () => {
       </div>
 
       {/* Connection Status */}
-      <Card className="p-4">
+      <Card data-testid="connection-status" className="p-4">
         <h3 className="text-lg font-medium mb-2">Connection Status</h3>
         <div className="flex items-center space-x-4 text-sm">
           <span className="flex items-center">
@@ -70,8 +72,8 @@ export const GraphQLTestScreen: React.FC = () => {
               }`}
             ></div>
             {eventsError || usersError
-              ? 'GraphQL API Connection Error'
-              : 'GraphQL API Connected'}
+              ? 'Disconnected (切断)'
+              : 'Connected (接続)'}
           </span>
           <span className="text-gray-600">Endpoint: {getGraphQLEndpoint()}</span>
         </div>

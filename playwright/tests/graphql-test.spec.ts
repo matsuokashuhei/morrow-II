@@ -37,7 +37,7 @@ test.describe('GraphQL Test Screen', () => {
 
     test('should display page as development/testing tool', async ({ page }) => {
       // This page should be clearly marked as a development tool
-      const devIndicator = page.locator('text=/開発|テスト|Development|Test/i');
+      const devIndicator = page.locator('text=/Development|Test/i').first();
       if (await devIndicator.isVisible()) {
         await expect(devIndicator).toBeVisible();
       }
@@ -93,7 +93,7 @@ test.describe('GraphQL Test Screen', () => {
 
     test('should handle connection errors gracefully', async ({ page }) => {
       // Check for error handling UI
-      const errorContainer = page.locator('.error, [role="alert"], .text-red-500');
+      const errorContainer = page.locator('.error, [role="alert"], .text-red-500').first();
 
       if (await errorContainer.isVisible()) {
         await expect(errorContainer).toBeVisible();
@@ -242,7 +242,7 @@ test.describe('GraphQL Test Screen', () => {
 
     test('should handle GraphQL query errors', async ({ page }) => {
       // Look for error handling when GraphQL queries fail
-      const errorContainer = page.locator('.error, [role="alert"], .text-red-500');
+      const errorContainer = page.locator('.error, [role="alert"], .text-red-500').first();
 
       if (await errorContainer.isVisible()) {
         await expect(errorContainer).toBeVisible();

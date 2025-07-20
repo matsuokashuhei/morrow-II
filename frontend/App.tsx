@@ -26,9 +26,9 @@ const EventDetailScreen = React.lazy(
 
 export default function App() {
   const navigationItems = [
-    { label: 'ホーム', href: ROUTES.HOME, active: true },
-    { label: 'イベント', href: ROUTES.EVENTS, active: false },
-    { label: 'GraphQL Test', href: '/graphql-test', active: false },
+    { label: 'ホーム', to: ROUTES.HOME, active: true },
+    { label: 'イベント一覧', to: ROUTES.EVENTS, active: false },
+    { label: 'GraphQL Test', to: '/graphql-test', active: false },
   ];
 
   return (
@@ -38,7 +38,7 @@ export default function App() {
           <header className="bg-orange-600 text-white shadow-md">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center py-4">
-                <h1 className="text-2xl font-bold">Morrow</h1>
+                <div className="text-2xl font-bold">Morrow</div>
                 <Navigation items={navigationItems} />
                 <Navigation items={navigationItems} mobile />
               </div>

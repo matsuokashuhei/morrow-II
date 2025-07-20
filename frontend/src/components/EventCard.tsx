@@ -86,21 +86,22 @@ const EventCard = ({
   };
 
   return (
-    <Card padding="md" className={className}>
+    <Card padding="md" className={className} data-testid="event-card">
       <div className="space-y-4">
         {/* Event Header */}
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-gray-900 mb-1">
+            <h3 data-testid="event-title" className="text-xl font-bold text-gray-900 mb-1">
               {event.title}
             </h3>
-            <p className="text-sm text-gray-500">{formatDate(event.date)}</p>
+            <p data-testid="event-date" className="text-sm text-gray-500">{formatDate(event.date)}</p>
           </div>
 
           {/* Action buttons */}
           <div className="flex space-x-2 ml-4">
             {onShare && (
               <Button
+                data-testid="share-btn"
                 variant="secondary"
                 size="sm"
                 onClick={() => onShare(event)}
@@ -119,6 +120,7 @@ const EventCard = ({
             )}
             {onEdit && (
               <Button
+                data-testid="edit-btn"
                 variant="secondary"
                 size="sm"
                 onClick={() => onEdit(event)}
@@ -137,6 +139,7 @@ const EventCard = ({
             )}
             {onDelete && (
               <Button
+                data-testid="delete-btn"
                 variant="danger"
                 size="sm"
                 onClick={() => onDelete(event)}
@@ -162,13 +165,13 @@ const EventCard = ({
 
         {/* Description */}
         {event.description && (
-          <p className="text-gray-600">{event.description}</p>
+          <p data-testid="event-description" className="text-gray-600">{event.description}</p>
         )}
 
         {/* Countdown */}
-        <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4">
+        <div data-testid="countdown-section" className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4">
           {timeRemaining.isExpired ? (
-            <div className="text-center">
+            <div data-testid="expired-state" className="text-center">
               <p className="text-lg font-semibold text-gray-700 mb-2">
                 🎉 イベント終了
               </p>
@@ -177,7 +180,7 @@ const EventCard = ({
               </p>
             </div>
           ) : (
-            <div className="text-center">
+            <div data-testid="countdown-display" className="text-center">
               <p className="text-sm text-gray-600 mb-3">残り時間</p>
               <div className="grid grid-cols-4 gap-2">
                 <div className="bg-white rounded-lg p-2 shadow-sm">

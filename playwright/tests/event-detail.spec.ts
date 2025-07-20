@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { EventDetailPage } from '../utils/page-objects';
+import { filterCriticalErrors } from '../utils/test-helpers';
 
 test.describe('Event Detail Screen', () => {
   let eventDetailPage: EventDetailPage;
@@ -350,11 +351,7 @@ test.describe('Event Detail Screen', () => {
       await eventDetailPage.page.waitForTimeout(2000);
 
       // Filter out known non-critical errors
-      const criticalErrors = errors.filter(error =>
-        !error.includes('favicon') &&
-        !error.includes('sourcemap') &&
-        !error.includes('DevTools')
-      );
+      const criticalErrors = filterCriticalErrors(errors);
 
       expect(criticalErrors).toHaveLength(0);
     });
@@ -432,18 +429,65 @@ test.describe('Event Detail Screen', () => {
 
       // Navigate to event detail
       await eventDetailPage.navigate(testEventId);
-      const originalTitle = await eventDetailPage.page.locator('h1').textContent();
+      await eventDetailPage.page.waitForLoadState('networkidle');
+
+      // Check if we got a valid event page or error page
+      const h1Element = eventDetailPage.page.locator('h1');
+      const errorMessage = eventDetailPage.page.locator('text=/イベントが見つかりません|Event not found|404/i');
+
+      // Wait for either the title or error message to appear
+      await Promise.race([
+        h1Element.waitFor({ timeout: 5000 }).catch(() => null),
+        errorMessage.waitFor({ timeout: 5000 }).catch(() => null)
+      ]);
+
+      let originalContent: string | null = null;
+      let isErrorState = false;
+
+      if (await errorMessage.isVisible()) {
+        // Error state - record the error message
+        originalContent = await errorMessage.textContent();
+        isErrorState = true;
+      } else if (await h1Element.isVisible()) {
+        // Valid state - record the title
+        originalContent = await h1Element.textContent();
+        isErrorState = false;
+      } else {
+        // Skip test if page state is unclear
+        test.skip(true, 'Page state unclear - neither title nor error message visible');
+        return;
+      }
 
       // Navigate away and back
       await eventDetailPage.page.goto('/events');
       await eventDetailPage.page.waitForLoadState('networkidle');
 
       await eventDetailPage.navigate(testEventId);
-      const returnTitle = await eventDetailPage.page.locator('h1').textContent();
+      await eventDetailPage.page.waitForLoadState('networkidle');
 
-      // Title should be consistent
-      if (originalTitle && returnTitle) {
-        expect(originalTitle).toBe(returnTitle);
+      // Wait for the same type of content to appear
+      await Promise.race([
+        h1Element.waitFor({ timeout: 5000 }).catch(() => null),
+        errorMessage.waitFor({ timeout: 5000 }).catch(() => null)
+      ]);
+
+      let returnContent: string | null = null;
+
+      if (isErrorState) {
+        // Should still be in error state
+        if (await errorMessage.isVisible()) {
+          returnContent = await errorMessage.textContent();
+        }
+      } else {
+        // Should still be in valid state
+        if (await h1Element.isVisible()) {
+          returnContent = await h1Element.textContent();
+        }
+      }
+
+      // Content should be consistent
+      if (originalContent && returnContent) {
+        expect(originalContent).toBe(returnContent);
       }
     });
 

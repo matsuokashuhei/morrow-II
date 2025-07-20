@@ -22,9 +22,9 @@ const getCurrentDateTime = () => {
 export const eventValidationSchema = yup.object({
   title: yup
     .string()
-    .required('イベント名は必須です')
+    .required('タイトルは必須です')
     .trim()
-    .min(1, 'イベント名は必須です')
+    .min(1, 'タイトルは必須です')
     .max(100, '100文字以内で入力してください'),
 
   description: yup
@@ -37,7 +37,7 @@ export const eventValidationSchema = yup.object({
     .required('開始日時は必須です')
     .test(
       'future-date',
-      '現在時刻以降を選択してください',
+      '過去の日時は選択できません',
       function (value: string | undefined) {
         if (!value) return true; // Skip this test if empty (required will handle it)
         const selectedDate = new Date(value);
@@ -51,7 +51,7 @@ export const eventValidationSchema = yup.object({
     .required('終了日時は必須です')
     .test(
       'after-start',
-      '開始日時以降を選択してください',
+      '終了時刻は開始時刻より後に設定してください',
       function (value: string | undefined) {
         const { startTime } = this.parent as { startTime: string };
         if (!value || !startTime) return true; // Skip this test if either is empty (required will handle it)

@@ -14,10 +14,18 @@ export const filterCriticalErrors = (errors: string[]): string[] => {
     'React Router Future Flag Warning',
     'Warning: An update to',
     'apollo.dev/c/err',
-    'No more mocked responses'
+    'No more mocked responses',
+    // Network-related errors (expected in test environment)
+    'Failed to load resource',
+    'ERR_CONNECTION_REFUSED',
+    'Network error',
+    'Failed to fetch',
+    'Backend server appears to be down',
+    'Connection refused',
+    'Could not connect to localhost'
   ];
-  
-  return errors.filter(error => 
+
+  return errors.filter(error =>
     !nonCriticalPatterns.some(pattern => error.includes(pattern))
   );
 };

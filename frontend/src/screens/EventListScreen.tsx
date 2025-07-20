@@ -103,50 +103,31 @@ const EventListScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loading size="lg" text="イベントを読み込み中..." />
-      </div>
-    );
-  }
-
-  if (error && !data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card padding="lg" className="max-w-md mx-auto text-center">
-          <div className="text-red-500 mb-4">
-            <svg
-              className="w-12 h-12 mx-auto"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+          <div>
+            <h1 data-testid="page-title" className="text-3xl font-bold text-gray-900 mb-2">
+              イベント一覧
+            </h1>
+            <p className="text-gray-600">
+              あなたのイベントを確認して、カウントダウンを楽しみましょう
+            </p>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            エラーが発生しました
-          </h3>
-          <p className="text-gray-600 mb-4">
-            イベントの読み込みに失敗しました。
-          </p>
-          <Button onClick={() => refetch()} variant="primary">
-            再試行
-          </Button>
-        </Card>
+        </div>
+        <div className="min-h-screen flex items-center justify-center">
+          <Loading size="lg" text="イベントを読み込み中..." />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 data-testid="page-title" className="text-3xl font-bold text-gray-900 mb-2">
             イベント一覧
           </h1>
           <p className="text-gray-600">
@@ -155,7 +136,7 @@ const EventListScreen: React.FC = () => {
         </div>
         <div className="mt-4 sm:mt-0">
           <Link to={ROUTES.EVENT_CREATE}>
-            <Button variant="primary" size="lg">
+            <Button data-testid="new-event-btn" variant="primary" size="lg">
               + 新しいイベント
             </Button>
           </Link>
@@ -183,6 +164,7 @@ const EventListScreen: React.FC = () => {
                 </svg>
               </div>
               <input
+                data-testid="search-input"
                 type="text"
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
                 placeholder="イベントを検索..."
@@ -197,6 +179,7 @@ const EventListScreen: React.FC = () => {
           {/* Filter */}
           <div className="sm:w-48">
             <select
+              data-testid="filter-select"
               className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
               value={filterType}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -211,10 +194,40 @@ const EventListScreen: React.FC = () => {
         </div>
       </Card>
 
+      {/* Error State */}
+      {error && !data && (
+        <Card padding="lg" className="max-w-md mx-auto text-center mb-6">
+          <div className="text-red-500 mb-4">
+            <svg
+              className="w-12 h-12 mx-auto"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            エラーが発生しました
+          </h3>
+          <p className="text-gray-600 mb-4">
+            イベントの読み込みに失敗しました。
+          </p>
+          <Button onClick={() => refetch()} variant="primary">
+            再試行
+          </Button>
+        </Card>
+      )}
+
       {/* Events List */}
-      {filteredEvents.length === 0 ? (
-        <Card padding="lg" className="text-center">
-          {events.length === 0 ? (
+      <>
+        {filteredEvents.length === 0 ? (
+          <Card padding="lg" className="text-center">
+            {events.length === 0 ? (
             <>
               <div className="text-gray-400 mb-4">
                 <svg
@@ -237,7 +250,7 @@ const EventListScreen: React.FC = () => {
                 最初のイベントを作成して、カウントダウンを始めましょう！
               </p>
               <Link to={ROUTES.EVENT_CREATE}>
-                <Button variant="primary">イベントを作成</Button>
+                <Button data-testid="empty-state-create-btn" variant="primary">イベントを作成</Button>
               </Link>
             </>
           ) : (
@@ -263,6 +276,7 @@ const EventListScreen: React.FC = () => {
                 検索条件またはフィルターを変更してください。
               </p>
               <Button
+                data-testid="clear-filter-btn"
                 variant="secondary"
                 onClick={() => {
                   setSearchTerm('');
@@ -275,11 +289,12 @@ const EventListScreen: React.FC = () => {
           )}
         </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3" data-testid="events-grid">
           {filteredEvents.map(event => (
             <Link
               key={event.id}
               to={`/events/${event.id}`}
+              data-testid={`event-link-${event.id}`}
               className="block transform transition-transform duration-200 hover:scale-105"
             >
               <EventCard
@@ -296,12 +311,13 @@ const EventListScreen: React.FC = () => {
 
       {/* Results summary */}
       {filteredEvents.length > 0 && (
-        <div className="mt-8 text-center text-sm text-gray-500">
+        <div data-testid="results-summary" className="mt-8 text-center text-sm text-gray-500">
           {searchTerm || filterType !== 'all'
             ? `${filteredEvents.length} 件のイベントが見つかりました`
             : `合計 ${filteredEvents.length} 件のイベント`}
         </div>
       )}
+      </>
     </div>
   );
 };
