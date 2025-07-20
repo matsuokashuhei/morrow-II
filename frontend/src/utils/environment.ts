@@ -18,12 +18,12 @@ const getEnvVariable = (viteKey: string, fallback: string): string => {
 
   // In browser environment, try to access import.meta.env
   // Use conditional access to avoid Jest parsing issues
-  const hasImportMeta = typeof globalThis !== 'undefined' && 
-                        'import' in globalThis && 
+  const hasImportMeta = typeof globalThis !== 'undefined' &&
+                        'import' in globalThis &&
                         (globalThis as any).import &&
                         (globalThis as any).import.meta &&
                         (globalThis as any).import.meta.env;
-                        
+
   if (hasImportMeta) {
     const env = (globalThis as any).import.meta.env;
     if (env[viteKey]) {
