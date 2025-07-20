@@ -126,13 +126,19 @@ const OnboardingScreen = () => {
               </Button>
             )}
             <Button
-              data-testid={currentStep === onboardingSteps.length - 1 ? "start-btn" : "next-btn"}
+              data-testid={
+                currentStep === onboardingSteps.length - 1
+                  ? 'start-btn'
+                  : 'next-btn'
+              }
               variant="primary"
               size="md"
               onClick={handleNext}
               tabIndex={3}
             >
-              {currentStep === onboardingSteps.length - 1 ? '始めましょう' : '次へ'}
+              {currentStep === onboardingSteps.length - 1
+                ? '始めましょう'
+                : '次へ'}
             </Button>
           </div>
         </div>

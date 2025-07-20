@@ -37,10 +37,16 @@ const HomeScreen = () => {
     <div className="responsive-container py-12">
       {/* Hero Section */}
       <div className="text-center mb-12">
-        <h1 data-testid="hero-title" className="text-4xl font-bold text-gray-900 mb-4">
+        <h1
+          data-testid="hero-title"
+          className="text-4xl font-bold text-gray-900 mb-4"
+        >
           Welcome to Morrow!
         </h1>
-        <p data-testid="hero-description" className="text-xl text-gray-600 mb-8">
+        <p
+          data-testid="hero-description"
+          className="text-xl text-gray-600 mb-8"
+        >
           Event Countdown Sharing App
         </p>
 

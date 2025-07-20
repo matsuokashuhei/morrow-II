@@ -71,7 +71,10 @@ const EventDetailScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <div data-testid="loading-state" className="min-h-screen flex items-center justify-center">
+      <div
+        data-testid="loading-state"
+        className="min-h-screen flex items-center justify-center"
+      >
         <Loading size="lg" text="イベントを読み込み中..." />
       </div>
     );
@@ -79,7 +82,10 @@ const EventDetailScreen: React.FC = () => {
 
   if (error || !event) {
     return (
-      <div data-testid="error-state" className="min-h-screen flex items-center justify-center">
+      <div
+        data-testid="error-state"
+        className="min-h-screen flex items-center justify-center"
+      >
         <Card padding="lg" className="max-w-md mx-auto text-center">
           <div className="text-red-500 mb-4">
             <svg
@@ -102,11 +108,17 @@ const EventDetailScreen: React.FC = () => {
             このイベントは削除されたか、存在しない可能性があります。
           </p>
           <div className="space-x-3">
-            <Button data-testid="retry-btn" onClick={() => refetch()} variant="secondary">
+            <Button
+              data-testid="retry-btn"
+              onClick={() => refetch()}
+              variant="secondary"
+            >
               再試行
             </Button>
             <Link to={ROUTES.EVENTS}>
-              <Button data-testid="back-to-list-btn" variant="primary">イベント一覧に戻る</Button>
+              <Button data-testid="back-to-list-btn" variant="primary">
+                イベント一覧に戻る
+              </Button>
             </Link>
           </div>
         </Card>
@@ -115,7 +127,10 @@ const EventDetailScreen: React.FC = () => {
   }
 
   return (
-    <div data-testid="event-detail-screen" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div
+      data-testid="event-detail-screen"
+      className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+    >
       {/* Breadcrumb Navigation */}
       <nav data-testid="breadcrumb" className="mb-8">
         <ol className="flex items-center space-x-2 text-sm text-gray-500">
@@ -171,11 +186,19 @@ const EventDetailScreen: React.FC = () => {
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="mb-4 sm:mb-0">
-            <h1 data-testid="event-title" className="text-3xl font-bold text-gray-900 mb-2">
+            <h1
+              data-testid="event-title"
+              className="text-3xl font-bold text-gray-900 mb-2"
+            >
               {event.title}
             </h1>
             {event.description && (
-              <p data-testid="event-description" className="text-lg text-gray-600">{event.description}</p>
+              <p
+                data-testid="event-description"
+                className="text-lg text-gray-600"
+              >
+                {event.description}
+              </p>
             )}
           </div>
 
@@ -238,7 +261,10 @@ const EventDetailScreen: React.FC = () => {
       </div>
 
       {/* Event Card with Enhanced Countdown */}
-      <div data-testid="event-card-container" className="max-w-2xl mx-auto mb-8">
+      <div
+        data-testid="event-card-container"
+        className="max-w-2xl mx-auto mb-8"
+      >
         <EventCard
           event={event}
           onEdit={handleEventEdit}
@@ -249,7 +275,10 @@ const EventDetailScreen: React.FC = () => {
       </div>
 
       {/* Event Details */}
-      <div data-testid="event-details-grid" className="grid gap-6 md:grid-cols-2">
+      <div
+        data-testid="event-details-grid"
+        className="grid gap-6 md:grid-cols-2"
+      >
         {/* Event Information */}
         <Card data-testid="event-info-card" padding="lg">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -319,7 +348,11 @@ const EventDetailScreen: React.FC = () => {
       {/* Back Button */}
       <div className="mt-8 text-center">
         <Link to={ROUTES.EVENTS}>
-          <Button data-testid="back-to-events-btn" variant="secondary" size="lg">
+          <Button
+            data-testid="back-to-events-btn"
+            variant="secondary"
+            size="lg"
+          >
             ← イベント一覧に戻る
           </Button>
         </Link>

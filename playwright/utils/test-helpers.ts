@@ -2,7 +2,26 @@ import { Page, expect } from '@playwright/test';
 import { TestEvent, selectors } from '../fixtures/test-data';
 
 /**
- * Filter out known non-critical console errors
+ * Filters out known non-critical console errors from a list of error messages.
+ *
+ * Non-critical errors are those that are expected or do not impact the test results.
+ * These include warnings, network-related errors in the test environment, and other
+ * benign issues such as missing resources or development tool warnings.
+ *
+ * Critical errors are those not matching the predefined patterns of non-critical errors.
+ * These are typically unexpected issues that may indicate a problem with the application
+ * under test or the test environment.
+ *
+ * @param {string[]} errors - An array of error messages captured from the console.
+ * @returns {string[]} - A filtered array containing only critical error messages.
+ *
+ * @example
+ * const errors = [
+ *   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+ *   "Uncaught TypeError: Cannot read property 'foo' of undefined"
+ * ];
+ * const criticalErrors = filterCriticalErrors(errors);
+ * console.log(criticalErrors); // ["Uncaught TypeError: Cannot read property 'foo' of undefined"]
  */
 export const filterCriticalErrors = (errors: string[]): string[] => {
   const nonCriticalPatterns = [
@@ -31,7 +50,29 @@ export const filterCriticalErrors = (errors: string[]): string[] => {
 };
 
 /**
- * Wait for GraphQL operations to complete
+ * Waits for GraphQL operations to complete by monitoring the Apollo Client network status.
+ *
+ * This function is useful in E2E tests when you need to ensure that all pending GraphQL
+ * queries and mutations have finished before proceeding with assertions or interactions.
+ * It checks the Apollo Client's network status and waits until it's not in a loading state.
+ *
+ * The function gracefully handles cases where the Apollo Client is not available on the
+ * global window object, which can happen during initial page loads or in test environments
+ * where the client hasn't been initialized yet.
+ *
+ * @param {Page} page - The Playwright page object representing the browser page.
+ * @param {number} [timeout=5000] - Maximum time to wait in milliseconds (default: 5000).
+ * @returns {Promise<void>} - A promise that resolves when GraphQL operations are complete.
+ *
+ * @example
+ * // Wait for GraphQL operations after navigation
+ * await page.goto('/events');
+ * await waitForGraphQL(page);
+ * // Now safe to make assertions about the loaded data
+ *
+ * @example
+ * // Wait with custom timeout
+ * await waitForGraphQL(page, 10000);
  */
 export const waitForGraphQL = async (page: Page, timeout = 5000): Promise<void> => {
   await page.waitForFunction(
@@ -46,7 +87,27 @@ export const waitForGraphQL = async (page: Page, timeout = 5000): Promise<void> 
 };
 
 /**
- * Common error handling for Playwright tests
+ * Handles test errors by capturing diagnostic information for debugging purposes.
+ *
+ * When a test fails, this function automatically captures a screenshot and logs
+ * relevant page information to help with debugging. The screenshot is saved to
+ * the test-results directory with a filename that includes the test name for
+ * easy identification.
+ *
+ * This function is designed to be called in test error handlers or catch blocks
+ * to provide maximum debugging information when tests fail unexpectedly.
+ *
+ * @param {Page} page - The Playwright page object representing the browser page.
+ * @param {string} testName - A descriptive name for the test, used in file naming.
+ * @returns {Promise<void>} - A promise that resolves when error handling is complete.
+ *
+ * @example
+ * try {
+ *   await page.click('[data-testid="submit-button"]');
+ * } catch (error) {
+ *   await handleTestError(page, 'event-creation-test');
+ *   throw error;
+ * }
  */
 export const handleTestError = async (page: Page, testName: string): Promise<void> => {
   try {
@@ -59,13 +120,31 @@ export const handleTestError = async (page: Page, testName: string): Promise<voi
 };
 
 /**
- * Helper functions for E2E tests
+ * TestHelpers class provides common utility methods for E2E testing with Playwright.
+ *
+ * This class encapsulates frequently used operations in end-to-end tests, providing
+ * a consistent interface for navigation, waiting, and interaction patterns. It helps
+ * reduce code duplication across test files and ensures consistent behavior.
+ *
+ * The class is designed to be instantiated once per test with a specific page object,
+ * and then reused throughout the test for various operations.
+ *
+ * @example
+ * const helpers = new TestHelpers(page);
+ * await helpers.navigateToHome();
+ * await helpers.navigateToEventsList();
  */
 export class TestHelpers {
   constructor(private page: Page) {}
 
   /**
-   * Navigate to home page and wait for it to load
+   * Navigates to the home page and waits for the page to fully load.
+   *
+   * This method handles the navigation to the root path and ensures that all
+   * network requests have completed before returning. This is particularly
+   * important for pages that load data asynchronously.
+   *
+   * @returns {Promise<void>} - A promise that resolves when navigation is complete.
    */
   async navigateToHome() {
     await this.page.goto('/');
@@ -73,7 +152,14 @@ export class TestHelpers {
   }
 
   /**
-   * Navigate to events list page
+   * Navigates to the events list page and waits for the page to fully load.
+   *
+   * This method handles the navigation to the events listing page and ensures
+   * that all network requests (including GraphQL queries for event data) have
+   * completed before returning. This provides a stable starting point for
+   * tests that interact with the events list.
+   *
+   * @returns {Promise<void>} - A promise that resolves when navigation is complete.
    */
   async navigateToEventsList() {
     await this.page.goto('/events');

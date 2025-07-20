@@ -57,7 +57,10 @@ export function createUpdateMutationWrapper<TData, TInput>(
   dataField: keyof TData
 ): (id: string, input: TInput) => Promise<TData[keyof TData] | undefined> {
   return useCallback(
-    async (id: string, input: TInput): Promise<TData[keyof TData] | undefined> => {
+    async (
+      id: string,
+      input: TInput
+    ): Promise<TData[keyof TData] | undefined> => {
       try {
         const result = await mutationFn({ variables: { id, input } });
         return handleMutationResult(result, dataField);

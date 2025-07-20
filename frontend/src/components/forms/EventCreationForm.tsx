@@ -84,7 +84,10 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
   );
 
   return (
-    <FormContainer data-testid="event-creation-form" onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer
+      data-testid="event-creation-form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="space-y-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900">
@@ -97,16 +100,27 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
 
         {/* Form-level error messages */}
         {error && (
-          <div data-testid="error-message" aria-live="polite" className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div
+            data-testid="error-message"
+            aria-live="polite"
+            className="bg-red-50 border border-red-200 rounded-lg p-4"
+          >
             <p className="text-red-700 text-sm">
-              エラーが発生しました: {typeof error === 'string' ? error : error.message || 'Unknown error'}
+              エラーが発生しました:{' '}
+              {typeof error === 'string'
+                ? error
+                : error.message || 'Unknown error'}
             </p>
           </div>
         )}
 
         {/* General validation errors */}
         {Object.keys(errors).length > 0 && (
-          <div data-testid="error-message" aria-live="polite" className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div
+            data-testid="error-message"
+            aria-live="polite"
+            className="bg-red-50 border border-red-200 rounded-lg p-4"
+          >
             <p className="text-red-700 text-sm font-medium mb-2">
               入力内容をご確認ください:
             </p>

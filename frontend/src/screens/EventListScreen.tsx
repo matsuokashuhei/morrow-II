@@ -107,7 +107,10 @@ const EventListScreen: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
-            <h1 data-testid="page-title" className="text-3xl font-bold text-gray-900 mb-2">
+            <h1
+              data-testid="page-title"
+              className="text-3xl font-bold text-gray-900 mb-2"
+            >
               イベント一覧
             </h1>
             <p className="text-gray-600">
@@ -127,7 +130,10 @@ const EventListScreen: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
-          <h1 data-testid="page-title" className="text-3xl font-bold text-gray-900 mb-2">
+          <h1
+            data-testid="page-title"
+            className="text-3xl font-bold text-gray-900 mb-2"
+          >
             イベント一覧
           </h1>
           <p className="text-gray-600">
@@ -228,95 +234,106 @@ const EventListScreen: React.FC = () => {
         {filteredEvents.length === 0 ? (
           <Card padding="lg" className="text-center">
             {events.length === 0 ? (
-            <>
-              <div className="text-gray-400 mb-4">
-                <svg
-                  className="w-16 h-16 mx-auto"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  aria-hidden="true"
+              <>
+                <div className="text-gray-400 mb-4">
+                  <svg
+                    className="w-16 h-16 mx-auto"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  まだイベントがありません
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  最初のイベントを作成して、カウントダウンを始めましょう！
+                </p>
+                <Link to={ROUTES.EVENT_CREATE}>
+                  <Button
+                    data-testid="empty-state-create-btn"
+                    variant="primary"
+                  >
+                    イベントを作成
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <div className="text-gray-400 mb-4">
+                  <svg
+                    className="w-16 h-16 mx-auto"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  該当するイベントがありません
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  検索条件またはフィルターを変更してください。
+                </p>
+                <Button
+                  data-testid="clear-filter-btn"
+                  variant="secondary"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setFilterType('all');
+                  }}
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                まだイベントがありません
-              </h3>
-              <p className="text-gray-600 mb-4">
-                最初のイベントを作成して、カウントダウンを始めましょう！
-              </p>
-              <Link to={ROUTES.EVENT_CREATE}>
-                <Button data-testid="empty-state-create-btn" variant="primary">イベントを作成</Button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <div className="text-gray-400 mb-4">
-                <svg
-                  className="w-16 h-16 mx-auto"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                該当するイベントがありません
-              </h3>
-              <p className="text-gray-600 mb-4">
-                検索条件またはフィルターを変更してください。
-              </p>
-              <Button
-                data-testid="clear-filter-btn"
-                variant="secondary"
-                onClick={() => {
-                  setSearchTerm('');
-                  setFilterType('all');
-                }}
+                  フィルターをクリア
+                </Button>
+              </>
+            )}
+          </Card>
+        ) : (
+          <div
+            className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            data-testid="events-grid"
+          >
+            {filteredEvents.map(event => (
+              <Link
+                key={event.id}
+                to={`/events/${event.id}`}
+                data-testid={`event-link-${event.id}`}
+                className="block transform transition-transform duration-200 hover:scale-105"
               >
-                フィルターをクリア
-              </Button>
-            </>
-          )}
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3" data-testid="events-grid">
-          {filteredEvents.map(event => (
-            <Link
-              key={event.id}
-              to={`/events/${event.id}`}
-              data-testid={`event-link-${event.id}`}
-              className="block transform transition-transform duration-200 hover:scale-105"
-            >
-              <EventCard
-                event={event}
-                onEdit={handleEventEdit}
-                onDelete={handleEventDelete}
-                onShare={handleEventShare}
-                className="h-full"
-              />
-            </Link>
-          ))}
-        </div>
-      )}
+                <EventCard
+                  event={event}
+                  onEdit={handleEventEdit}
+                  onDelete={handleEventDelete}
+                  onShare={handleEventShare}
+                  className="h-full"
+                />
+              </Link>
+            ))}
+          </div>
+        )}
 
-      {/* Results summary */}
-      {filteredEvents.length > 0 && (
-        <div data-testid="results-summary" className="mt-8 text-center text-sm text-gray-500">
-          {searchTerm || filterType !== 'all'
-            ? `${filteredEvents.length} 件のイベントが見つかりました`
-            : `合計 ${filteredEvents.length} 件のイベント`}
-        </div>
-      )}
+        {/* Results summary */}
+        {filteredEvents.length > 0 && (
+          <div
+            data-testid="results-summary"
+            className="mt-8 text-center text-sm text-gray-500"
+          >
+            {searchTerm || filterType !== 'all'
+              ? `${filteredEvents.length} 件のイベントが見つかりました`
+              : `合計 ${filteredEvents.length} 件のイベント`}
+          </div>
+        )}
       </>
     </div>
   );

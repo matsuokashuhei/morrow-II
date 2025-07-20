@@ -26,7 +26,10 @@ const FormContainer: React.FC<FormContainerProps> = ({
   };
 
   return (
-    <div className={cn('bg-white rounded-lg shadow-md p-6', className)} data-testid={dataTestId}>
+    <div
+      className={cn('bg-white rounded-lg shadow-md p-6', className)}
+      data-testid={dataTestId}
+    >
       {(title || description) && (
         <div className="mb-6">
           {title && (

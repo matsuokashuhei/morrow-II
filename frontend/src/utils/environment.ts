@@ -9,7 +9,10 @@ export const getGraphQLEndpoint = (): string => {
   }
 
   // In browser environment, use environment variable or default
-  return import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:8080/api/v1/graphql';
+  return (
+    import.meta.env.VITE_GRAPHQL_ENDPOINT ||
+    'http://localhost:8080/api/v1/graphql'
+  );
 };
 
 export const getBaseApiUrl = (): string => {

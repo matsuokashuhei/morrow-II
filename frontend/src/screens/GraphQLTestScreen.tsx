@@ -10,19 +10,31 @@ export const GraphQLTestScreen: React.FC = () => {
   const { users, loading: usersLoading, error: usersError } = useUsers();
 
   if (eventsLoading || usersLoading) {
-    return <div data-testid="graphql-loading"><Loading size="lg" text="Loading GraphQL data..." /></div>;
+    return (
+      <div data-testid="graphql-loading">
+        <Loading size="lg" text="Loading GraphQL data..." />
+      </div>
+    );
   }
 
   return (
     <div data-testid="graphql-test-screen" className="space-y-6">
       <div className="mb-8">
-        <h1 data-testid="page-title" className="text-3xl font-bold text-gray-900">GraphQL Test</h1>
+        <h1
+          data-testid="page-title"
+          className="text-3xl font-bold text-gray-900"
+        >
+          GraphQL Test
+        </h1>
         <p data-testid="page-description" className="text-gray-600 mt-2">
           Testing GraphQL client integration with Apollo Client
         </p>
       </div>
 
-      <div data-testid="data-sections" className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div
+        data-testid="data-sections"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+      >
         {/* Users Section */}
         <DataListSection
           data-testid="users-section"
@@ -75,7 +87,9 @@ export const GraphQLTestScreen: React.FC = () => {
               ? 'Disconnected (切断)'
               : 'Connected (接続)'}
           </span>
-          <span className="text-gray-600">Endpoint: {getGraphQLEndpoint()}</span>
+          <span className="text-gray-600">
+            Endpoint: {getGraphQLEndpoint()}
+          </span>
         </div>
       </Card>
     </div>

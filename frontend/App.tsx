@@ -34,7 +34,9 @@ export default function App() {
   return (
     <NotificationProvider>
       <div className="min-h-screen bg-gray-50">
-        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Router
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <header className="bg-orange-600 text-white shadow-md">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center py-4">
@@ -49,7 +51,10 @@ export default function App() {
             <Suspense fallback={<Loading size="lg" text="Loading..." />}>
               <Routes>
                 <Route path={ROUTES.HOME} element={<HomeScreen />} />
-                <Route path={ROUTES.ONBOARDING} element={<OnboardingScreen />} />
+                <Route
+                  path={ROUTES.ONBOARDING}
+                  element={<OnboardingScreen />}
+                />
                 <Route path={ROUTES.EVENTS} element={<EventListScreen />} />
                 <Route path="/events/:id" element={<EventDetailScreen />} />
                 <Route

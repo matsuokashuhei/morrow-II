@@ -41,7 +41,10 @@ const EventCreationScreen: React.FC = () => {
               </svg>
               戻る
             </button>
-            <h1 data-testid="page-title" className="text-lg font-semibold text-gray-900">
+            <h1
+              data-testid="page-title"
+              className="text-lg font-semibold text-gray-900"
+            >
               新しいイベント
             </h1>
             <div className="w-16"></div> {/* Spacer for centering */}

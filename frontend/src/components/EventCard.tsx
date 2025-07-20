@@ -91,10 +91,15 @@ const EventCard = ({
         {/* Event Header */}
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <h3 data-testid="event-title" className="text-xl font-bold text-gray-900 mb-1">
+            <h3
+              data-testid="event-title"
+              className="text-xl font-bold text-gray-900 mb-1"
+            >
               {event.title}
             </h3>
-            <p data-testid="event-date" className="text-sm text-gray-500">{formatDate(event.date)}</p>
+            <p data-testid="event-date" className="text-sm text-gray-500">
+              {formatDate(event.date)}
+            </p>
           </div>
 
           {/* Action buttons */}
@@ -165,11 +170,16 @@ const EventCard = ({
 
         {/* Description */}
         {event.description && (
-          <p data-testid="event-description" className="text-gray-600">{event.description}</p>
+          <p data-testid="event-description" className="text-gray-600">
+            {event.description}
+          </p>
         )}
 
         {/* Countdown */}
-        <div data-testid="countdown-section" className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4">
+        <div
+          data-testid="countdown-section"
+          className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4"
+        >
           {timeRemaining.isExpired ? (
             <div data-testid="expired-state" className="text-center">
               <p className="text-lg font-semibold text-gray-700 mb-2">
