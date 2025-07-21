@@ -86,12 +86,6 @@ test.describe('Basic Connectivity Test', () => {
 
     expect(response.status()).toBe(200);
 
-    const responseData = await response.json();
-    expect(responseData.data).toBeTruthy();
-    expect(responseData.data.__schema).toBeTruthy();
-    expect(responseData.data.__schema.types).toBeTruthy();
-    expect(Array.isArray(responseData.data.__schema.types)).toBe(true);
-
     // Check for some expected GraphQL types
     interface GraphQLType {
       name: string;
@@ -104,6 +98,10 @@ test.describe('Basic Connectivity Test', () => {
     }
 
     const responseData: { data: GraphQLSchema } = await response.json();
+    expect(responseData.data).toBeTruthy();
+    expect(responseData.data.__schema).toBeTruthy();
+    expect(responseData.data.__schema.types).toBeTruthy();
+    expect(Array.isArray(responseData.data.__schema.types)).toBe(true);
     const typeNames = responseData.data.__schema.types.map((type: GraphQLType) => type.name);
     expect(typeNames).toContain('User');
     expect(typeNames).toContain('Event');

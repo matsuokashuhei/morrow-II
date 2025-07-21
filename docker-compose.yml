@@ -79,7 +79,9 @@ services:
     profiles:
       - tools
   playwright:
-    image: mcr.microsoft.com/playwright:v1.54.1-jammy
+    build:
+      context: ./playwright
+      dockerfile: Dockerfile
     container_name: morrow-playwright
     depends_on:
       - frontend
