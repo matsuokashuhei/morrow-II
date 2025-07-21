@@ -67,7 +67,7 @@ export const retryOperation = async <T>(
       if (attempts >= config.maxAttempts) {
         throw new RetryOperationError(operationName, attempts, error);
       }
-      
+
       // Wait before retrying with incremental backoff
       const waitTime = config.baseWaitTime + (attempts * config.waitIncrement);
       await new Promise(resolve => setTimeout(resolve, waitTime));
@@ -93,7 +93,7 @@ export const retryFormInteraction = async (
   options: RetryOptions = {}
 ): Promise<void> => {
   const config = { ...defaultRetryOptions, ...options };
-  
+
   await retryOperation(async () => {
     // Check if the form is visible first
     await formLocator.waitFor({ state: 'visible', timeout: config.timeout });
@@ -102,7 +102,7 @@ export const retryFormInteraction = async (
     // Perform the input action
     await inputAction(inputLocator);
   }, 'form interaction', config);
-  
+
   // Trigger re-render if enabled (useful for GraphQL mocking scenarios)
   if (config.triggerRerender) {
     try {
@@ -167,9 +167,9 @@ export const retryWaitFor = async (
   options: RetryOptions = {}
 ): Promise<void> => {
   await retryOperation(async () => {
-    await elementLocator.waitFor({ 
-      state, 
-      timeout: options.timeout || 2000 
+    await elementLocator.waitFor({
+      state,
+      timeout: options.timeout || 2000
     });
   }, `wait for element to be ${state}`, options);
 };

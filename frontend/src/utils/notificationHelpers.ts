@@ -51,11 +51,11 @@ export const createCommonNotifications = (
 
   return {
     showFeatureComingSoon,
-    showEditFeatureComingSoon: () => 
+    showEditFeatureComingSoon: () =>
       showFeatureComingSoon(NOTIFICATION_MESSAGES.EDIT_FEATURE_COMING_SOON),
-    showDeleteFeatureComingSoon: () => 
+    showDeleteFeatureComingSoon: () =>
       showFeatureComingSoon(NOTIFICATION_MESSAGES.DELETE_FEATURE_COMING_SOON),
-    showShareFeatureComingSoon: () => 
+    showShareFeatureComingSoon: () =>
       showFeatureComingSoon(NOTIFICATION_MESSAGES.SHARE_FEATURE_COMING_SOON),
   };
 };

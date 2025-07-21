@@ -261,7 +261,7 @@ test.describe('Event Creation Flow', () => {
         postData?: string | null;
       }
       const graphqlRequests: GraphQLRequest[] = [];
-      
+
       // Use more specific pattern to avoid conflicts
       await page.route('**/api/v1/graphql', route => {
         graphqlRequests.push({

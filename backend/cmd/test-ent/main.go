@@ -54,10 +54,11 @@ func main() {
 }
 
 func createTestData(ctx context.Context, client *ent.Client, logger *logrus.Logger) error {
-	// ユーザーの作成
+	// ユーザーの作成（既存の場合は取得）
+	email := fmt.Sprintf("test_%d@example.com", time.Now().Unix())
 	user, err := client.User.
 		Create().
-		SetEmail("test@example.com").
+		SetEmail(email).
 		SetName("Test User").
 		Save(ctx)
 	if err != nil {

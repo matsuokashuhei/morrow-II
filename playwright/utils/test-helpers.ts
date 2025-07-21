@@ -53,7 +53,7 @@ export const filterCriticalErrors = (errors: string[]): string[] => {
  * Interface for window object with Apollo Client properties
  */
 interface WindowWithApolloClient extends Window {
-  __APOLLO_CLIENT__?: { 
+  __APOLLO_CLIENT__?: {
     networkStatus?: number;
     queryManager?: {
       inFlightLinkObservables?: Map<string, any>;

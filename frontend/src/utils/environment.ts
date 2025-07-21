@@ -62,7 +62,7 @@ const getBrowserEnvVariable = (viteKey: string, fallback: string): string => {
         return env[viteKey];
       }
     }
-    
+
     // Try another common pattern for Vite env access
     if (typeof window !== 'undefined' && (window as ViteWindow).process?.env) {
       const env = (window as ViteWindow).process?.env;
@@ -74,9 +74,9 @@ const getBrowserEnvVariable = (viteKey: string, fallback: string): string => {
     // Try to access import.meta.env safely with better Jest compatibility
     try {
       // Check if import.meta exists and is an object before accessing
-      const hasImportMeta = typeof globalThis.import !== 'undefined' && 
+      const hasImportMeta = typeof globalThis.import !== 'undefined' &&
                           globalThis.import.meta;
-      
+
       if (hasImportMeta) {
         const importMeta = globalThis.import.meta as ImportMetaWithEnv;
         if (importMeta.env && importMeta.env[viteKey]) {

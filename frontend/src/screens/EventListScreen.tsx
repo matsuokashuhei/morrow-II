@@ -35,7 +35,7 @@ const EventListScreen: React.FC = () => {
   }, [events, searchTerm, filterType]);
 
   // Create common notification helpers
-  const { showEditFeatureComingSoon, showDeleteFeatureComingSoon, showShareFeatureComingSoon } = 
+  const { showEditFeatureComingSoon, showDeleteFeatureComingSoon, showShareFeatureComingSoon } =
     createCommonNotifications(addNotification);
 
   const handleEventEdit = (event: Event) => {
