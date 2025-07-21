@@ -81,8 +81,11 @@ jobs:
 
     - name: Build and start services
       run: |
-        # Build all services
+        # Build all services including Playwright with pre-installed browsers
         docker compose build
+
+        # Ensure Playwright dependencies are properly installed
+        docker compose --profile tools build playwright
 
         # Start database first
         docker compose up -d postgres
@@ -134,13 +137,12 @@ jobs:
           fi
         done
 
-    - name: Install Playwright browsers
-      run: |
-        docker compose --profile tools run --rm playwright npx playwright install --with-deps
-
     - name: Run connectivity tests
       if: matrix.test-suite == 'connectivity'
       run: |
+        # Verify Playwright dependencies are available
+        docker compose --profile tools run --rm playwright npm ls @playwright/test
+        # Run the actual tests
         docker compose --profile tools run --rm playwright npm run test:connectivity
       env:
         CI: true
@@ -148,6 +150,9 @@ jobs:
     - name: Run fast E2E tests
       if: matrix.test-suite == 'fast'
       run: |
+        # Verify Playwright dependencies are available
+        docker compose --profile tools run --rm playwright npm ls @playwright/test
+        # Run the actual tests
         docker compose --profile tools run --rm playwright npm run test:fast
       env:
         CI: true
@@ -279,10 +284,6 @@ jobs:
       run: |
         timeout 60 bash -c 'until curl -f http://localhost:8080/health || curl -f http://localhost:8080/query; do sleep 2; done'
         timeout 60 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
-
-    - name: Install Playwright browsers
-      run: |
-        docker compose --profile tools run --rm playwright npx playwright install --with-deps
 
     - name: Run full E2E test suite
       run: |

@@ -142,6 +142,10 @@ jobs:
     - name: Create Docker network
       run: docker network create morrow-network || true
 
+    - name: Build services including Playwright
+      run: |
+        docker compose build
+
     - name: Start PostgreSQL service
       run: |
         docker compose up -d postgres

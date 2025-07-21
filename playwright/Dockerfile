@@ -7,36 +7,37 @@ WORKDIR /app
 # Ensure development dependencies are installed in CI
 ENV NODE_ENV=development
 
-# Copy package files
-COPY package.json ./
+# Copy package files first for better caching
+COPY package.json package-lock.json* ./
 
-# Conditionally copy package-lock.json if it exists
-# This uses Docker buildkit's experimental syntax for optional copy
-COPY package-lock.json* ./
-
-# Install dependencies (including dev dependencies for CI)
-# Use npm install if ci fails or no package-lock.json exists
+# Install dependencies
+# Prioritize using package-lock.json for reproducible builds
 RUN if [ -f package-lock.json ]; then \
-        echo "Using package-lock.json for npm ci"; \
-        npm ci --include=dev || npm install --include=dev; \
+        echo "Installing dependencies with npm ci"; \
+        npm ci --include=dev; \
     else \
         echo "No package-lock.json found, using npm install"; \
         npm install --include=dev; \
     fi
 
-# Debug: List installed packages
-RUN npm list --depth=0 || true
-RUN ls -la node_modules/ | head -20 || true
+# Verify @playwright/test is installed
+RUN npm ls @playwright/test || (echo "ERROR: @playwright/test not found" && exit 1)
 
-# Copy test files
+# Create a script to ensure dependencies are available at runtime
+RUN echo '#!/bin/bash\nset -e\nif [ ! -d "/app/node_modules/@playwright/test" ]; then\n  echo "Dependencies not found, installing..."\n  npm ci --include=dev\nfi\nexec "$@"' > /app/entrypoint.sh && chmod +x /app/entrypoint.sh
+
+# Install browsers and dependencies
+RUN npx playwright install --with-deps chromium || (echo "Browser installation failed" && exit 1)
+RUN npx playwright install-deps || (echo "Dependencies installation failed" && exit 1)
+
+# Verify Playwright installation
+RUN npx playwright --version
+
+# Copy test files (will be overridden by volume in development)
 COPY . .
 
-# Install browsers and dependencies with improved error handling
-RUN npx playwright install --with-deps chromium || (echo "Primary browser installation failed, attempting recovery..." && npx playwright install chromium)
-RUN npx playwright install-deps || echo "Some dependencies may not have installed correctly"
-
-# Verify installation
-RUN npx playwright --version
+# Use entrypoint to ensure dependencies are available
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Default command
 CMD ["npm", "test"]
