@@ -38,14 +38,14 @@ test.describe('Event List Screen', () => {
       });
       await eventListPage.page.waitForTimeout(500);
 
-      // Try test attribute first, fallback to text
-      const eventsListLink = eventListPage.page.locator('[data-testid="events-list-link"]');
-      if (await eventsListLink.isVisible()) {
-        await eventsListLink.click();
+      // Use correct test ID for navigation link
+      const eventsNavLink = eventListPage.page.locator('[data-testid="nav-events"]');
+      if (await eventsNavLink.isVisible()) {
+        await eventsNavLink.click();
       } else {
         // Try force clicking various selectors
         try {
-          await eventListPage.page.locator('[data-testid="events-list-link"]').click({ force: true });
+          await eventListPage.page.locator('[data-testid="nav-events"]').click({ force: true });
         } catch {
           try {
             await eventListPage.page.locator('a[href="/events"]').first().click({ force: true });
@@ -332,14 +332,14 @@ test.describe('Event List Screen', () => {
       });
       await eventListPage.page.waitForTimeout(500);
 
-      // Try test attribute first, fallback to text
-      const eventsLink = eventListPage.page.locator('[data-testid="events-link"]');
+      // Use correct test ID for navigation link
+      const eventsLink = eventListPage.page.locator('[data-testid="nav-events"]');
       if (await eventsLink.isVisible()) {
         await eventsLink.click();
       } else {
         // Try force clicking various selectors
         try {
-          await eventListPage.page.locator('[data-testid="events-link"]').click({ force: true });
+          await eventListPage.page.locator('[data-testid="nav-events"]').click({ force: true });
         } catch {
           try {
             await eventListPage.page.locator('a[href="/events"]').first().click({ force: true });

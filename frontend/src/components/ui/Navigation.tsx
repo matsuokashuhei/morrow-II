@@ -17,6 +17,16 @@ interface NavigationProps {
 const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Test ID mapping for consistent element targeting
+  const getTestId = (label: string): string => {
+    const mapping: Record<string, string> = {
+      'ホーム': 'nav-home',
+      'イベント一覧': 'nav-events',
+      'GraphQL Test': 'nav-graphql-test'
+    };
+    return mapping[label] || `nav-${label.toLowerCase().replace(/\s+/g, '-')}`;
+  };
+
   if (mobile) {
     return (
       <div className={cn('md:hidden', className)}>
@@ -57,7 +67,7 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
                 <Link
                   key={index}
                   to={item.to}
-                  data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                  data-testid={getTestId(item.label)}
                   className={cn(
                     'block px-3 py-2 rounded-md text-base transition-colors',
                     item.active
@@ -83,7 +93,7 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
           <li key={index}>
             <Link
               to={item.to}
-              data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+              data-testid={getTestId(item.label)}
               className={cn(
                 'px-3 py-2 rounded-md text-sm font-medium transition-colors',
                 item.active
