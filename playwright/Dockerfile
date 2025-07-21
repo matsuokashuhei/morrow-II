@@ -11,7 +11,8 @@ ENV NODE_ENV=development
 COPY package*.json ./
 
 # Install dependencies (including dev dependencies for CI)
-RUN npm ci --include=dev 2>/dev/null || npm install --production=false
+# Ensure we install ALL dependencies including devDependencies
+RUN npm ci --also=dev || npm install
 
 # Copy test files
 COPY . .
