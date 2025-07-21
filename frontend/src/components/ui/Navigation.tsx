@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 
 interface NavigationItem {
   label: string;
-  href: string;
+  to: string;
   active?: boolean;
 }
 
@@ -15,6 +16,16 @@ interface NavigationProps {
 
 const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Test ID mapping for consistent element targeting
+  const getTestId = (label: string): string => {
+    const mapping: Record<string, string> = {
+      ホーム: 'nav-home',
+      イベント一覧: 'nav-events',
+      'GraphQL Test': 'nav-graphql-test',
+    };
+    return mapping[label] || `nav-${label.toLowerCase().replace(/\s+/g, '-')}`;
+  };
 
   if (mobile) {
     return (
@@ -53,9 +64,10 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
           <div className="absolute top-full left-0 right-0 bg-orange-600 border-t border-orange-700 shadow-lg">
             <nav className="px-4 py-2">
               {items.map((item, index) => (
-                <a
+                <Link
                   key={index}
-                  href={item.href}
+                  to={item.to}
+                  data-testid={getTestId(item.label)}
                   className={cn(
                     'block px-3 py-2 rounded-md text-base transition-colors',
                     item.active
@@ -65,7 +77,7 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
@@ -79,8 +91,9 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
       <ul className="flex space-x-6">
         {items.map((item, index) => (
           <li key={index}>
-            <a
-              href={item.href}
+            <Link
+              to={item.to}
+              data-testid={getTestId(item.label)}
               className={cn(
                 'px-3 py-2 rounded-md text-sm font-medium transition-colors',
                 item.active
@@ -89,7 +102,7 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
               )}
             >
               {item.label}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

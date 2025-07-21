@@ -137,11 +137,22 @@ make test-integration
 docker-compose exec backend go test ./test/integration/
 ```
 
-#### 3. E2Eテスト
+#### 3. E2Eテスト（Playwright）
 ```bash
 # PR作成前に実行
-make test-e2e
+make test:e2e
+
+# 開発中の特定テスト実行
+docker compose --profile tools run --rm playwright npm test tests/home.spec.ts
+
+# デバッグモード
+docker compose --profile tools run --rm playwright npm run test:debug
+
+# UIモードでテスト実行
+docker compose --profile tools run --rm playwright npm run test:ui
 ```
+
+**📖 詳細**: [Playwright E2Eテストガイド](./playwright-e2e-testing.md)
 
 ### テスト駆動開発（TDD）
 ```bash

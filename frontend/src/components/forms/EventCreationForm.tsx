@@ -84,7 +84,10 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
   );
 
   return (
-    <FormContainer onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer
+      data-testid="event-creation-form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="space-y-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900">
@@ -95,11 +98,37 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
           </p>
         </div>
 
+        {/* Form-level error messages */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div
+            data-testid="error-message"
+            aria-live="polite"
+            className="bg-red-50 border border-red-200 rounded-lg p-4"
+          >
             <p className="text-red-700 text-sm">
-              エラーが発生しました: {error.message}
+              エラーが発生しました:{' '}
+              {typeof error === 'string'
+                ? error
+                : error.message || 'Unknown error'}
             </p>
+          </div>
+        )}
+
+        {/* General validation errors */}
+        {Object.keys(errors).length > 0 && (
+          <div
+            data-testid="error-message"
+            aria-live="polite"
+            className="bg-red-50 border border-red-200 rounded-lg p-4"
+          >
+            <p className="text-red-700 text-sm font-medium mb-2">
+              入力内容をご確認ください:
+            </p>
+            <ul className="text-red-700 text-sm list-disc list-inside space-y-1">
+              {Object.entries(errors).map(([field, message]) => (
+                <li key={field}>{message}</li>
+              ))}
+            </ul>
           </div>
         )}
 
@@ -109,11 +138,23 @@ const EventCreationForm: React.FC<EventCreationFormProps> = ({
 
         <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
           {onCancel && (
-            <Button variant="secondary" onClick={onCancel} type="button">
+            <Button
+              data-testid="cancel-btn"
+              variant="secondary"
+              onClick={onCancel}
+              type="button"
+              tabIndex={9}
+            >
               キャンセル
             </Button>
           )}
-          <Button type="submit" loading={loading} disabled={loading}>
+          <Button
+            data-testid="submit-btn"
+            type="submit"
+            loading={loading}
+            disabled={loading}
+            tabIndex={8}
+          >
             {loading ? 'イベント作成中...' : 'イベントを作成'}
           </Button>
         </div>

@@ -17,18 +17,22 @@ const EventDateTimeSection: React.FC<EventDateTimeSectionProps> = ({
       <div className="space-y-4">
         {/* Start Date Time */}
         <DatePicker
+          data-testid="start-time-input"
           label="開始日時"
           id="startTime"
           showTime
+          tabIndex={6}
           error={errors.startTime}
           {...register('startTime')}
         />
 
         {/* End Date Time */}
         <DatePicker
+          data-testid="end-time-input"
           label="終了日時"
           id="endTime"
           showTime
+          tabIndex={7}
           error={errors.endTime}
           {...register('endTime')}
         />

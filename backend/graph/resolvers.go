@@ -408,4 +408,4 @@ func (r *Resolver) Participants(ctx context.Context) ([]*model.Participant, erro
 
 // Resolver interface implementations
 func (r *Resolver) Mutation() MutationResolver { return r }
-func (r *Resolver) Query() QueryResolver { return r }
+func (r *Resolver) Query() QueryResolver       { return r }

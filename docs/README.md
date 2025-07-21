@@ -12,6 +12,7 @@
 ### 開発者向け
 - **[API仕様書](./03-api/README.md)** - バックエンドAPI完全リファレンス
 - **[開発ガイドライン](./02-getting-started/development-guidelines.md)** - コード品質とベストプラクティス
+- **[Playwright E2Eテスト](./02-getting-started/playwright-e2e-testing.md)** - End-to-Endテスト環境
 - **[トラブルシューティング](./02-getting-started/troubleshooting.md)** - よくある問題と解決法
 
 ### プロジェクト管理者向け
@@ -30,6 +31,7 @@ docs/
 │   ├── development-setup.md  # 開発環境構築
 │   ├── development-workflow.md # 開発ワークフロー
 │   ├── development-guidelines.md # 開発ガイドライン
+│   ├── playwright-e2e-testing.md # E2Eテスト（Playwright）
 │   └── troubleshooting.md    # トラブルシューティング
 ├── 03-api/                   # 🔌 API仕様書
 │   ├── README.md            # API概要

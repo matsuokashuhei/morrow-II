@@ -12,6 +12,7 @@ interface DataListSectionProps<T extends DataItem> {
   error?: Error | null;
   renderItem: (item: T) => React.ReactNode;
   emptyMessage?: string;
+  'data-testid'?: string;
 }
 
 export function DataListSection<T extends DataItem>({
@@ -20,9 +21,10 @@ export function DataListSection<T extends DataItem>({
   error,
   renderItem,
   emptyMessage = `No ${title.toLowerCase()} found`,
+  'data-testid': dataTestId,
 }: DataListSectionProps<T>) {
   return (
-    <Card className="p-6">
+    <Card data-testid={dataTestId} className="p-6">
       <h2 className="text-2xl font-semibold mb-4">{title}</h2>
       {error ? (
         <div

@@ -8,6 +8,8 @@ interface FormFieldProps extends Omit<InputProps, 'label'> {
   error?: string;
   helpText?: string;
   required?: boolean;
+  tabIndex?: number;
+  'data-testid'?: string;
 }
 
 const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
@@ -18,7 +20,9 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
       error,
       helpText,
       required = false,
+      tabIndex,
       className,
+      'data-testid': dataTestId,
       ...inputProps
     },
     ref
@@ -39,6 +43,8 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
           ref={ref}
           id={name}
           name={name}
+          data-testid={dataTestId}
+          tabIndex={tabIndex}
           className={cn(
             error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
             className
@@ -51,7 +57,11 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
         />
 
         {error && (
-          <p id={`${name}-error`} className="text-sm text-red-600">
+          <p
+            id={`${name}-error`}
+            data-testid={`${name}-error-message`}
+            className="text-sm text-red-600"
+          >
             {error}
           </p>
         )}

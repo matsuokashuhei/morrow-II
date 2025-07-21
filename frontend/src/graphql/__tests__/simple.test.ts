@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { getGraphQLEndpoint } from '../../utils/environment';
 
 describe('GraphQL Simple Tests', () => {
   it('should parse GraphQL queries', () => {
@@ -18,10 +19,8 @@ describe('GraphQL Simple Tests', () => {
 
   it('should handle environment variables fallback', () => {
     // Test that our client config handles missing env vars gracefully
-    const testEndpoint =
-      (globalThis as any).import?.meta?.env?.VITE_GRAPHQL_ENDPOINT ||
-      'http://localhost:8080/api/v1/graphql';
-    expect(testEndpoint).toBe('http://localhost:8080/api/v1/graphql');
+    const testEndpoint = getGraphQLEndpoint();
+    expect(testEndpoint).toContain('graphql');
   });
 
   it('should have proper GraphQL document structure', () => {

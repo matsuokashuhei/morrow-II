@@ -11,8 +11,8 @@ const EventCreationScreen: React.FC = () => {
   };
 
   const handleCancel = () => {
-    // Navigate back to previous page
-    navigate(-1);
+    // Navigate back to events list or home page
+    navigate('/events', { replace: true });
   };
 
   return (
@@ -22,6 +22,7 @@ const EventCreationScreen: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <button
+              data-testid="back-btn"
               onClick={handleCancel}
               className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
             >
@@ -40,7 +41,10 @@ const EventCreationScreen: React.FC = () => {
               </svg>
               戻る
             </button>
-            <h1 className="text-lg font-semibold text-gray-900">
+            <h1
+              data-testid="page-title"
+              className="text-lg font-semibold text-gray-900"
+            >
               新しいイベント
             </h1>
             <div className="w-16"></div> {/* Spacer for centering */}

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
+	_ "github.com/lib/pq" // PostgreSQLドライバー
 	"github.com/matsuokashuhei/morrow-backend/ent"
 	"github.com/matsuokashuhei/morrow-backend/internal/config"
 	"github.com/sirupsen/logrus"
-	_ "github.com/lib/pq" // PostgreSQLドライバー
 )
 
 // Client wraps the Ent client with additional functionality
@@ -64,13 +64,19 @@ func (c *Client) Close() error {
 
 // HealthCheck performs a database health check
 func (c *Client) HealthCheck(ctx context.Context) error {
-	// Simple query test using Ent
+	// Simple connection test - try to access the database without requiring specific tables
 	pingCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	// カウントクエリでヘルスチェック
-	if _, err := c.Client.User.Query().Count(pingCtx); err != nil {
+	// Use a simple transaction to test database connectivity
+	// This should work even if tables don't exist yet
+	tx, err := c.Client.Tx(pingCtx)
+	if err != nil {
 		return fmt.Errorf("database health check failed: %w", err)
+	}
+	// Immediately rollback since we're just testing connectivity
+	if rollbackErr := tx.Rollback(); rollbackErr != nil {
+		c.logger.WithError(rollbackErr).Debug("Health check transaction rollback note")
 	}
 
 	return nil
@@ -80,7 +86,7 @@ func (c *Client) HealthCheck(ctx context.Context) error {
 func (c *Client) AutoMigrate(ctx context.Context) error {
 	c.logger.Info("Starting database migration")
 
-	if err := c.Client.Schema.Create(ctx); err != nil {
+	if err := c.Schema.Create(ctx); err != nil {
 		c.logger.WithError(err).Error("Database migration failed")
 		return fmt.Errorf("failed to create schema resources: %w", err)
 	}

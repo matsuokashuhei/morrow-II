@@ -96,6 +96,12 @@ lerna-debug.log*
 # GraphQL generated files
 generated/
 
+# Playwright E2E test outputs
+playwright/test-results/
+playwright/reports/
+playwright/node_modules/
+# playwright/package-lock.json
+
 # Database
 *.db
 *.sqlite

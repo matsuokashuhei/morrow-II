@@ -29,7 +29,11 @@ func main() {
 	if err != nil {
 		logger.WithError(err).Fatal("Failed to create database client")
 	}
-	defer client.Close()
+	defer func() {
+		if err := client.Close(); err != nil {
+			logger.WithError(err).Error("Failed to close database client")
+		}
+	}()
 
 	// マイグレーション実行
 	if err := client.AutoMigrate(ctx); err != nil {
@@ -50,10 +54,11 @@ func main() {
 }
 
 func createTestData(ctx context.Context, client *ent.Client, logger *logrus.Logger) error {
-	// ユーザーの作成
+	// ユーザーの作成（既存の場合は取得）
+	email := fmt.Sprintf("test_%d@example.com", time.Now().Unix())
 	user, err := client.User.
 		Create().
-		SetEmail("test@example.com").
+		SetEmail(email).
 		SetName("Test User").
 		Save(ctx)
 	if err != nil {
@@ -104,8 +109,8 @@ func createTestData(ctx context.Context, client *ent.Client, logger *logrus.Logg
 
 	for _, e := range events {
 		logger.WithFields(logrus.Fields{
-			"event_title":       e.Title,
-			"creator_name":      e.Edges.Creator.Name,
+			"event_title":        e.Title,
+			"creator_name":       e.Edges.Creator.Name,
 			"participants_count": len(e.Edges.Participants),
 		}).Info("Retrieved event data")
 	}

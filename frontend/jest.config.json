@@ -4,6 +4,7 @@
   "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"],
   "moduleNameMapper": {
     "^@/(.*)$": "<rootDir>/src/$1",
+    "^@/utils/environment$": "<rootDir>/__mocks__/environment.js",
     "^nanoid$": "<rootDir>/__mocks__/nanoid.js",
     "^nanoid/(.*)$": "<rootDir>/__mocks__/nanoid.js"
   },

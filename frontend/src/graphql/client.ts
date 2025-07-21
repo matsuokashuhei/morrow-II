@@ -5,11 +5,11 @@ import {
   from,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { GRAPHQL_ENDPOINT } from './constants';
+import { getGraphQLEndpoint } from '../utils/environment';
 
 // GraphQL endpoint
 const httpLink = createHttpLink({
-  uri: GRAPHQL_ENDPOINT,
+  uri: getGraphQLEndpoint(),
 });
 
 // Error handling link

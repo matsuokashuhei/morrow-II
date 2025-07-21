@@ -56,13 +56,13 @@ func LoggerMiddleware(logger *logrus.Logger) gin.HandlerFunc {
 		latency := endTime.Sub(startTime)
 
 		fields := logrus.Fields{
-			"status":      c.Writer.Status(),
-			"method":      c.Request.Method,
-			"path":        c.Request.URL.Path,
-			"ip":          c.ClientIP(),
-			"user_agent":  c.Request.UserAgent(),
-			"latency":     latency,
-			"time":        endTime.Format("2006-01-02 15:04:05"),
+			"status":     c.Writer.Status(),
+			"method":     c.Request.Method,
+			"path":       c.Request.URL.Path,
+			"ip":         c.ClientIP(),
+			"user_agent": c.Request.UserAgent(),
+			"latency":    latency,
+			"time":       endTime.Format("2006-01-02 15:04:05"),
 		}
 
 		// クエリパラメータがある場合は追加

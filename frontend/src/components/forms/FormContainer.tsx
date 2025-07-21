@@ -8,6 +8,7 @@ interface FormContainerProps {
   onSubmit?: (e: React.FormEvent) => void;
   className?: string;
   footer?: React.ReactNode;
+  'data-testid'?: string;
 }
 
 const FormContainer: React.FC<FormContainerProps> = ({
@@ -17,6 +18,7 @@ const FormContainer: React.FC<FormContainerProps> = ({
   onSubmit,
   className,
   footer,
+  'data-testid': dataTestId,
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +26,10 @@ const FormContainer: React.FC<FormContainerProps> = ({
   };
 
   return (
-    <div className={cn('bg-white rounded-lg shadow-md p-6', className)}>
+    <div
+      className={cn('bg-white rounded-lg shadow-md p-6', className)}
+      data-testid={dataTestId}
+    >
       {(title || description) && (
         <div className="mb-6">
           {title && (
@@ -34,7 +39,13 @@ const FormContainer: React.FC<FormContainerProps> = ({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6"
+        role="form"
+        aria-label={title || 'フォーム'}
+        noValidate
+      >
         {children}
 
         {footer && (
