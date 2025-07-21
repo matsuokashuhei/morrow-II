@@ -212,11 +212,11 @@ test.describe('Event Detail Screen', () => {
       await eventDetailPage.navigate(testEventId);
 
       // Check if buttons are enabled/disabled based on event status
-      const buttons = eventDetailPage.page.locator('button').all();
+      const buttons = await eventDetailPage.page.locator('button').all();
 
       // Buttons should be present and interactive
       // This test verifies basic button functionality exists
-      expect(true).toBe(true); // Placeholder for status-based button testing
+      expect(buttons.length).toBeGreaterThan(0);
     });
   });
 
