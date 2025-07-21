@@ -64,13 +64,19 @@ func (c *Client) Close() error {
 
 // HealthCheck performs a database health check
 func (c *Client) HealthCheck(ctx context.Context) error {
-	// Simple connection test using raw query
+	// Simple connection test - try to access the database without requiring specific tables
 	pingCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	// Use a simple SELECT 1 query to test connectivity without requiring specific tables
-	if err := c.Client.Exec(pingCtx, "SELECT 1"); err != nil {
+	// Use a simple transaction to test database connectivity
+	// This should work even if tables don't exist yet
+	tx, err := c.Client.Tx(pingCtx)
+	if err != nil {
 		return fmt.Errorf("database health check failed: %w", err)
+	}
+	// Immediately rollback since we're just testing connectivity
+	if rollbackErr := tx.Rollback(); rollbackErr != nil {
+		c.logger.WithError(rollbackErr).Debug("Health check transaction rollback note")
 	}
 
 	return nil
