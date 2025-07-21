@@ -20,9 +20,9 @@ const Navigation = ({ items, className, mobile = false }: NavigationProps) => {
   // Test ID mapping for consistent element targeting
   const getTestId = (label: string): string => {
     const mapping: Record<string, string> = {
-      'ホーム': 'nav-home',
-      'イベント一覧': 'nav-events',
-      'GraphQL Test': 'nav-graphql-test'
+      ホーム: 'nav-home',
+      イベント一覧: 'nav-events',
+      'GraphQL Test': 'nav-graphql-test',
     };
     return mapping[label] || `nav-${label.toLowerCase().replace(/\s+/g, '-')}`;
   };
