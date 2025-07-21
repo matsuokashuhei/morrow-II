@@ -100,7 +100,7 @@ generated/
 playwright/test-results/
 playwright/reports/
 playwright/node_modules/
-playwright/package-lock.json
+# playwright/package-lock.json
 
 # Database
 *.db
