@@ -75,8 +75,8 @@ const getBrowserEnvVariable = (viteKey: string, fallback: string): string => {
     try {
       // Check if import.meta exists and is an object before accessing
       const globalObj = globalThis as any;
-      const hasImportMeta = typeof globalObj.import !== 'undefined' &&
-                          globalObj.import.meta;
+      const hasImportMeta =
+        typeof globalObj.import !== 'undefined' && globalObj.import.meta;
 
       if (hasImportMeta) {
         const importMeta = globalObj.import.meta as ImportMetaWithEnv;

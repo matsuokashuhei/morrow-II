@@ -36,8 +36,10 @@ export const createFeatureComingSoonNotification = (
  * Common notification messages
  */
 export const NOTIFICATION_MESSAGES = {
-  EDIT_FEATURE_COMING_SOON: '編集機能は現在開発中です。しばらくお待ちください。',
-  DELETE_FEATURE_COMING_SOON: '削除機能は現在開発中です。しばらくお待ちください。',
+  EDIT_FEATURE_COMING_SOON:
+    '編集機能は現在開発中です。しばらくお待ちください。',
+  DELETE_FEATURE_COMING_SOON:
+    '削除機能は現在開発中です。しばらくお待ちください。',
   SHARE_FEATURE_COMING_SOON: '共有機能は次期バージョンで実装予定です。',
 } as const;
 
@@ -47,7 +49,8 @@ export const NOTIFICATION_MESSAGES = {
 export const createCommonNotifications = (
   addNotification: AddNotificationFunction
 ) => {
-  const showFeatureComingSoon = createFeatureComingSoonNotification(addNotification);
+  const showFeatureComingSoon =
+    createFeatureComingSoonNotification(addNotification);
 
   return {
     showFeatureComingSoon,
