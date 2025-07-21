@@ -28,6 +28,8 @@ const mockExpiredEvent: Event = {
 describe('EventCard Component', () => {
   beforeEach(() => {
     jest.clearAllTimers();
+    // Re-set the system time after clearing timers
+    jest.setSystemTime(mockDate);
   });
 
   afterAll(() => {
