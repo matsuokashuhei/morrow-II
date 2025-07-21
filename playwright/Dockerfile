@@ -7,13 +7,22 @@ WORKDIR /app
 # Ensure development dependencies are installed in CI
 ENV NODE_ENV=development
 
-# Copy package files and package-lock.json specifically
+# Copy package files
 COPY package.json ./
-COPY package-lock.json ./
+
+# Conditionally copy package-lock.json if it exists
+# This uses Docker buildkit's experimental syntax for optional copy
+COPY package-lock.json* ./
 
 # Install dependencies (including dev dependencies for CI)
-# Use npm install if ci fails (for environments without package-lock.json)
-RUN npm ci --include=dev || npm install --include=dev
+# Use npm install if ci fails or no package-lock.json exists
+RUN if [ -f package-lock.json ]; then \
+        echo "Using package-lock.json for npm ci"; \
+        npm ci --include=dev || npm install --include=dev; \
+    else \
+        echo "No package-lock.json found, using npm install"; \
+        npm install --include=dev; \
+    fi
 
 # Debug: List installed packages
 RUN npm list --depth=0 || true
