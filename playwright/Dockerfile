@@ -7,12 +7,17 @@ WORKDIR /app
 # Ensure development dependencies are installed in CI
 ENV NODE_ENV=development
 
-# Copy package files
-COPY package*.json ./
+# Copy package files and package-lock.json specifically
+COPY package.json ./
+COPY package-lock.json ./
 
 # Install dependencies (including dev dependencies for CI)
-# Ensure we install ALL dependencies including devDependencies
-RUN npm ci --also=dev || npm install
+# Use npm install if ci fails (for environments without package-lock.json)
+RUN npm ci --include=dev || npm install --include=dev
+
+# Debug: List installed packages
+RUN npm list --depth=0 || true
+RUN ls -la node_modules/ | head -20 || true
 
 # Copy test files
 COPY . .

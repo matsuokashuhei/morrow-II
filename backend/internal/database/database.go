@@ -64,12 +64,12 @@ func (c *Client) Close() error {
 
 // HealthCheck performs a database health check
 func (c *Client) HealthCheck(ctx context.Context) error {
-	// Simple query test using Ent
+	// Simple connection test using raw query
 	pingCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	// カウントクエリでヘルスチェック
-	if _, err := c.Client.User.Query().Count(pingCtx); err != nil {
+	// Use a simple SELECT 1 query to test connectivity without requiring specific tables
+	if err := c.Client.Exec(pingCtx, "SELECT 1"); err != nil {
 		return fmt.Errorf("database health check failed: %w", err)
 	}
 
